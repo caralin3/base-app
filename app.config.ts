@@ -57,6 +57,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         },
       },
     ],
+    ['react-native-edge-to-edge'],
   ],
   extra: {
     ...ClientEnv,

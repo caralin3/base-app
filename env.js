@@ -1,4 +1,4 @@
-/* eslint-env node */
+/* global */
 /*
  * Env file to load and validate env variables
  * Be cautious; this file should not be imported into your source folder.
@@ -13,10 +13,10 @@
  * we use dotenv to load the correct variables from the .env file based on the APP_ENV variable (default is development)
  * APP_ENV is passed as an inline variable while executing the command, for example: APP_ENV=staging pnpm build:android
  */
+const path = require('path');
 const z = require('zod');
 
 const packageJSON = require('./package.json');
-const path = require('path');
 const APP_ENV = process.env.APP_ENV ?? 'development';
 // eslint-disable-next-line no-undef
 const envPath = path.resolve(__dirname, `.env.${APP_ENV}.local`);
@@ -142,7 +142,9 @@ if (parsed.success === false) {
     `\n❌ Missing variables in .env.${APP_ENV} file, Make sure all required variables are defined in the .env.${APP_ENV} file.`,
     `\n💡 Tip: If you recently updated the .env.${APP_ENV} file and the error still persists, try restarting the server with the -c flag to clear the cache.`
   );
-  throw new Error('Invalid environment variables, Check terminal for more details ');
+  throw new Error(
+    'Invalid environment variables, Check terminal for more details '
+  );
 }
 
 const Env = parsed.data;

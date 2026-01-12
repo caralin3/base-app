@@ -106,9 +106,10 @@ const _clientEnv = {
   VERSION: packageJSON.version,
 
   // ADD YOUR ENV VARS HERE TOO
-  API_URL: process.env.API_URL,
-  VAR_NUMBER: Number(process.env.VAR_NUMBER),
-  VAR_BOOL: process.env.VAR_BOOL === 'true',
+  FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+  FIREBASE_ANDROID_APP_ID: process.env.FIREBASE_ANDROID_APP_ID,
+  FIREBASE_IOS_APP_ID: process.env.FIREBASE_IOS_APP_ID,
+  FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
 };
 
 /**
@@ -141,7 +142,7 @@ if (parsed.success === false) {
     parsed.error.flatten().fieldErrors,
 
     `\n❌ Missing variables in .env.${APP_ENV} file, Make sure all required variables are defined in the .env.${APP_ENV} file.`,
-    `\n💡 Tip: If you recently updated the .env.${APP_ENV} file and the error still persists, try restarting the server with the -c flag to clear the cache.`,
+    `\n💡 Tip: If you recently updated the .env.${APP_ENV} file and the error still persists, try restarting the server with the -c flag to clear the cache.`
   );
   throw new Error(
     'Invalid environment variables, Check terminal for more details '

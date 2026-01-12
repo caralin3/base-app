@@ -38,6 +38,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
     package: Env.PACKAGE,
     predictiveBackGestureEnabled: false,
+    googleServicesFile: Env.GOOGLE_SERVICES_JSON ?? './google-services.json',
   },
   web: {
     output: 'static',

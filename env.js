@@ -80,16 +80,17 @@ const client = z.object({
   VERSION: z.string(),
 
   // ADD YOUR CLIENT ENV VARS HERE
-  API_URL: z.string(),
-  VAR_NUMBER: z.number(),
-  VAR_BOOL: z.boolean(),
+  FIREBASE_API_KEY: z.string(),
+  FIREBASE_ANDROID_APP_ID: z.string(),
+  FIREBASE_IOS_APP_ID: z.string(),
+  FIREBASE_PROJECT_ID: z.string(),
 });
 
 const buildTime = z.object({
   EXPO_ACCOUNT_OWNER: z.string(),
   EAS_PROJECT_ID: z.string(),
   // ADD YOUR BUILD TIME ENV VARS HERE
-  SECRET_KEY: z.string(),
+  GOOGLE_SERVICES_JSON: z.string(),
 });
 
 /**
@@ -105,9 +106,10 @@ const _clientEnv = {
   VERSION: packageJSON.version,
 
   // ADD YOUR ENV VARS HERE TOO
-  API_URL: process.env.API_URL,
-  VAR_NUMBER: Number(process.env.VAR_NUMBER),
-  VAR_BOOL: process.env.VAR_BOOL === 'true',
+  FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+  FIREBASE_ANDROID_APP_ID: process.env.FIREBASE_ANDROID_APP_ID,
+  FIREBASE_IOS_APP_ID: process.env.FIREBASE_IOS_APP_ID,
+  FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
 };
 
 /**
@@ -117,7 +119,7 @@ const _buildTimeEnv = {
   EXPO_ACCOUNT_OWNER: process.env.EXPO_ACCOUNT_OWNER,
   EAS_PROJECT_ID: process.env.EAS_PROJECT_ID,
   // ADD YOUR ENV VARS HERE TOO
-  SECRET_KEY: process.env.SECRET_KEY,
+  GOOGLE_SERVICES_JSON: process.env.GOOGLE_SERVICES_JSON,
 };
 
 /**

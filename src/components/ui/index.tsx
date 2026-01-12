@@ -5,6 +5,8 @@ export * from './button';
 export * from './checkbox';
 export { default as colors } from './colors';
 export * from './focus-aware-status-bar';
+export * from './icon-button';
+export * from './icon-symbol';
 export * from './input';
 export * from './modal';
 export * from './progress-bar';

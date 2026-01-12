@@ -7,18 +7,21 @@ import { ThemeProvider } from '@react-navigation/native';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { onlineManager, QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
+import { onAuthStateChanged, type Unsubscribe } from 'firebase/auth';
 import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
-import { useThemeConfig } from '../components/use-theme-config';
+import { useThemeConfig } from '../components';
+import { useAuth } from '../lib';
+import { firebaseAuth } from '../lib/firebase/config';
 
 export default function RootLayout() {
   return (
     <Providers>
-      <Stack />
+      <Stack screenOptions={{ headerShown: false }} />
     </Providers>
   );
 }
@@ -39,6 +42,7 @@ const asyncPersist = createAsyncStoragePersister({
 
 function Providers({ children }: { children: React.ReactNode }) {
   const theme = useThemeConfig();
+  const router = useRouter();
 
   useEffect(() => {
     return NetInfo.addEventListener((state) => {
@@ -49,6 +53,36 @@ function Providers({ children }: { children: React.ReactNode }) {
       console.log('Network status changed:', status ? 'online' : 'offline');
       onlineManager.setOnline(status);
     });
+  }, []);
+
+  useEffect(() => {
+    let authListener: Unsubscribe;
+
+    authListener = onAuthStateChanged(firebaseAuth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        console.log('User is signed in with uid:', uid);
+        useAuth.setState({
+          status: 'signIn',
+          user: {
+            ...user,
+            id: user.uid,
+          },
+        });
+        router.replace('/(app)/(home)');
+      } else {
+        // User is signed out
+        console.log('User is signed out');
+        useAuth.setState({ status: 'signOut', user: null });
+        router.replace('/login');
+      }
+    });
+
+    return () => {
+      authListener?.();
+    };
   }, []);
 
   return (

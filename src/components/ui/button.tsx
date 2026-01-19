@@ -15,14 +15,14 @@ const button = tv({
   variants: {
     variant: {
       default: {
+        container: 'bg-primary-600',
+        label: 'text-black',
+        indicator: 'text-black',
+      },
+      secondary: {
         container: 'bg-black dark:bg-white',
         label: 'text-white dark:text-black',
         indicator: 'text-white dark:text-black',
-      },
-      secondary: {
-        container: 'bg-primary-600',
-        label: 'text-white dark:text-black',
-        indicator: 'text-white',
       },
       outline: {
         container: 'border border-neutral-400',
@@ -48,11 +48,11 @@ const button = tv({
     size: {
       default: {
         container: 'h-10 px-4',
-        label: 'text-base',
+        label: 'text-base font-semibold',
       },
       lg: {
         container: 'h-12 px-8',
-        label: 'text-xl',
+        label: 'text-xl font-bold',
       },
       sm: {
         container: 'h-8 px-3',

@@ -48,17 +48,20 @@ export const RegisterForm = ({ onSubmit = () => {} }: RegisterFormProps) => {
     >
       <View className="flex-1 justify-center gap-4 p-8">
         <View className="items-center justify-center">
-          <Text className="pb-8 text-center text-5xl font-bold">
+          {/* <Image
+            source={require('../assets/images/splash-icon.png')}
+            style={{ width: 200, height: 100 }}
+          /> */}
+          <Text className="pb-8 text-center text-5xl/tight font-bold">
             {Env.NAME}
           </Text>
-          <Text
-            testID="form-title"
-            className="pb-6 text-center text-4xl font-bold"
-          >
-            Register
-          </Text>
         </View>
-
+        <Text
+          testID="form-title"
+          className="pb-6 text-center text-4xl font-bold"
+        >
+          Register
+        </Text>
         <ControlledInput
           containerStyles="mb-4"
           testID="email-input"
@@ -93,7 +96,7 @@ export const RegisterForm = ({ onSubmit = () => {} }: RegisterFormProps) => {
           testID="register-button"
           label="Register"
           onPress={handleSubmit(onSubmit)}
-          variant="secondary"
+          size="lg"
         />
         <View className="items-center justify-center">
           <Text className="flex flex-row items-start text-center text-gray-500">

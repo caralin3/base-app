@@ -11,7 +11,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: Env.SLUG,
   version: Env.VERSION.toString(),
   orientation: 'portrait',
-  icon: './assets/images/icon.png',
+  icon: './src/assets/images/app-icon-ios.png',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
   updates: {
@@ -24,6 +24,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     infoPlist: {
       ITSAppUsesNonExemptEncryption: false,
     },
+    icon: {
+      dark: './src/assets/images/app-icon-ios.png',
+      light: './src/assets/images/app-icon-ios.png',
+      tinted: './src/assets/images/app-icon-ios.png',
+    },
   },
   experiments: {
     typedRoutes: true,
@@ -31,10 +36,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     adaptiveIcon: {
-      backgroundColor: '#E6F4FE',
-      foregroundImage: './assets/images/android-icon-foreground.png',
-      backgroundImage: './assets/images/android-icon-background.png',
-      monochromeImage: './assets/images/android-icon-monochrome.png',
+      foregroundImage: './src/assets/images/app-icon-android.png',
+      backgroundColor: '#000000',
     },
     package: Env.PACKAGE,
     predictiveBackGestureEnabled: false,
@@ -42,20 +45,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   web: {
     output: 'static',
-    favicon: './assets/images/favicon.png',
+    favicon: './src/assets/images/favicon.png',
   },
   plugins: [
     'expo-router',
     [
       'expo-splash-screen',
       {
-        image: './assets/images/splash-icon.png',
+        image: './src/assets/images/splash-icon.png',
         imageWidth: 200,
         resizeMode: 'contain',
-        backgroundColor: '#ffffff',
-        dark: {
-          backgroundColor: '#000000',
-        },
+        backgroundColor: '#000000',
       },
     ],
     ['react-native-edge-to-edge'],

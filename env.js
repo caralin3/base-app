@@ -33,14 +33,11 @@ require('dotenv').config({
  * for example: if the APP_ENV is staging, the bundle id will be com.appName.staging
  */
 
-// TODO: Replace these values with your own
-
-const BUNDLE_ID = 'com.appName'; // ios bundle id
-const PACKAGE = 'com.appName'; // android package name
-const NAME = 'App Name'; // app name
-const SLUG = 'app-slug'; // app slug
-const SCHEME = 'appName'; // app scheme
-
+const BUNDLE_ID = 'com.caralin3.bingebuddy'; // ios bundle id
+const PACKAGE = 'com.caralin3.bingebuddy'; // android package name
+const NAME = 'Binge Buddy'; // app name
+const SLUG = 'binge-buddy'; // app slug
+const SCHEME = 'bingebuddy'; // app scheme
 /**
  * We declare a function withEnvSuffix that will add a suffix to the variable name based on the APP_ENV
  * Add a suffix to variable env based on APP_ENV

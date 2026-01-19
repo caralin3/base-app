@@ -7,6 +7,7 @@ import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import * as z from 'zod';
 
 import { Env } from '../lib';
+import { Image } from './image';
 import { Button, ControlledInput, Text, View } from './ui';
 
 const schema = z.object({
@@ -35,17 +36,20 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
     >
       <View className="flex-1 justify-center gap-4 p-8">
         <View className="items-center justify-center">
-          <Text className="pb-8 text-center text-5xl font-bold">
+          <Image
+            source={require('../assets/images/splash-icon.png')}
+            style={{ width: 200, height: 100 }}
+          />
+          <Text className="pb-8 text-center text-5xl/tight font-bold">
             {Env.NAME}
           </Text>
-          <Text
-            testID="form-title"
-            className="pb-6 text-center text-4xl font-bold"
-          >
-            Sign In
-          </Text>
         </View>
-
+        <Text
+          testID="form-title"
+          className="pb-6 text-center text-4xl font-bold"
+        >
+          Sign In
+        </Text>
         <ControlledInput
           containerStyles="mb-4"
           testID="email-input"
@@ -70,7 +74,7 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
           testID="login-button"
           label="Login"
           onPress={handleSubmit(onSubmit)}
-          variant="secondary"
+          size="lg"
         />
         <View className="items-center justify-center">
           <Text className="flex flex-row items-start text-center text-gray-500">

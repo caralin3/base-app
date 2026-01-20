@@ -14,7 +14,7 @@ import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
-import { useThemeConfig } from '@/components';
+import { FocusAwareStatusBar, useThemeConfig } from '@/components';
 import { useAuth } from '@/lib';
 import { firebaseAuth } from '@/lib/firebase/config';
 
@@ -104,7 +104,10 @@ function Providers({ children }: { children: React.ReactNode }) {
       >
         <KeyboardProvider>
           <ThemeProvider value={theme}>
-            <BottomSheetModalProvider>{children}</BottomSheetModalProvider>
+            <BottomSheetModalProvider>
+              <FocusAwareStatusBar />
+              {children}
+            </BottomSheetModalProvider>
           </ThemeProvider>
         </KeyboardProvider>
       </GestureHandlerRootView>

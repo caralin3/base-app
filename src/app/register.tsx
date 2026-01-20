@@ -1,10 +1,6 @@
 import React from 'react';
 
-import {
-  FocusAwareStatusBar,
-  RegisterForm,
-  type RegisterFormProps,
-} from '@/components';
+import { RegisterForm, type RegisterFormProps } from '@/components';
 import { useAuth } from '@/lib';
 
 export default function Register() {
@@ -14,10 +10,5 @@ export default function Register() {
     await register(data.email, data.password);
   };
 
-  return (
-    <>
-      <FocusAwareStatusBar />
-      <RegisterForm onSubmit={onSubmit} />
-    </>
-  );
+  return <RegisterForm onSubmit={onSubmit} />;
 }

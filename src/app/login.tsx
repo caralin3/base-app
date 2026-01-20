@@ -1,10 +1,6 @@
 import React from 'react';
 
-import {
-  FocusAwareStatusBar,
-  LoginForm,
-  type LoginFormProps,
-} from '@/components';
+import { LoginForm, type LoginFormProps } from '@/components';
 import { useAuth } from '@/lib';
 
 export default function Login() {
@@ -14,10 +10,5 @@ export default function Login() {
     await signIn(data.email, data.password);
   };
 
-  return (
-    <>
-      <FocusAwareStatusBar />
-      <LoginForm onSubmit={onSubmit} />
-    </>
-  );
+  return <LoginForm onSubmit={onSubmit} />;
 }

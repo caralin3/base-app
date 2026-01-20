@@ -1,15 +1,13 @@
-import { Text, View } from '@/components';
+import { Screen, Text } from '@/components';
 
 export default function Favorites() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+    <Screen
+      headerProps={{
+        title: 'My Favorites',
       }}
     >
       <Text>Favorites screen</Text>
-    </View>
+    </Screen>
   );
 }

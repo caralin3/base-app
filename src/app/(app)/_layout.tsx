@@ -12,7 +12,9 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      backBehavior="history"
       screenOptions={{
+        headerShown: false,
         tabBarActiveTintColor: colors.primary[600],
         tabBarButton: HapticTab,
         tabBarShowLabel: false,
@@ -23,9 +25,11 @@ export default function TabLayout() {
         }),
         tabBarStyle: Platform.select({
           ios: {
+            backgroundColor: colors.charcoal[400],
             paddingTop: 10,
           },
           default: {
+            backgroundColor: colors.charcoal[400],
             height: 95,
             paddingTop: 5,
           },

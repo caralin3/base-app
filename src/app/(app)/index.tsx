@@ -1,14 +1,15 @@
 import { Link } from 'expo-router';
 
-import { Text, View } from '@/components';
+import { colors, Screen, Text } from '@/components';
 
 export default function Home() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+    <Screen
+      headerProps={{
+        brand: true,
+        title: 'Binge Buddy',
+        showBackButton: false,
+        titleColor: colors.primary[600],
       }}
     >
       <Text>Edit app/index.tsx to edit this screen.</Text>
@@ -21,6 +22,6 @@ export default function Home() {
       <Link href="/(groups)/currently-watching" className="mt-4">
         <Text className="text-blue-500 underline">Currently Watching</Text>
       </Link>
-    </View>
+    </Screen>
   );
 }

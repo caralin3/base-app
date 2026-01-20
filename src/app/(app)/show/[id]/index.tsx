@@ -1,15 +1,13 @@
-import { Text, View } from '@/components';
+import { Screen, Text } from '@/components';
 
 export default function Show() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+    <Screen
+      headerProps={{
+        title: 'Show',
       }}
     >
       <Text>Show screen</Text>
-    </View>
+    </Screen>
   );
 }

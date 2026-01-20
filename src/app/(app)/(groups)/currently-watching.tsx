@@ -1,15 +1,13 @@
-import { Text, View } from '@/components';
+import { Screen, Text } from '@/components';
 
 export default function CurrentlyWatching() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+    <Screen
+      headerProps={{
+        title: 'Currently Watching',
       }}
     >
       <Text>Currently Watching screen</Text>
-    </View>
+    </Screen>
   );
 }

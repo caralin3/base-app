@@ -5,7 +5,7 @@ import {
   Inputs,
   ScrollView,
   Typography,
-} from '../../../components';
+} from '@/components';
 
 export default function Style() {
   return (

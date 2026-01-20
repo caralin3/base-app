@@ -1,7 +1,6 @@
-import { Button, Text, View } from '../../../components';
-import { Env } from '../../../lib';
+import { Button, Text, View } from '@/components';
 
-export default function Index() {
+export default function Search() {
   return (
     <View
       style={{
@@ -10,7 +9,7 @@ export default function Index() {
         alignItems: 'center',
       }}
     >
-      <Text>{Env.VERSION} - Edit app/index.tsx to edit this screen.</Text>
+      <Text>Search</Text>
       <Button label="small" size="sm" className="mr-2" />
     </View>
   );

@@ -4,8 +4,8 @@ import {
   FocusAwareStatusBar,
   RegisterForm,
   type RegisterFormProps,
-} from '../components';
-import { useAuth } from '../lib';
+} from '@/components';
+import { useAuth } from '@/lib';
 
 export default function Register() {
   const register = useAuth.use.register();

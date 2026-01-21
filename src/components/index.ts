@@ -2,6 +2,7 @@ export * from './buttons';
 export * from './card';
 export * from './colors';
 export * from './haptic-tab';
+export * from './image';
 export * from './inputs';
 export * from './layout';
 export * from './login-form';

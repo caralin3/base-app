@@ -1,17 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 
-import { Screen, ScrollView, Text } from '@/components';
+import { Image, ParallaxScrollView, Screen, Text } from '@/components';
 import { useAuth } from '@/lib';
 import { getTvShowDetails } from '@/lib/api';
 import { FIRESTORE_COLLECTIONS, getFavoriteEpisodes } from '@/lib/firebase';
 import { type ShowRouteParams } from '@/lib/types';
+import { getTmdbUri } from '@/lib/utils';
 
 export default function Show() {
   const userId = useAuth().user?.id ?? '';
   const local = useLocalSearchParams<ShowRouteParams>();
   const showId = local.id;
-  console.log('ShowId:', showId);
   const {
     data: favoriteEpisodes,
     refetch: refetchEpisodes,
@@ -37,7 +37,14 @@ export default function Show() {
         title: 'Show',
       }}
     >
-      <ScrollView contentContainerClassName="p-4">
+      <ParallaxScrollView
+        headerImage={
+          <Image
+            source={{ uri: getTmdbUri(showDetails?.backdrop_path) ?? '' }}
+            style={{ width: '100%', height: '100%' }}
+          />
+        }
+      >
         <Text>{showDetails?.name}</Text>
         <Text>{showDetails?.overview}</Text>
         {favoriteEpisodes?.map((episode) => (
@@ -45,7 +52,7 @@ export default function Show() {
             S{episode.seasonNumber}E{episode.episodeNumber}: {episode.name}
           </Text>
         ))}
-      </ScrollView>
+      </ParallaxScrollView>
     </Screen>
   );
 }

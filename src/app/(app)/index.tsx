@@ -60,6 +60,9 @@ export default function Home() {
           />
         }
       >
+        <Link href="/(groups)/favorites" className="mt-4">
+          <Text className="text-blue-500 underline">Favorites</Text>
+        </Link>
         {data?.map((favoriteShow) => (
           <Link
             key={favoriteShow.id}
@@ -72,7 +75,9 @@ export default function Home() {
           </Link>
         ))}
 
-        <Text className="mt-8 text-lg font-semibold">Currently Watching</Text>
+        <Link href="/(groups)/currently-watching" className="mt-4">
+          <Text className="mt-8 text-lg font-semibold">Currently Watching</Text>
+        </Link>
         {currentlyWatchingShows?.map((show) => (
           <Link key={show.id} href={`/show/${show.id}`} className="mt-4">
             <Text>
@@ -81,12 +86,6 @@ export default function Home() {
           </Link>
         ))}
       </ScrollView>
-      <Link href="/(groups)/favorites" className="mt-4">
-        <Text className="text-blue-500 underline">Favorites</Text>
-      </Link>
-      <Link href="/(groups)/currently-watching" className="mt-4">
-        <Text className="text-blue-500 underline">Currently Watching</Text>
-      </Link>
     </Screen>
   );
 }

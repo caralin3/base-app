@@ -81,6 +81,9 @@ const client = z.object({
   FIREBASE_ANDROID_APP_ID: z.string(),
   FIREBASE_IOS_APP_ID: z.string(),
   FIREBASE_PROJECT_ID: z.string(),
+  TMDB_API_URL: z.string(),
+  TMDB_IMAGE_URL: z.string(),
+  TMDB_API_KEY: z.string(),
 });
 
 const buildTime = z.object({
@@ -107,6 +110,9 @@ const _clientEnv = {
   FIREBASE_ANDROID_APP_ID: process.env.FIREBASE_ANDROID_APP_ID,
   FIREBASE_IOS_APP_ID: process.env.FIREBASE_IOS_APP_ID,
   FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
+  TMDB_API_URL: process.env.TMDB_API_URL,
+  TMDB_IMAGE_URL: process.env.TMDB_IMAGE_URL,
+  TMDB_API_KEY: process.env.TMDB_API_KEY,
 };
 
 /**

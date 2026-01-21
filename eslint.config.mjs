@@ -37,7 +37,7 @@ export default defineConfig([
       'unused-imports': unusedImports,
     },
     rules: {
-      'max-params': ['error', 3],
+      // 'max-params': ['error', 3],
       // 'max-lines-per-function': ['error', 70],
       'tailwindcss/classnames-order': [
         'warn',

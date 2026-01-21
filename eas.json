@@ -6,13 +6,31 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "TMDB_API_URL": "https://api.themoviedb.org/3",
+        "TMDB_IMAGE_URL": "https://image.tmdb.org"
+      },
+      "android": {
+        "buildType": "apk"
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "TMDB_API_URL": "https://api.themoviedb.org/3",
+        "TMDB_IMAGE_URL": "https://image.tmdb.org"
+      },
+      "android": {
+        "buildType": "apk"
+      }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "TMDB_API_URL": "https://api.themoviedb.org/3",
+        "TMDB_IMAGE_URL": "https://image.tmdb.org"
+      }
     }
   },
   "submit": {

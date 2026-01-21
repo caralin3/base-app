@@ -61,7 +61,6 @@ export const getFavoriteEpisodes = async (showId: string, userId: string) => {
       where('userId', '==', userId),
       where('showId', '==', Number(showId))
     );
-    console.log('Querying favorite episodes with:', { showId, userId });
     const querySnapshot = await getDocs(q);
     const favorites: FavoriteEpisode[] = [];
     querySnapshot.forEach((doc) => {

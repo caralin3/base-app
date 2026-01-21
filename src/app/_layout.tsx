@@ -10,12 +10,12 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { Stack, useRouter } from 'expo-router';
 import { onAuthStateChanged, type Unsubscribe } from 'firebase/auth';
 import React, { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-import { FocusAwareStatusBar, useThemeConfig } from '@/components';
+import { colors, useThemeConfig } from '@/components';
 import { useAuth } from '@/lib';
 import { firebaseAuth } from '@/lib/firebase/config';
 
@@ -107,8 +107,12 @@ function Providers({ children }: { children: React.ReactNode }) {
           <ThemeProvider value={theme}>
             <BottomSheetModalProvider>
               <SafeAreaProvider>
-                <FocusAwareStatusBar />
-                {children}
+                <StatusBar barStyle="light-content" />
+                <SafeAreaView
+                  style={{ flex: 1, backgroundColor: colors.charcoal[400] }}
+                >
+                  {children}
+                </SafeAreaView>
               </SafeAreaProvider>
             </BottomSheetModalProvider>
           </ThemeProvider>

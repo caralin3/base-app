@@ -23,17 +23,12 @@ export default function TabLayout() {
             padding: 0,
           },
         }),
-        tabBarStyle: Platform.select({
-          ios: {
-            backgroundColor: colors.charcoal[400],
-            paddingTop: 10,
-          },
-          default: {
-            backgroundColor: colors.charcoal[400],
-            height: 95,
-            paddingTop: 5,
-          },
-        }),
+        tabBarStyle: {
+          backgroundColor: colors.charcoal[400],
+          borderTopWidth: 0,
+          height: 50,
+          paddingTop: 5,
+        },
       }}
     >
       <Tabs.Screen

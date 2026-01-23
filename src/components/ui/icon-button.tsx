@@ -1,55 +1,72 @@
-import { useColorScheme } from 'nativewind';
+import { Link, type LinkProps } from 'expo-router';
 import React from 'react';
 import {
   type GestureResponderEvent,
   Pressable,
-  StyleSheet,
   type ViewStyle,
 } from 'react-native';
 
 import colors from './colors';
-import { IconSymbol, type IconSymbolName } from './icon-symbol';
+import {
+  IconSymbol,
+  type IconSymbolName,
+  type IconSymbolType,
+} from './icon-symbol';
+import { Text } from './text';
 
 type IconButtonProps = {
-  icon: IconSymbolName;
-  size?: number;
   color?: string;
-  onPress?: (event: GestureResponderEvent) => void;
-  style?: ViewStyle;
   disabled?: boolean;
+  href?: LinkProps['href'];
+  iconName: IconSymbolName;
+  iconType?: IconSymbolType;
+  label?: string;
+  onPress?: (event: GestureResponderEvent) => void;
+  size?: number;
+  style?: ViewStyle;
 };
 
 export const IconButton = ({
-  icon,
-  size = 24,
-  color,
-  onPress,
-  style,
   disabled = false,
+  color,
+  href,
+  iconName,
+  iconType = 'material',
+  label,
+  onPress,
+  size = 24,
+  style,
 }: IconButtonProps) => {
-  const { colorScheme } = useColorScheme();
-  const defaultColor =
-    colorScheme === 'dark' ? colors.neutral[50] : colors.charcoal[800];
+  const defaultColor = colors.white;
 
-  return (
+  const PressableIcon = (
     <Pressable
-      style={[styles.button, style, disabled && styles.disabled]}
+      className="flex-row items-center justify-center"
+      style={[style, disabled ? { opacity: 0.5 } : undefined]}
       onPress={onPress}
       disabled={disabled}
     >
-      <IconSymbol name={icon} size={size} color={color || defaultColor} />
+      {!!label && <Text>{label}</Text>}
+      <IconSymbol
+        name={iconName}
+        size={size}
+        color={color || defaultColor}
+        type={iconType}
+      />
     </Pressable>
   );
-};
 
-const styles = StyleSheet.create({
-  button: {
-    // padding: 8,
-    // borderRadius: 24,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-  },
-  disabled: {
-    // opacity: 0.5,
-  },
-});
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className="flex-row items-center justify-center"
+        asChild
+      >
+        {PressableIcon}
+      </Link>
+    );
+  }
+
+  return PressableIcon;
+};

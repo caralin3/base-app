@@ -7,8 +7,7 @@ import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import * as z from 'zod';
 
 import { Env } from '../lib';
-import { Image } from './image';
-import { Button, ControlledInput, Text, View } from './ui';
+import { Button, ControlledInput, Image, Text, View } from './ui';
 
 const schema = z.object({
   email: z.email('Invalid email format'),

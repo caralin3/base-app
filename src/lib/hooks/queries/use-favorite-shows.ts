@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { type PosterProps } from '@/components';
 import { FIRESTORE_COLLECTIONS, getFavoriteShows } from '@/lib/firebase';
 import { getTmdbUri, sortByDate } from '@/lib/utils';
 
@@ -20,16 +19,13 @@ export function useFavoriteShows(
         .sort((a, b) =>
           sortByDate(a.favoritedAt || '', b.favoritedAt || '', sortDirection)
         )
-        .map((show) => {
-          const poster: PosterProps = {
-            ...show,
-            href: `/show/${show.id}` as const,
-            isFavorite: show.favoritedAt != null,
-            isWatching: show.watchingAt != null,
-            uri: getTmdbUri(posterPath ?? show.posterPath),
-          };
-          return poster;
-        }),
+        .map((show) => ({
+          ...show,
+          href: `/show/${show.id}` as const,
+          isFavorite: show.favoritedAt != null,
+          isWatching: show.watchingAt != null,
+          uri: getTmdbUri(posterPath ?? show.posterPath),
+        })),
     enabled: !!userId,
   });
 }

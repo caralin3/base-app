@@ -20,8 +20,11 @@ interface HeaderProps extends PropsWithChildren {
   brand?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
   right?: {
-    iconName: IconSymbolName;
-    iconType?: 'community' | 'material';
+    icon: {
+      color?: string;
+      name: IconSymbolName;
+      type?: 'community' | 'material';
+    };
     onPress: () => void;
   }[];
   showBackButton?: boolean;
@@ -78,12 +81,12 @@ export const Header = ({
       <View style={[{ backgroundColor }, styles.row]}>
         {right?.length &&
           right.map((rt) => (
-            <TouchableOpacity key={rt.iconName} onPress={rt.onPress}>
+            <TouchableOpacity key={rt.icon.name} onPress={rt.onPress}>
               <IconSymbol
                 size={28}
-                name={rt.iconName}
-                color={color}
-                type={rt.iconType}
+                name={rt.icon.name}
+                color={rt.icon.color ?? color}
+                type={rt.icon.type}
               />
             </TouchableOpacity>
           ))}

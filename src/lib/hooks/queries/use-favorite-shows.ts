@@ -11,6 +11,7 @@ export function useFavoriteShows(
   posterPath?: string
 ) {
   const userId = useAuth().user?.id ?? '';
+
   return useQuery({
     queryKey: [FIRESTORE_COLLECTIONS.FAVORITE_SHOWS, userId],
     queryFn: ({ queryKey }) => getFavoriteShows(queryKey[1]),

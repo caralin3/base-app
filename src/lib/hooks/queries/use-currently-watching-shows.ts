@@ -14,6 +14,7 @@ export function useCurrentlyWatchingShows(
   posterPath?: string
 ) {
   const userId = useAuth().user?.id ?? '';
+
   return useQuery({
     queryKey: [FIRESTORE_COLLECTIONS.CURRENTLY_WATCHING_SHOWS, userId],
     queryFn: ({ queryKey }) => getCurrentlyWatchingShows(queryKey[1]),

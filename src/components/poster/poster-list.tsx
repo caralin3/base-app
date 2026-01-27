@@ -1,5 +1,6 @@
 import { FlatList, type RefreshControlProps } from 'react-native';
 
+import { TabsFlatList } from '../tabs-view';
 import { Poster, type PosterProps } from './poster';
 import { PosterListSkeleton } from './poster-list-skeleton';
 
@@ -38,21 +39,21 @@ export const PosterList = ({
     ListEmptyComponent
   );
 
-  // if (inTabPanel) {
-  //   return (
-  //     <TabsFlatList
-  //       data={data}
-  //       horizontal={horizontal}
-  //       renderItem={({ item }) => (
-  //         <Poster {...item} horizontal={horizontalItem} onPress={onPress} />
-  //       )}
-  //       ListEmptyComponent={emptyComponent}
-  //       keyExtractor={(item) => item.id.toString()}
-  //       showsHorizontalScrollIndicator={false}
-  //       style={{ padding: inTabPanel ? 16 : undefined }}
-  //     />
-  //   );
-  // }
+  if (inTabPanel) {
+    return (
+      <TabsFlatList
+        data={data}
+        horizontal={horizontal}
+        renderItem={({ item }) => (
+          <Poster {...item} horizontal={horizontalItem} onPress={onPress} />
+        )}
+        ListEmptyComponent={emptyComponent}
+        keyExtractor={(item) => item.id.toString()}
+        showsHorizontalScrollIndicator={false}
+        style={{ padding: inTabPanel ? 16 : undefined }}
+      />
+    );
+  }
 
   return (
     <FlatList

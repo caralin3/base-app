@@ -1,13 +1,34 @@
-import { Screen, Text } from '@/components';
+import { useCallback } from 'react';
+import { RefreshControl } from 'react-native-gesture-handler';
+
+import { Screen, View } from '@/components';
+import { PosterList } from '@/components/poster/poster-list';
+import { useCurrentlyWatchingShows } from '@/lib/hooks';
 
 export default function CurrentlyWatching() {
+  const { data, refetch, isRefetching } = useCurrentlyWatchingShows();
+
+  const onRefresh = useCallback(() => {
+    refetch();
+  }, [refetch]);
+
   return (
     <Screen
       headerProps={{
         title: 'Currently Watching',
       }}
     >
-      <Text>Currently Watching screen</Text>
+      <View className="flex-1 p-4">
+        <PosterList
+          data={data ?? []}
+          horizontal={false}
+          horizontalItem
+          isLoading={isRefetching}
+          refreshControl={
+            <RefreshControl refreshing={isRefetching} onRefresh={onRefresh} />
+          }
+        />
+      </View>
     </Screen>
   );
 }

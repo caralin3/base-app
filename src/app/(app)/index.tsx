@@ -1,61 +1,37 @@
-import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { RefreshControl } from 'react-native-gesture-handler';
 
 import { colors, PosterSection, Screen, ScrollView } from '@/components';
-import { useAuth } from '@/lib';
 import {
-  FIRESTORE_COLLECTIONS,
-  getCurrentlyWatchingShows,
-  getFavoriteShows,
-} from '@/lib/firebase';
-import { getTmdbUri, sortByDate } from '@/lib/utils';
+  useCurrentlyWatchingShows,
+  useFavoriteShows,
+  useTrendingShows,
+} from '@/lib/hooks';
 
 export default function Home() {
-  const userId = useAuth().user?.id ?? '';
-  const { data, refetch, isRefetching } = useQuery({
-    queryKey: [FIRESTORE_COLLECTIONS.FAVORITE_SHOWS, userId],
-    queryFn: ({ queryKey }) => getFavoriteShows(queryKey[1]),
-    select: (favoriteShows) =>
-      favoriteShows
-        .sort((a, b) =>
-          sortByDate(a.favoritedAt || '', b.favoritedAt || '', 'desc')
-        )
-        .map((show) => ({
-          ...show,
-          href: `/show/${show.id}` as const,
-          isFavorite: show.favoritedAt != null,
-          isWatching: show.watchingAt != null,
-          uri: getTmdbUri(show.posterPath),
-        })),
-    enabled: !!userId,
-  });
+  const {
+    data: favoriteShows,
+    refetch: refetchFavoriteShows,
+    isRefetching: isRefetchingFavoriteShows,
+  } = useFavoriteShows();
+
   const {
     data: currentlyWatchingShows,
     refetch: refetchCurrentlyWatching,
     isRefetching: isRefetchingCurrentlyWatching,
-  } = useQuery({
-    queryKey: [FIRESTORE_COLLECTIONS.CURRENTLY_WATCHING_SHOWS, userId],
-    queryFn: ({ queryKey }) => getCurrentlyWatchingShows(queryKey[1]),
-    select: (currentlyWatchingShows) =>
-      currentlyWatchingShows
-        .sort((a, b) =>
-          sortByDate(a.watchingAt || '', b.watchingAt || '', 'desc')
-        )
-        .map((show) => ({
-          ...show,
-          href: `/show/${show.id}` as const,
-          isFavorite: show.favoritedAt != null,
-          isWatching: show.watchingAt != null,
-          uri: getTmdbUri(show.posterPath),
-        })),
-    enabled: !!userId,
-  });
+  } = useCurrentlyWatchingShows();
+
+  const {
+    data: trendingShows,
+    refetch: refetchTrendingShows,
+    isRefetching: isRefetchingTrendingShows,
+  } = useTrendingShows();
 
   const onRefresh = useCallback(() => {
-    refetch();
+    refetchFavoriteShows();
     refetchCurrentlyWatching();
-  }, [refetch, refetchCurrentlyWatching]);
+    refetchTrendingShows();
+  }, [refetchFavoriteShows, refetchCurrentlyWatching, refetchTrendingShows]);
 
   return (
     <Screen
@@ -70,7 +46,11 @@ export default function Home() {
         contentContainerClassName="p-4"
         refreshControl={
           <RefreshControl
-            refreshing={isRefetching || isRefetchingCurrentlyWatching}
+            refreshing={
+              isRefetchingFavoriteShows ||
+              isRefetchingCurrentlyWatching ||
+              isRefetchingTrendingShows
+            }
             onRefresh={onRefresh}
           />
         }
@@ -82,9 +62,10 @@ export default function Home() {
         />
         <PosterSection
           title="My Favorites"
-          posters={data ?? []}
+          posters={favoriteShows ?? []}
           viewAllHref="/(groups)/favorites"
         />
+        <PosterSection title="Trending Shows" posters={trendingShows ?? []} />
       </ScrollView>
     </Screen>
   );

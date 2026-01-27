@@ -16,8 +16,8 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import { colors, useThemeConfig } from '@/components';
-import { useAuth } from '@/lib';
 import { firebaseAuth } from '@/lib/firebase/config';
+import { useAuth } from '@/lib/hooks';
 
 export default function RootLayout() {
   return (

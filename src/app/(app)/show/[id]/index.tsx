@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 
 import { Image, ParallaxScrollView, Screen, Text } from '@/components';
-import { useAuth } from '@/lib';
 import { getTvShowDetails } from '@/lib/api';
 import { FIRESTORE_COLLECTIONS, getFavoriteEpisodes } from '@/lib/firebase';
+import { useAuth } from '@/lib/hooks';
 import { type ShowRouteParams } from '@/lib/types';
 import { getTmdbUri } from '@/lib/utils';
 

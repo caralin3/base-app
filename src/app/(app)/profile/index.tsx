@@ -8,7 +8,8 @@ import {
   ThemeItem,
   View,
 } from '@/components';
-import { Env, useAuth } from '@/lib';
+import { Env } from '@/lib';
+import { useAuth } from '@/lib/hooks';
 
 export default function Profile() {
   const router = useRouter();

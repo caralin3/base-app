@@ -9,6 +9,7 @@ export interface PosterProps {
   firstAirDate?: string | null;
   horizontal?: boolean;
   href: LinkProps['href'];
+  id: number;
   isFavorite: boolean;
   isWatching?: boolean;
   name: string;

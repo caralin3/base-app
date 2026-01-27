@@ -28,7 +28,7 @@ export type User = z.infer<typeof User>;
 
 export const CurrentlyWatchingShow = z.object({
   ...Show.shape,
-  documentId: z.string().optional(),
+  documentId: z.string(),
   lastViewedSeason: z.number().optional(),
   userId: z.string(),
 });
@@ -43,7 +43,7 @@ export type NewCurrentlyWatchingShow = z.infer<typeof NewCurrentlyWatchingShow>;
 
 export const FavoriteShow = z.object({
   ...Show.shape,
-  documentId: z.string().optional(),
+  documentId: z.string(),
   watched: z.boolean().optional(),
   lastViewedSeason: z.number().optional(),
   userId: z.string(),
@@ -59,7 +59,7 @@ export type NewFavoriteShow = z.infer<typeof NewFavoriteShow>;
 
 export const FavoriteEpisode = z.object({
   ...Episode.shape,
-  documentId: z.string().optional(),
+  documentId: z.string(),
   watched: z.boolean().optional(),
   userId: z.string(),
 });

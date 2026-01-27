@@ -6,9 +6,7 @@ import { PosterList } from './poster-list';
 
 interface PosterSectionProps {
   isLoading?: boolean;
-  posters: (PosterProps & {
-    id: number;
-  })[];
+  posters: PosterProps[];
   title: string;
   viewAllHref?: LinkProps['href'];
 }

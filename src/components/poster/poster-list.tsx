@@ -4,9 +4,7 @@ import { Poster, type PosterProps } from './poster';
 import { PosterListSkeleton } from './poster-list-skeleton';
 
 interface PosterListProps {
-  data: (PosterProps & {
-    id: number;
-  })[];
+  data: PosterProps[];
   horizontal?: boolean;
   horizontalItem?: boolean;
   inTabPanel?: boolean;

@@ -47,7 +47,6 @@ export const Poster = ({
               horizontal
               alt={alt}
               uri={uri}
-              className="rounded-md"
               style={{ height: 140, width: 92 }}
             />
             <View className="flex-1">

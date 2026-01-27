@@ -1,6 +1,7 @@
 import { FlatList, type RefreshControlProps } from 'react-native';
 
 import { TabsFlatList } from '../tabs-view';
+import { View } from '../ui';
 import { Poster, type PosterProps } from './poster';
 import { PosterListSkeleton } from './poster-list-skeleton';
 
@@ -44,13 +45,17 @@ export const PosterList = ({
       <TabsFlatList
         data={data}
         horizontal={horizontal}
+        ItemSeparatorComponent={() => <View className="h-2" />}
         renderItem={({ item }) => (
           <Poster {...item} horizontal={horizontalItem} onPress={onPress} />
         )}
         ListEmptyComponent={emptyComponent}
         keyExtractor={(item) => item.id.toString()}
         showsHorizontalScrollIndicator={false}
-        style={{ padding: inTabPanel ? 16 : undefined }}
+        contentContainerStyle={{
+          padding: 16,
+        }}
+        refreshControl={refreshControl}
       />
     );
   }
@@ -63,6 +68,7 @@ export const PosterList = ({
         <Poster {...item} horizontal={horizontalItem} onPress={onPress} />
       )}
       ListEmptyComponent={emptyComponent}
+      ItemSeparatorComponent={() => <View className="h-2" />}
       keyExtractor={(item) => item.id.toString()}
       showsHorizontalScrollIndicator={false}
       refreshControl={refreshControl}

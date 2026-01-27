@@ -48,7 +48,7 @@ export const TabsView = ({ header, tabs }: TabsViewProps) => {
   );
 
   return (
-    <Tabs.Container renderHeader={header} renderTabBar={TabBar}>
+    <Tabs.Container renderHeader={header} renderTabBar={TabBar} lazy>
       {tabs.map((tab) => (
         <Tabs.Tab key={tab.name} name={tab.name}>
           {tab.content}

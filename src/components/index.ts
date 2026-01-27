@@ -8,6 +8,7 @@ export * from './login-form';
 export * from './poster';
 export * from './register-form';
 export * from './settings';
+export * from './show-details';
 export * from './tabs-view';
 export * from './title';
 export * from './typography';

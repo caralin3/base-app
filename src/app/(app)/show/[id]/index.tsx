@@ -3,6 +3,7 @@ import { useLocalSearchParams } from 'expo-router';
 import {
   colors,
   Image,
+  RecommendedTabContent,
   Screen,
   TabsScrollView,
   TabsView,
@@ -16,12 +17,14 @@ import {
   useShowDetails,
   useShowToggles,
 } from '@/lib/hooks';
+import { useRecommendedShows } from '@/lib/hooks/queries/use-recommended-shows';
 import { type ShowRouteParams } from '@/lib/types';
 import { getTmdbUri } from '@/lib/utils';
 
 export default function Show() {
   const local = useLocalSearchParams<ShowRouteParams>();
   const showId = local.id;
+  const { data: recommendedShows } = useRecommendedShows(showId);
   const favoriteShow = useFavoriteShows().data?.find(
     (show) => show.id.toString() === showId
   );
@@ -39,18 +42,18 @@ export default function Show() {
   const { data: showDetails, isRefetching: isRefetchingShowDetails } =
     useShowDetails(showId);
 
-  if (showDetails == null) {
-    return (
-      <Screen>
-        <Text className="text-white">Show not found.</Text>
-      </Screen>
-    );
-  }
-
   if (isRefetchingShowDetails) {
     return (
       <Screen>
         <Text className="text-white">Loading Show Details...</Text>
+      </Screen>
+    );
+  }
+
+  if (showDetails == null) {
+    return (
+      <Screen>
+        <Text className="text-white">Show not found.</Text>
       </Screen>
     );
   }
@@ -113,11 +116,7 @@ export default function Show() {
           },
           {
             name: 'More Like This',
-            content: (
-              <TabsScrollView>
-                <Text className="text-white">More Content</Text>
-              </TabsScrollView>
-            ),
+            content: <RecommendedTabContent shows={recommendedShows} />,
           },
         ]}
       />

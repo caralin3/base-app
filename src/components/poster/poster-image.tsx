@@ -29,7 +29,7 @@ export const PosterImage = ({
     if (horizontal) {
       return (
         <View
-          className="items-center justify-center gap-2 rounded-md p-4"
+          className="items-center justify-center gap-2 p-4"
           style={[{ backgroundColor, height: 75, width: 125 }]}
         >
           <IconSymbol size={40} name="tv" type="community" color={iconColor} />
@@ -39,7 +39,7 @@ export const PosterImage = ({
 
     return (
       <View
-        className="items-center justify-center gap-2 rounded-md p-4"
+        className="items-center justify-center gap-2 p-4"
         style={[{ backgroundColor, height: 175, width: 115 }]}
       >
         <IconSymbol size={40} name="tv" type="community" color={iconColor} />
@@ -48,5 +48,5 @@ export const PosterImage = ({
     );
   }
 
-  return <Image source={{ uri }} style={style} />;
+  return <Image className="rounded-sm" source={{ uri }} style={style} />;
 };

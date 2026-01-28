@@ -1,5 +1,5 @@
 import { Image, type ImageProps, type ImageStyle } from 'expo-image';
-import { type StyleProp } from 'react-native';
+import { type StyleProp, StyleSheet } from 'react-native';
 
 import { colors, IconSymbol, Text, View } from '../ui';
 
@@ -29,8 +29,11 @@ export const PosterImage = ({
     if (horizontal) {
       return (
         <View
-          className="items-center justify-center gap-2 p-4"
-          style={[{ backgroundColor, height: 75, width: 125 }]}
+          style={[
+            styles.placeholder,
+            styles.horizontalPlaceholder,
+            { backgroundColor },
+          ]}
         >
           <IconSymbol size={40} name="tv" type="community" color={iconColor} />
         </View>
@@ -39,14 +42,40 @@ export const PosterImage = ({
 
     return (
       <View
-        className="items-center justify-center gap-2 p-4"
-        style={[{ backgroundColor, height: 175, width: 115 }]}
+        style={[
+          styles.placeholder,
+          styles.verticalPlaceholder,
+          { backgroundColor },
+        ]}
       >
         <IconSymbol size={40} name="tv" type="community" color={iconColor} />
-        <Text align="center">{alt}</Text>
+        <Text style={styles.altText}>{alt}</Text>
       </View>
     );
   }
 
-  return <Image className="rounded-sm" source={{ uri }} style={style} />;
+  return <Image style={[styles.image, style]} source={{ uri }} />;
 };
+
+const styles = StyleSheet.create({
+  placeholder: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    padding: 16,
+  },
+  horizontalPlaceholder: {
+    height: 75,
+    width: 125,
+  },
+  verticalPlaceholder: {
+    height: 175,
+    width: 115,
+  },
+  image: {
+    borderRadius: 2,
+  },
+  altText: {
+    textAlign: 'center',
+  },
+});

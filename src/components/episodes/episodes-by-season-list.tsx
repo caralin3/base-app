@@ -65,7 +65,7 @@ export const EpisodesBySeasonList = ({
             type={itemType}
           />
         )}
-        contentContainerStyle={{ padding: 16 }}
+        contentContainerStyle={{ padding: 8 }}
         refreshControl={refreshControl}
       />
     );

@@ -53,7 +53,7 @@ export const PosterList = ({
         keyExtractor={(item) => item.id.toString()}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
-          padding: 16,
+          padding: 8,
         }}
         refreshControl={refreshControl}
       />

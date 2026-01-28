@@ -1,5 +1,6 @@
 import { formatDate, parseISO } from 'date-fns';
 import { useState } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { getTmdbImageUrl } from '@/lib/api/tmdb/endpoints';
 import { type Episode } from '@/lib/types';
@@ -25,7 +26,7 @@ export const EpisodeItem = ({
 
   if (type === 'simple') {
     return (
-      <View className="flex-1 gap-1 pt-4">
+      <View style={styles.container}>
         <Collapsible
           title={`S${episode.seasonNumber} E${episode.episodeNumber} - ${episode.name}`}
           rightAction={
@@ -39,16 +40,16 @@ export const EpisodeItem = ({
             />
           }
         >
-          <View className="flex-row items-start justify-between gap-4">
+          <View style={styles.rowBetween}>
             {episode.runtime > 0 && (
-              <Text className="text-sm">{episode.runtime} min</Text>
+              <Text style={styles.info}>{episode.runtime} min</Text>
             )}
-            <Text className="text-sm">
+            <Text style={styles.info}>
               Air Date: {formatDate(parseISO(episode.airDate), DATE_FORMAT)}
             </Text>
           </View>
           {!!episode.overview && (
-            <Text className="text-sm">{episode.overview}</Text>
+            <Text style={styles.info}>{episode.overview}</Text>
           )}
         </Collapsible>
       </View>
@@ -58,21 +59,21 @@ export const EpisodeItem = ({
   const imagePath = episode.stillPath || posterPath;
 
   return (
-    <View className="flex-1 gap-1 pt-4">
-      <View className="flex-row items-start justify-between gap-4">
-        <View className="flex-1 flex-row items-start gap-2">
+    <View style={styles.container}>
+      <View style={styles.rowBetween}>
+        <View style={styles.row}>
           {!!imagePath && (
             <Image
               source={{ uri: getTmdbImageUrl(imagePath) }}
-              className="h-[75px] w-[125px] rounded-md object-cover"
+              style={styles.image}
             />
           )}
-          <View className="flex-1">
-            <Text className="flex-wrap text-base font-bold capitalize">
+          <View style={styles.flex}>
+            <Text style={styles.name}>
               {episode.episodeNumber}. {episode.name}
             </Text>
             {episode.runtime > 0 && (
-              <Text className="text-sm">{episode.runtime} min</Text>
+              <Text style={styles.info}>{episode.runtime} min</Text>
             )}
           </View>
         </View>
@@ -88,13 +89,55 @@ export const EpisodeItem = ({
         </View>
       </View>
       {!!episode.overview && (
-        <Text className="text-sm">{episode.overview}</Text>
+        <Text style={styles.info}>{episode.overview}</Text>
       )}
-      <View className="flex-row justify-end">
-        <Text className="text-sm">
+      <View style={styles.rowEnd}>
+        <Text style={styles.info}>
           Air Date: {formatDate(parseISO(episode.airDate), DATE_FORMAT)}
         </Text>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    gap: 4,
+    paddingTop: 16,
+  },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
+  rowBetween: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: 16,
+  },
+  rowEnd: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  flex: {
+    flex: 1,
+  },
+  image: {
+    height: 75,
+    width: 125,
+    borderRadius: 6,
+    objectFit: 'cover',
+  },
+  name: {
+    flexWrap: 'wrap',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textTransform: 'capitalize',
+  },
+  info: {
+    fontSize: 14,
+  },
+});

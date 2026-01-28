@@ -60,6 +60,7 @@ export const Episode = z.object({
   crew: z.array(Crew).optional(),
   episodeNumber: z.number(),
   episodeType: z.string().optional(),
+  favoritedAt: z.string().optional(),
   guestStars: z.array(Star).optional(),
   id: z.number(),
   isFavorite: z.boolean().optional(),

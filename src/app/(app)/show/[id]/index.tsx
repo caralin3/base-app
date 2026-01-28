@@ -1,11 +1,14 @@
-import { useLocalSearchParams } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { useCallback } from 'react';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 import {
   colors,
+  EpisodesTabContent,
   Image,
+  MyEpisodesTabContent,
   RecommendedTabContent,
   Screen,
-  TabsScrollView,
   TabsView,
   Text,
   View,
@@ -14,6 +17,7 @@ import {
   useCurrentlyWatchingShows,
   useFavoriteEpisodes,
   useFavoriteShows,
+  useSeasonEpisodes,
   useShowDetails,
   useShowToggles,
 } from '@/lib/hooks';
@@ -25,14 +29,26 @@ export default function Show() {
   const local = useLocalSearchParams<ShowRouteParams>();
   const showId = local.id;
   const { data: recommendedShows } = useRecommendedShows(showId);
-  const favoriteShow = useFavoriteShows().data?.find(
+  const {
+    data: favoriteShowsData,
+    refetch: refetchFavoriteShows,
+    isFetching: isFetchingFavoriteShows,
+  } = useFavoriteShows();
+  const favoriteShow = favoriteShowsData?.find(
     (show) => show.id.toString() === showId
   );
   const currentlyWatchingShow = useCurrentlyWatchingShows().data?.find(
     (show) => show.id.toString() === showId
   );
-  const { toggleFavoriteShow, toggleCurrentlyWatchingShow } =
-    useShowToggles(showId);
+  const {
+    toggleFavoriteEpisode,
+    toggleFavoriteShow,
+    toggleCurrentlyWatchingShow,
+  } = useShowToggles(showId);
+  const {
+    getEpisodes,
+    seasonQuery: { data: season },
+  } = useSeasonEpisodes(showId, 1);
 
   const {
     data: favoriteEpisodes,
@@ -41,6 +57,19 @@ export default function Show() {
   } = useFavoriteEpisodes(showId);
   const { data: showDetails, isRefetching: isRefetchingShowDetails } =
     useShowDetails(showId);
+
+  const onRefresh = useCallback(() => {
+    refetchEpisodes();
+    refetchFavoriteShows();
+  }, [refetchEpisodes, refetchFavoriteShows]);
+
+  useFocusEffect(
+    useCallback(() => {
+      onRefresh();
+    }, [onRefresh])
+  );
+
+  const isRefetching = isRefetchingEpisodes || isFetchingFavoriteShows;
 
   if (isRefetchingShowDetails) {
     return (
@@ -99,19 +128,43 @@ export default function Show() {
         header={Header}
         tabs={[
           {
-            name: 'My Episodes',
+            name: 'Episodes',
             content: (
-              <TabsScrollView>
-                <Text className="text-white">My Episodes Content</Text>
-              </TabsScrollView>
+              <EpisodesTabContent
+                episodes={
+                  season
+                    ? getEpisodes(season.episodes, favoriteEpisodes ?? [])
+                    : []
+                }
+                show={showDetails}
+                onFavoriteEpisode={(episode) =>
+                  toggleFavoriteEpisode(episode, showDetails)
+                }
+                refreshControl={
+                  <RefreshControl
+                    refreshing={isRefetching}
+                    onRefresh={onRefresh}
+                  />
+                }
+              />
             ),
           },
           {
-            name: 'Episodes',
+            name: 'My Episodes',
             content: (
-              <TabsScrollView>
-                <Text className="text-white">Episodes Content</Text>
-              </TabsScrollView>
+              <MyEpisodesTabContent
+                episodes={favoriteEpisodes ?? []}
+                onFavoriteEpisode={(episode) =>
+                  toggleFavoriteEpisode(episode, showDetails)
+                }
+                show={showDetails}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={isRefetching}
+                    onRefresh={onRefresh}
+                  />
+                }
+              />
             ),
           },
           {

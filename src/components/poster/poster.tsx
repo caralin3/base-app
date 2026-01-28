@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { Link, type LinkProps } from 'expo-router';
 import { useState } from 'react';
 
-import { IconButton, Text, View } from '../ui';
+import { colors, IconButton, Text, View } from '../ui';
 import { PosterImage } from './poster-image';
 
 export interface PosterProps {
@@ -63,12 +63,14 @@ export const Poster = ({
             <IconButton
               iconName={isWatching ? 'eye.fill' : 'eye'}
               iconType="community"
+              color={colors.primary[600]}
               onPress={onWatch}
             />
           )}
           {!!onFavorite && (
             <IconButton
               iconName={hearted ? 'heart.fill' : 'heart'}
+              color={colors.primary[600]}
               onPress={() => {
                 onFavorite();
                 setHearted(!hearted);

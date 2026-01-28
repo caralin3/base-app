@@ -26,6 +26,5 @@ export function useFavoriteShows(
           isWatching: show.watchingAt != null,
           uri: getTmdbUri(posterPath ?? show.posterPath),
         })),
-    enabled: !!userId,
   });
 }

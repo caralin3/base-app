@@ -10,6 +10,5 @@ export function useFavoriteEpisodes(showId: string) {
   return useQuery({
     queryKey: [FIRESTORE_COLLECTIONS.FAVORITE_EPISODES, showId, userId],
     queryFn: ({ queryKey }) => getFavoriteEpisodes(queryKey[1], queryKey[2]),
-    enabled: !!showId && !!userId,
   });
 }

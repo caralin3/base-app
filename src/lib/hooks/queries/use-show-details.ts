@@ -8,6 +8,5 @@ export function useShowDetails(showId: string) {
     queryKey: [SHOW_DETAILS_QUERY_KEY, showId],
     queryFn: ({ queryKey }) => getTvShowDetails(Number(queryKey[1])),
     select: (data) => formatTvShow(data),
-    enabled: !!showId,
   });
 }

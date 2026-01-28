@@ -3,7 +3,7 @@ import { FlatList, type RefreshControlProps } from 'react-native';
 import { type Episode } from '@/lib/types';
 
 import { TabsFlatList } from '../tabs-view';
-import { Text, View } from '../ui';
+import { Text } from '../ui';
 import { EpisodeItem } from './episode-item';
 import { EpisodeListSkeleton } from './episode-list-skeleton';
 
@@ -55,7 +55,6 @@ export const EpisodesBySeasonList = ({
         ListEmptyComponent={getEmptyComponent()}
         ListHeaderComponent={ListHeaderComponent}
         data={episodes}
-        ItemSeparatorComponent={() => <View className="h-2" />}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <EpisodeItem
@@ -76,7 +75,6 @@ export const EpisodesBySeasonList = ({
       ListEmptyComponent={getEmptyComponent()}
       ListHeaderComponent={ListHeaderComponent}
       data={episodes}
-      ItemSeparatorComponent={() => <View className="h-2" />}
       scrollEnabled={false}
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => (

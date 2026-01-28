@@ -45,11 +45,13 @@ export const EpisodeItem = ({
               <Text style={styles.info}>{episode.runtime} min</Text>
             )}
             <Text style={styles.info}>
-              Air Date: {formatDate(parseISO(episode.airDate), DATE_FORMAT)}
+              {formatDate(parseISO(episode.airDate), DATE_FORMAT)}
             </Text>
           </View>
           {!!episode.overview && (
-            <Text style={styles.info}>{episode.overview}</Text>
+            <Text clipText style={styles.info}>
+              {episode.overview}
+            </Text>
           )}
         </Collapsible>
       </View>
@@ -89,7 +91,9 @@ export const EpisodeItem = ({
         </View>
       </View>
       {!!episode.overview && (
-        <Text style={styles.info}>{episode.overview}</Text>
+        <Text clipText style={styles.info}>
+          {episode.overview}
+        </Text>
       )}
       <View style={styles.rowEnd}>
         <Text style={styles.info}>

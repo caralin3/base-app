@@ -88,13 +88,17 @@ export default function Show() {
   }
 
   const Header = () => (
-    <View className="w-full bg-black">
+    <View className="bg-black">
       <Image
         source={{ uri: getTmdbUri(showDetails.backdropPath) ?? '' }}
-        className="h-52 w-full"
+        className="h-52 w-full object-cover"
       />
-      <Text>{showDetails.name}</Text>
-      <Text>{showDetails.overview}</Text>
+      <View className="px-2 py-4">
+        <Text className="pb-2" size="3xl" weight="bold">
+          {showDetails.name}
+        </Text>
+        <Text clipText>{showDetails.overview}</Text>
+      </View>
     </View>
   );
 

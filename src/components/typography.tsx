@@ -54,6 +54,22 @@ export const Typography = () => {
         <Text size="xs" variant="muted" className="mt-4">
           Extra small text for fine print or metadata
         </Text>
+
+        <Text numberOfLines={2} className="mt-4">
+          This is ellipsized text: Lorem ipsum dolor sit amet consectetur,
+          adipisicing elit. Cumque quasi aut, expedita tempore ratione quidem
+          in, corporis quia minus et dolorem sunt temporibus iusto consequatur
+          culpa. Omnis sequi debitis recusandae?
+        </Text>
+
+        <Text clipText className="mt-4">
+          This is clipped text: Lorem ipsum dolor sit amet consectetur,
+          adipisicing elit. Cumque quasi aut, e xpedita tempore ratione qu in,
+          corporis quia minus et dolorem sunt t emporibus iusto consequatur
+          adipisicing elit. Cumque quasi aut, e xpedita tempore ratione qu in,
+          corporis quia minus et dolorem sunt t emporibus iusto consequatur
+          culpa. Omnis sequi debitis recusandae?
+        </Text>
       </View>
     </>
   );

@@ -30,7 +30,6 @@ export const getSeasonsList = (numberOfSeasons: number, showAll: boolean) => {
 export const getShowPosterData = (
   shows: Show[],
   from: ShowRouteParams['fromList'],
-  horizontal: boolean = false,
   onFavorite?: (show: Show) => void,
   onWatch?: (id: string) => void
 ) => {
@@ -56,7 +55,7 @@ export const getShowPosterData = (
       isWatching: !!show.watchingAt,
       onFavorite: onFavorite ? () => onFavorite(show) : undefined,
       onWatch: onWatch ? () => onWatch(show.id.toString()) : undefined,
-      uri: getTmdbUri(horizontal ? show.backdropPath : show.posterPath),
+      uri: getTmdbUri(show.posterPath),
     };
   });
 };

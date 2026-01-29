@@ -22,7 +22,7 @@ export const PosterListSkeleton = ({
   );
 
   return (
-    <View className={horizontal ? 'flex-row' : undefined}>
+    <View className={`gap-2 ${horizontal ? 'flex-row' : undefined}`}>
       {Array.from({ length: 5 }).map((_, index) => (
         <View key={index}>{posterSkeleton}</View>
       ))}

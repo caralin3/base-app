@@ -47,6 +47,7 @@ const MAPPING = {
   'paperplane.fill': 'send',
   'person.fill': 'person',
   plus: 'add',
+  xmark: 'close',
 } as IconMapping;
 
 const COMMUNITY_MAPPING = {

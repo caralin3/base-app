@@ -16,25 +16,23 @@ import { Text } from './text';
 const inputTv = tv({
   slots: {
     container: 'mb-2 flex-1',
-    label: 'text-grey-100 mb-1 text-lg dark:text-neutral-100',
+    label: 'mb-1 text-lg text-white',
     input:
-      'mt-0 rounded-xl border-[0.5px] border-neutral-300 px-4 py-3 font-inter text-base  font-medium leading-5 dark:border-neutral-700 dark:text-white',
+      'mt-0 rounded-md bg-charcoal-300 p-4 font-inter text-lg font-medium leading-5 text-white',
   },
   variants: {
     focused: {
-      true: {
-        input: 'border-primary-500 dark:border-neutral-400',
-      },
+      true: {},
     },
     error: {
       true: {
         input: 'border-danger-600',
-        label: 'text-danger-600 dark:text-danger-600',
+        label: 'text-danger-600',
       },
     },
     disabled: {
       true: {
-        input: 'bg-neutral-100 opacity-50 dark:bg-neutral-700',
+        input: 'bg-neutral-100 opacity-50',
       },
     },
   },
@@ -113,7 +111,7 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
       <NTextInput
         testID={testID}
         ref={ref}
-        placeholderTextColor={colors.neutral[400]}
+        placeholderTextColor={colors.charcoal[200]}
         className={styles.input()}
         onBlur={onBlur}
         onFocus={onFocus}

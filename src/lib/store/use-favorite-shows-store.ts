@@ -1,6 +1,13 @@
-import { type FavoriteShow } from '../firebase/types';
+import { type FavoriteShowDocument } from '../firebase/types';
 import { createPersistedStore } from './helpers';
 import { createSelectors } from './selectors';
+
+export type FavoriteShow = FavoriteShowDocument & {
+  href: `/show/${number}`;
+  uri: string | null;
+  isFavorite: boolean;
+  isWatching: boolean;
+};
 
 interface FavoriteShowsState {
   favoriteShows: FavoriteShow[];

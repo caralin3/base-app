@@ -3,6 +3,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
   updateDoc,
@@ -10,10 +11,10 @@ import {
 } from 'firebase/firestore';
 
 import { firebaseDB } from '../config';
-import { FavoriteShow, type NewFavoriteShow } from '../types';
+import { FavoriteShowDocument, type NewFavoriteShowDocument } from '../types';
 import { FIRESTORE_COLLECTIONS } from './constants';
 
-export const addFavoriteShow = async (data: NewFavoriteShow) => {
+export const addFavoriteShow = async (data: NewFavoriteShowDocument) => {
   try {
     const docRef = await addDoc(
       collection(firebaseDB, FIRESTORE_COLLECTIONS.FAVORITE_SHOWS),
@@ -22,22 +23,26 @@ export const addFavoriteShow = async (data: NewFavoriteShow) => {
     await updateDoc(docRef, {
       documentId: docRef.id,
     });
-    console.log('Document written with ID: ', docRef.id);
+    const updatedDoc = await getDoc(docRef);
+    return FavoriteShowDocument.parse(updatedDoc.data());
   } catch (e) {
     console.error('Error adding document: ', e);
   }
 };
 
 export const updateFavoriteShow = async (
-  data: Partial<FavoriteShow>,
+  data: Partial<FavoriteShowDocument>,
   documentId: string
 ) => {
   try {
-    await updateDoc(
-      doc(firebaseDB, FIRESTORE_COLLECTIONS.FAVORITE_SHOWS, documentId),
-      data
+    const docRef = doc(
+      firebaseDB,
+      FIRESTORE_COLLECTIONS.FAVORITE_SHOWS,
+      documentId
     );
-    console.log('Document written with ID: ', documentId);
+    await updateDoc(docRef, data);
+    const updatedDoc = await getDoc(docRef);
+    return FavoriteShowDocument.parse(updatedDoc.data());
   } catch (e) {
     console.error('Error updating document: ', e);
   }
@@ -48,7 +53,7 @@ export const deleteFavoriteShow = async (documentId: string) => {
     await deleteDoc(
       doc(firebaseDB, FIRESTORE_COLLECTIONS.FAVORITE_SHOWS, documentId)
     );
-    console.log('Document deleted with ID: ', documentId);
+    return documentId;
   } catch (e) {
     console.error('Error removing document: ', e);
   }
@@ -61,9 +66,9 @@ export const getFavoriteShows = async (userId: string) => {
       where('userId', '==', userId)
     );
     const querySnapshot = await getDocs(q);
-    const favorites: FavoriteShow[] = [];
+    const favorites: FavoriteShowDocument[] = [];
     querySnapshot.forEach((doc) => {
-      favorites.push(FavoriteShow.parse(doc.data()));
+      favorites.push(FavoriteShowDocument.parse(doc.data()));
     });
     return favorites;
   } catch (e) {

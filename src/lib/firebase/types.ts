@@ -26,48 +26,59 @@ export const User = z.object({
 
 export type User = z.infer<typeof User>;
 
-export const CurrentlyWatchingShow = z.object({
+export const CurrentlyWatchingShowDocument = z.object({
   ...Show.shape,
   documentId: z.string(),
+  isFavorite: z.boolean().optional(),
+  isWatching: z.boolean().optional(),
   lastViewedSeason: z.number().optional(),
-  userId: z.string(),
-});
-
-export type CurrentlyWatchingShow = z.infer<typeof CurrentlyWatchingShow>;
-
-export const NewCurrentlyWatchingShow = z.discriminatedUnion('type', [
-  CurrentlyWatchingShow.omit({ documentId: true }),
-]);
-
-export type NewCurrentlyWatchingShow = z.infer<typeof NewCurrentlyWatchingShow>;
-
-export const FavoriteShow = z.object({
-  ...Show.shape,
-  documentId: z.string(),
   watched: z.boolean().optional(),
-  lastViewedSeason: z.number().optional(),
   userId: z.string(),
 });
 
-export type FavoriteShow = z.infer<typeof FavoriteShow>;
+export type CurrentlyWatchingShowDocument = z.infer<
+  typeof CurrentlyWatchingShowDocument
+>;
 
-export const NewFavoriteShow = z.discriminatedUnion('type', [
-  FavoriteShow.omit({ documentId: true }),
+export const NewCurrentlyWatchingShowDocument = z.discriminatedUnion('type', [
+  CurrentlyWatchingShowDocument.omit({ documentId: true }),
 ]);
 
-export type NewFavoriteShow = z.infer<typeof NewFavoriteShow>;
+export type NewCurrentlyWatchingShowDocument = z.infer<
+  typeof NewCurrentlyWatchingShowDocument
+>;
 
-export const FavoriteEpisode = z.object({
+export const FavoriteShowDocument = z.object({
+  ...Show.shape,
+  documentId: z.string(),
+  isFavorite: z.boolean().optional(),
+  isWatching: z.boolean().optional(),
+  lastViewedSeason: z.number().optional(),
+  watched: z.boolean().optional(),
+  userId: z.string(),
+});
+
+export type FavoriteShowDocument = z.infer<typeof FavoriteShowDocument>;
+
+export const NewFavoriteShowDocument = z.discriminatedUnion('type', [
+  FavoriteShowDocument.omit({ documentId: true }),
+]);
+
+export type NewFavoriteShowDocument = z.infer<typeof NewFavoriteShowDocument>;
+
+export const FavoriteEpisodeDocument = z.object({
   ...Episode.shape,
   documentId: z.string(),
   watched: z.boolean().optional(),
   userId: z.string(),
 });
 
-export type FavoriteEpisode = z.infer<typeof FavoriteEpisode>;
+export type FavoriteEpisodeDocument = z.infer<typeof FavoriteEpisodeDocument>;
 
-export const NewFavoriteEpisode = z.discriminatedUnion('type', [
-  FavoriteEpisode.omit({ documentId: true }),
+export const NewFavoriteEpisodeDocument = z.discriminatedUnion('type', [
+  FavoriteEpisodeDocument.omit({ documentId: true }),
 ]);
 
-export type NewFavoriteEpisode = z.infer<typeof NewFavoriteEpisode>;
+export type NewFavoriteEpisodeDocument = z.infer<
+  typeof NewFavoriteEpisodeDocument
+>;

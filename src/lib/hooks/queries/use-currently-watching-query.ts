@@ -8,7 +8,7 @@ import { getTmdbUri, sortByDate } from '@/lib/utils';
 
 import { useAuth } from '../use-auth';
 
-export function useCurrentlyWatchingShows(
+export function useCurrentlyWatchingQuery(
   sortDirection: 'asc' | 'desc' = 'desc',
   posterPath?: string
 ) {

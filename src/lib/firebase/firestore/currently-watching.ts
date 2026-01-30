@@ -3,6 +3,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
   updateDoc,
@@ -10,11 +11,14 @@ import {
 } from 'firebase/firestore';
 
 import { firebaseDB } from '../config';
-import { CurrentlyWatchingShow, type NewCurrentlyWatchingShow } from '../types';
+import {
+  CurrentlyWatchingShowDocument,
+  type NewCurrentlyWatchingShowDocument,
+} from '../types';
 import { FIRESTORE_COLLECTIONS } from './constants';
 
 export const addCurrentlyWatchingShow = async (
-  data: NewCurrentlyWatchingShow
+  data: NewCurrentlyWatchingShowDocument
 ) => {
   try {
     const docRef = await addDoc(
@@ -24,33 +28,41 @@ export const addCurrentlyWatchingShow = async (
     await updateDoc(docRef, {
       documentId: docRef.id,
     });
-    console.log('Document written with ID: ', docRef.id);
+    const updatedDoc = await getDoc(docRef);
+    return CurrentlyWatchingShowDocument.parse(updatedDoc.data());
   } catch (e) {
     console.error('Error adding document: ', e);
   }
 };
 
 export const updateCurrentlyWatchingShow = async (
-  data: Partial<CurrentlyWatchingShow>,
+  data: Partial<CurrentlyWatchingShowDocument>,
   id: string
 ) => {
   try {
-    await updateDoc(
-      doc(firebaseDB, FIRESTORE_COLLECTIONS.CURRENTLY_WATCHING_SHOWS, id),
-      data
+    const docRef = doc(
+      firebaseDB,
+      FIRESTORE_COLLECTIONS.CURRENTLY_WATCHING_SHOWS,
+      id
     );
-    console.log('Document written with ID: ', id);
+    await updateDoc(docRef, data);
+    const updatedDoc = await getDoc(docRef);
+    return CurrentlyWatchingShowDocument.parse(updatedDoc.data());
   } catch (e) {
     console.error('Error updating document: ', e);
   }
 };
 
-export const deleteCurrentlyWatchingShow = async (id: string) => {
+export const deleteCurrentlyWatchingShow = async (documentId: string) => {
   try {
     await deleteDoc(
-      doc(firebaseDB, FIRESTORE_COLLECTIONS.CURRENTLY_WATCHING_SHOWS, id)
+      doc(
+        firebaseDB,
+        FIRESTORE_COLLECTIONS.CURRENTLY_WATCHING_SHOWS,
+        documentId
+      )
     );
-    console.log('Document deleted with ID: ', id);
+    return documentId;
   } catch (e) {
     console.error('Error removing document: ', e);
   }
@@ -63,9 +75,9 @@ export const getCurrentlyWatchingShows = async (userId: string) => {
       where('userId', '==', userId)
     );
     const querySnapshot = await getDocs(q);
-    const currentlyWatching: CurrentlyWatchingShow[] = [];
+    const currentlyWatching: CurrentlyWatchingShowDocument[] = [];
     querySnapshot.forEach((doc) => {
-      currentlyWatching.push(CurrentlyWatchingShow.parse(doc.data()));
+      currentlyWatching.push(CurrentlyWatchingShowDocument.parse(doc.data()));
     });
     return currentlyWatching;
   } catch (e) {

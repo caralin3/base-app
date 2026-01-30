@@ -3,6 +3,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
   updateDoc,
@@ -10,10 +11,13 @@ import {
 } from 'firebase/firestore';
 
 import { firebaseDB } from '../config';
-import { FavoriteEpisode, type NewFavoriteEpisode } from '../types';
+import {
+  FavoriteEpisodeDocument,
+  type NewFavoriteEpisodeDocument,
+} from '../types';
 import { FIRESTORE_COLLECTIONS } from './constants';
 
-export const addFavoriteEpisode = async (data: NewFavoriteEpisode) => {
+export const addFavoriteEpisode = async (data: NewFavoriteEpisodeDocument) => {
   try {
     const docRef = await addDoc(
       collection(firebaseDB, FIRESTORE_COLLECTIONS.FAVORITE_EPISODES),
@@ -22,22 +26,26 @@ export const addFavoriteEpisode = async (data: NewFavoriteEpisode) => {
     await updateDoc(docRef, {
       documentId: docRef.id,
     });
-    console.log('Document written with ID: ', docRef.id);
+    const updatedDoc = await getDoc(docRef);
+    return FavoriteEpisodeDocument.parse(updatedDoc.data());
   } catch (e) {
     console.error('Error adding document: ', e);
   }
 };
 
 export const updateFavoriteEpisode = async (
-  data: Partial<FavoriteEpisode>,
+  data: Partial<FavoriteEpisodeDocument>,
   documentId: string
 ) => {
   try {
-    await updateDoc(
-      doc(firebaseDB, FIRESTORE_COLLECTIONS.FAVORITE_EPISODES, documentId),
-      data
+    const docRef = doc(
+      firebaseDB,
+      FIRESTORE_COLLECTIONS.FAVORITE_EPISODES,
+      documentId
     );
-    console.log('Document written with ID: ', documentId);
+    await updateDoc(docRef, data);
+    const updatedDoc = await getDoc(docRef);
+    return FavoriteEpisodeDocument.parse(updatedDoc.data());
   } catch (e) {
     console.error('Error updating document: ', e);
   }
@@ -48,7 +56,7 @@ export const deleteFavoriteEpisode = async (documentId: string) => {
     await deleteDoc(
       doc(firebaseDB, FIRESTORE_COLLECTIONS.FAVORITE_EPISODES, documentId)
     );
-    console.log('Document deleted with ID: ', documentId);
+    return documentId;
   } catch (e) {
     console.error('Error removing document: ', e);
   }
@@ -62,9 +70,9 @@ export const getFavoriteEpisodes = async (showId: string, userId: string) => {
       where('showId', '==', Number(showId))
     );
     const querySnapshot = await getDocs(q);
-    const favorites: FavoriteEpisode[] = [];
+    const favorites: FavoriteEpisodeDocument[] = [];
     querySnapshot.forEach((doc) => {
-      favorites.push(FavoriteEpisode.parse(doc.data()));
+      favorites.push(FavoriteEpisodeDocument.parse(doc.data()));
     });
     return favorites;
   } catch (e) {

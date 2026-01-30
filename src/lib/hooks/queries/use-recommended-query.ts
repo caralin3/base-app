@@ -1,13 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { type PosterProps } from '@/components';
-import { getTrendingTvShows, TRENDING_SHOWS_QUERY_KEY } from '@/lib/api';
+import {
+  getTvShowRecommendations,
+  RECOMMENDED_SHOWS_QUERY_KEY,
+} from '@/lib/api';
 import { formatTvShow, getTmdbUri } from '@/lib/utils';
 
-export function useTrendingShows(posterPath?: string) {
+export function useRecommendedQuery(showId: string, posterPath?: string) {
   return useQuery({
-    queryKey: [TRENDING_SHOWS_QUERY_KEY],
-    queryFn: () => getTrendingTvShows(),
+    queryKey: [RECOMMENDED_SHOWS_QUERY_KEY, showId],
+    queryFn: ({ queryKey }) => getTvShowRecommendations(Number(queryKey[1])),
     select: (response) => {
       return response.results
         .map((show) => formatTvShow(show))

@@ -4,7 +4,7 @@ import { getTvSeason, SEASON_EPISODES_QUERY_KEY } from '@/lib/api';
 import { type Episode } from '@/lib/types';
 import { formatSeason } from '@/lib/utils';
 
-export function useSeasonEpisodes(showId: string, seasonNumber: number) {
+export function useSeasonEpisodesQuery(showId: string, seasonNumber: number) {
   const seasonQuery = useQuery({
     queryKey: [SEASON_EPISODES_QUERY_KEY, showId, seasonNumber],
     queryFn: ({ queryKey }) =>

@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { Link, type LinkProps } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { colors, IconButton, Text, View } from '../ui';
@@ -34,8 +34,6 @@ export const Poster = ({
   onWatch,
   uri,
 }: PosterProps) => {
-  const [hearted, setHearted] = useState(isFavorite);
-
   const startYear = useMemo(
     () => (firstAirDate ? format(new Date(firstAirDate), 'yyyy') : null),
     [firstAirDate]
@@ -76,11 +74,10 @@ export const Poster = ({
           )}
           {!!onFavorite && (
             <IconButton
-              iconName={hearted ? 'heart.fill' : 'heart'}
+              iconName={isFavorite ? 'heart.fill' : 'heart'}
               color={colors.primary[600]}
               onPress={() => {
                 onFavorite();
-                setHearted(!hearted);
               }}
             />
           )}

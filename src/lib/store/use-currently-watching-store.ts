@@ -1,6 +1,13 @@
-import { type CurrentlyWatchingShow } from '../firebase/types';
+import { type CurrentlyWatchingShowDocument } from '../firebase/types';
 import { createPersistedStore } from './helpers';
 import { createSelectors } from './selectors';
+
+export type CurrentlyWatchingShow = CurrentlyWatchingShowDocument & {
+  href: `/show/${number}`;
+  uri: string | null;
+  isFavorite: boolean;
+  isWatching: boolean;
+};
 
 interface CurrentlyWatchingState {
   currentlyWatchingShows: CurrentlyWatchingShow[];

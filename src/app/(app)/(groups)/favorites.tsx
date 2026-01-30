@@ -6,7 +6,7 @@ import { PosterList } from '@/components/poster/poster-list';
 import { useFavoriteShows } from '@/lib/hooks';
 
 export default function Favorites() {
-  const { data, refetch, isRefetching } = useFavoriteShows();
+  const { favoriteShows, refetch, isRefetching } = useFavoriteShows();
 
   const onRefresh = useCallback(() => {
     refetch();
@@ -20,7 +20,7 @@ export default function Favorites() {
     >
       <View className="flex-1 p-4">
         <PosterList
-          data={data ?? []}
+          data={favoriteShows ?? []}
           horizontal={false}
           horizontalItem
           isLoading={isRefetching}

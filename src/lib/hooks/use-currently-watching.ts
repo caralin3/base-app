@@ -1,0 +1,28 @@
+import { useEffect } from 'react';
+
+import {
+  setCurrentlyWatchingShowsInStore,
+  useCurrentlyWatchingShowsStore,
+} from '@/lib/store';
+
+import { useCurrentlyWatchingQuery } from './queries/use-currently-watching-query';
+
+export function useCurrentlyWatching(sortDirection: 'asc' | 'desc' = 'desc') {
+  const query = useCurrentlyWatchingQuery(sortDirection);
+  const { currentlyWatchingShows } = useCurrentlyWatchingShowsStore();
+
+  useEffect(() => {
+    if (query.data) {
+      setCurrentlyWatchingShowsInStore(query.data);
+    }
+  }, [query.data]);
+
+  return {
+    currentlyWatchingShows,
+    isLoading: query.isLoading,
+    isRefetching: query.isRefetching,
+    isError: query.isError,
+    error: query.error,
+    refetch: query.refetch,
+  };
+}

@@ -5,7 +5,7 @@ import { sortByDate } from '@/lib/utils';
 
 import { useAuth } from '../use-auth';
 
-export function useFavoriteEpisodes(
+export function useFavoriteEpisodesQuery(
   showId: string,
   sortDirection: 'asc' | 'desc' = 'asc'
 ) {

@@ -1,6 +1,4 @@
-import { useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { useCallback } from 'react';
-import { RefreshControl } from 'react-native-gesture-handler';
+import { useLocalSearchParams } from 'expo-router';
 
 import {
   colors,
@@ -14,64 +12,36 @@ import {
   View,
 } from '@/components';
 import {
-  useCurrentlyWatchingShows,
-  useFavoriteEpisodes,
-  useFavoriteShows,
-  useSeasonEpisodes,
-  useShowDetails,
+  useRecommendedQuery,
+  useSeasonEpisodesQuery,
+  useShowDetailsQuery,
   useShowToggles,
 } from '@/lib/hooks';
-import { useRecommendedShows } from '@/lib/hooks/queries/use-recommended-shows';
 import { type ShowRouteParams } from '@/lib/types';
 import { getTmdbUri } from '@/lib/utils';
 
 export default function Show() {
   const local = useLocalSearchParams<ShowRouteParams>();
   const showId = local.id;
-  const { data: recommendedShows } = useRecommendedShows(showId);
+
+  const { data: showDetails, isLoading: isLoadingShowDetails } =
+    useShowDetailsQuery(showId);
   const {
-    data: favoriteShowsData,
-    refetch: refetchFavoriteShows,
-    isFetching: isFetchingFavoriteShows,
-  } = useFavoriteShows();
-  const favoriteShow = favoriteShowsData?.find(
-    (show) => show.id.toString() === showId
-  );
-  const currentlyWatchingShow = useCurrentlyWatchingShows().data?.find(
-    (show) => show.id.toString() === showId
-  );
+    getEpisodes,
+    seasonQuery: { data: season },
+  } = useSeasonEpisodesQuery(showId, 1);
+  const { data: recommendedShows } = useRecommendedQuery(showId);
+
   const {
+    currentlyWatchingShow,
+    favoriteEpisodes,
+    favoriteShow,
     toggleFavoriteEpisode,
     toggleFavoriteShow,
     toggleCurrentlyWatchingShow,
   } = useShowToggles(showId);
-  const {
-    getEpisodes,
-    seasonQuery: { data: season },
-  } = useSeasonEpisodes(showId, 1);
 
-  const {
-    data: favoriteEpisodes,
-    refetch: refetchEpisodes,
-    isRefetching: isRefetchingEpisodes,
-  } = useFavoriteEpisodes(showId);
-  const { data: showDetails, isRefetching: isRefetchingShowDetails } =
-    useShowDetails(showId);
-
-  const onRefresh = useCallback(() => {
-    refetchEpisodes();
-    refetchFavoriteShows();
-  }, [refetchEpisodes, refetchFavoriteShows]);
-
-  useFocusEffect(
-    useCallback(() => {
-      onRefresh();
-    }, [onRefresh])
-  );
-
-  const isRefetching = isRefetchingEpisodes || isFetchingFavoriteShows;
-
-  if (isRefetchingShowDetails) {
+  if (isLoadingShowDetails) {
     return (
       <Screen>
         <Text className="text-white">Loading Show Details...</Text>
@@ -144,12 +114,6 @@ export default function Show() {
                 onFavoriteEpisode={(episode) =>
                   toggleFavoriteEpisode(episode, showDetails)
                 }
-                refreshControl={
-                  <RefreshControl
-                    refreshing={isRefetching}
-                    onRefresh={onRefresh}
-                  />
-                }
               />
             ),
           },
@@ -162,12 +126,6 @@ export default function Show() {
                   toggleFavoriteEpisode(episode, showDetails)
                 }
                 show={showDetails}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={isRefetching}
-                    onRefresh={onRefresh}
-                  />
-                }
               />
             ),
           },

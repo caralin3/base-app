@@ -3,10 +3,11 @@ import { RefreshControl } from 'react-native-gesture-handler';
 
 import { Screen, View } from '@/components';
 import { PosterList } from '@/components/poster/poster-list';
-import { useCurrentlyWatchingShows } from '@/lib/hooks';
+import { useCurrentlyWatching } from '@/lib/hooks';
 
 export default function CurrentlyWatching() {
-  const { data, refetch, isRefetching } = useCurrentlyWatchingShows();
+  const { currentlyWatchingShows, refetch, isRefetching } =
+    useCurrentlyWatching();
 
   const onRefresh = useCallback(() => {
     refetch();
@@ -20,7 +21,7 @@ export default function CurrentlyWatching() {
     >
       <View className="flex-1 p-4">
         <PosterList
-          data={data ?? []}
+          data={currentlyWatchingShows ?? []}
           horizontal={false}
           horizontalItem
           isLoading={isRefetching}

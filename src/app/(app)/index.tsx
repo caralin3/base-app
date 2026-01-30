@@ -3,29 +3,29 @@ import { RefreshControl } from 'react-native-gesture-handler';
 
 import { colors, PosterSection, Screen, ScrollView } from '@/components';
 import {
-  useCurrentlyWatchingShows,
+  useCurrentlyWatching,
   useFavoriteShows,
-  useTrendingShows,
+  useTrendingShowsQuery,
 } from '@/lib/hooks';
 
 export default function Home() {
   const {
-    data: favoriteShows,
+    favoriteShows,
     refetch: refetchFavoriteShows,
     isRefetching: isRefetchingFavoriteShows,
   } = useFavoriteShows();
 
   const {
-    data: currentlyWatchingShows,
+    currentlyWatchingShows,
     refetch: refetchCurrentlyWatching,
     isRefetching: isRefetchingCurrentlyWatching,
-  } = useCurrentlyWatchingShows();
+  } = useCurrentlyWatching();
 
   const {
     data: trendingShows,
     refetch: refetchTrendingShows,
     isRefetching: isRefetchingTrendingShows,
-  } = useTrendingShows();
+  } = useTrendingShowsQuery();
 
   const onRefresh = useCallback(() => {
     refetchFavoriteShows();

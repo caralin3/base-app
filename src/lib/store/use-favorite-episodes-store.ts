@@ -1,16 +1,16 @@
-import { type FavoriteEpisode } from '../firebase/types';
+import { type FavoriteEpisodeDocument } from '../firebase/types';
 import { createPersistedStore } from './helpers';
 import { createSelectors } from './selectors';
 
 interface FavoriteEpisodesState {
-  favoriteEpisodes: FavoriteEpisode[];
-  addFavoriteEpisode: (episode: FavoriteEpisode) => void;
+  favoriteEpisodes: FavoriteEpisodeDocument[];
+  addFavoriteEpisode: (episode: FavoriteEpisodeDocument) => void;
   removeFavoriteEpisode: (documentId: string) => void;
   updateFavoriteEpisode: (
     documentId: string,
-    data: Partial<FavoriteEpisode>
+    data: Partial<FavoriteEpisodeDocument>
   ) => void;
-  setFavoriteEpisodes: (episodes: FavoriteEpisode[]) => void;
+  setFavoriteEpisodes: (episodes: FavoriteEpisodeDocument[]) => void;
   resetFavoriteEpisodes: () => void;
 }
 
@@ -46,7 +46,7 @@ export const useFavoriteEpisodesStore = createSelectors(
   useFavoriteEpisodesStoreBase
 );
 
-export const addFavoriteEpisodeToStore = (episode: FavoriteEpisode) =>
+export const addFavoriteEpisodeToStore = (episode: FavoriteEpisodeDocument) =>
   useFavoriteEpisodesStoreBase.getState().addFavoriteEpisode(episode);
 
 export const removeFavoriteEpisodeFromStore = (documentId: string) =>
@@ -54,14 +54,15 @@ export const removeFavoriteEpisodeFromStore = (documentId: string) =>
 
 export const updateFavoriteEpisodeInStore = (
   documentId: string,
-  data: Partial<FavoriteEpisode>
+  data: Partial<FavoriteEpisodeDocument>
 ) =>
   useFavoriteEpisodesStoreBase
     .getState()
     .updateFavoriteEpisode(documentId, data);
 
-export const setFavoriteEpisodesInStore = (episodes: FavoriteEpisode[]) =>
-  useFavoriteEpisodesStoreBase.getState().setFavoriteEpisodes(episodes);
+export const setFavoriteEpisodesInStore = (
+  episodes: FavoriteEpisodeDocument[]
+) => useFavoriteEpisodesStoreBase.getState().setFavoriteEpisodes(episodes);
 
 export const resetFavoriteEpisodesInStore = () =>
   useFavoriteEpisodesStoreBase.getState().resetFavoriteEpisodes();

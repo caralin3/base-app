@@ -5,7 +5,7 @@ import { getTmdbUri, sortByDate } from '@/lib/utils';
 
 import { useAuth } from '../use-auth';
 
-export function useFavoriteShows(
+export function useFavoriteShowsQuery(
   sortDirection: 'asc' | 'desc' = 'desc',
   posterPath?: string
 ) {

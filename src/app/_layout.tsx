@@ -15,7 +15,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-import { colors, FocusAwareStatusBar, useThemeConfig } from '@/components';
+import { FocusAwareStatusBar, useThemeConfig } from '@/components';
 import { firebaseAuth } from '@/lib/firebase/config';
 import { useAuth } from '@/lib/hooks';
 
@@ -108,9 +108,7 @@ function Providers({ children }: { children: React.ReactNode }) {
             <BottomSheetModalProvider>
               <SafeAreaProvider>
                 <FocusAwareStatusBar hidden={false} />
-                <SafeAreaView
-                  style={{ flex: 1, backgroundColor: colors.charcoal[400] }}
-                >
+                <SafeAreaView className="flex-1 bg-black">
                   {children}
                 </SafeAreaView>
               </SafeAreaProvider>

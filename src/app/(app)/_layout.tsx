@@ -1,5 +1,4 @@
 import { Redirect, Tabs } from 'expo-router';
-import { Platform } from 'react-native';
 
 import { colors, HapticTab, IconSymbol } from '@/components';
 import { useAuth } from '@/lib/hooks';
@@ -18,16 +17,14 @@ export default function TabLayout() {
         tabBarActiveTintColor: colors.primary[600],
         tabBarButton: HapticTab,
         tabBarShowLabel: false,
-        tabBarIconStyle: Platform.select({
-          ios: {
-            padding: 0,
-          },
-        }),
+        tabBarIconStyle: {
+          height: 50,
+          width: '100%',
+        },
         tabBarStyle: {
           backgroundColor: colors.charcoal[400],
           borderTopWidth: 0,
           height: 50,
-          paddingTop: 5,
         },
       }}
     >

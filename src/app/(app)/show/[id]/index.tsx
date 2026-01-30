@@ -61,7 +61,7 @@ export default function Show() {
     <View className="bg-black">
       <Image
         source={{ uri: getTmdbUri(showDetails.backdropPath) ?? '' }}
-        className="h-52 w-full object-cover"
+        className="h-64 w-full object-cover"
       />
       <View className="px-2 py-4">
         <Text className="pb-2" size="3xl" weight="bold">

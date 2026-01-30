@@ -3,7 +3,7 @@ import { FlatList, type RefreshControlProps } from 'react-native';
 import { type Episode } from '@/lib/types';
 
 import { TabsFlatList } from '../tabs-view';
-import { Text } from '../ui';
+import { Text, View } from '../ui';
 import { EpisodeItem } from './episode-item';
 import { EpisodeListSkeleton } from './episode-list-skeleton';
 
@@ -43,9 +43,11 @@ export const EpisodesBySeasonList = ({
       return ListEmptyComponent;
     }
     return (
-      <Text className="p-2" align="center">
-        No episodes for this season are available yet.
-      </Text>
+      <View className="flex-1 px-4 py-8">
+        <Text className="text-white" align="center">
+          There are no episodes for this season yet.
+        </Text>
+      </View>
     );
   };
 

@@ -43,7 +43,7 @@ export default function Home() {
       }}
     >
       <ScrollView
-        contentContainerClassName="p-4"
+        contentContainerClassName="p-4 gap-5"
         refreshControl={
           <RefreshControl
             refreshing={

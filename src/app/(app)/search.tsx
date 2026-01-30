@@ -153,7 +153,9 @@ export default function Search() {
                     </Text>
                     {recentSearches.length > 0 && (
                       <TouchableOpacity onPress={handleClearRecentSearches}>
-                        <Text weight="bold">Clear</Text>
+                        <Text transform="uppercase" weight="bold">
+                          Clear
+                        </Text>
                       </TouchableOpacity>
                     )}
                   </View>

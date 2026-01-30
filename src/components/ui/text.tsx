@@ -36,6 +36,12 @@ const text = tv({
       center: 'text-center',
       right: 'text-right',
     },
+    transform: {
+      uppercase: 'uppercase',
+      lowercase: 'lowercase',
+      capitalize: 'capitalize',
+      none: 'normal-case',
+    },
   },
   defaultVariants: {
     variant: 'default',
@@ -62,14 +68,15 @@ export const Text = ({
   clipText,
   size,
   style,
+  transform,
   tx,
   variant,
   weight,
   ...props
 }: Props) => {
   const textStyle = useMemo(
-    () => text({ variant, size, weight, align, className }),
-    [variant, size, weight, align, className]
+    () => text({ variant, size, weight, align, transform, className }),
+    [variant, size, weight, align, transform, className]
   );
 
   const nStyle = useMemo(

@@ -1,4 +1,5 @@
 import { type LinkProps } from 'expo-router';
+import { Platform } from 'react-native';
 
 import { IconButton, Text, View } from '../ui';
 import { type PosterProps } from './poster';
@@ -22,10 +23,10 @@ export const PosterSection = ({
   }
 
   return (
-    <View className="gap-2">
+    <View className="gap-3">
       {!!viewAllHref ? (
         <View className="flex-row items-center justify-between">
-          <Text size="lg" weight="semibold">
+          <Text size="xl" weight="bold">
             {title}
           </Text>
           {posters.length > 0 && (
@@ -33,11 +34,15 @@ export const PosterSection = ({
               href={viewAllHref}
               label="View All"
               iconName="chevron.right"
+              size={Platform.select({
+                ios: 16,
+                default: 24,
+              })}
             />
           )}
         </View>
       ) : (
-        <Text size="lg" weight="semibold">
+        <Text size="xl" weight="bold">
           {title}
         </Text>
       )}

@@ -36,7 +36,7 @@ export default function TabLayout() {
         options={{
           title: 'Binge Buddy',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
+            <IconSymbol size={32} name="house.fill" color={color} />
           ),
         }}
       />
@@ -45,7 +45,7 @@ export default function TabLayout() {
         options={{
           title: 'Search',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="magnifyingglass" color={color} />
+            <IconSymbol size={32} name="magnifyingglass" color={color} />
           ),
         }}
       />
@@ -55,7 +55,7 @@ export default function TabLayout() {
           headerShown: false,
           title: 'Profile',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="person.fill" color={color} />
+            <IconSymbol size={32} name="person.fill" color={color} />
           ),
         }}
       />

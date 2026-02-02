@@ -1,18 +1,20 @@
 import { useQueryClient } from '@tanstack/react-query';
 import debounce from 'lodash.debounce';
-import { useCallback, useMemo, useState } from 'react';
-import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { FlatList, Keyboard, StyleSheet, TouchableOpacity } from 'react-native';
 
 import {
   Header,
   PosterList,
   PosterListSkeleton,
+  PosterSection,
   Screen,
   SearchInput,
   Text,
   View,
 } from '@/components';
 import { SEARCH_TV_QUERY_KEY, searchTv } from '@/lib/api';
+import { useTrendingShowsQuery } from '@/lib/hooks';
 import {
   addRecentSearch,
   editRecentSearch,
@@ -37,6 +39,30 @@ export default function Search() {
   const [searchResults, setSearchResults] = useState<Show[]>([]);
   const [searched, setSearched] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setShowTrending(true);
+      }
+    );
+
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setShowTrending(false);
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
+  const { data: trendingShows, isLoading: trendingLoading } =
+    useTrendingShowsQuery();
 
   const searchResultsPosters = useMemo(
     () => getShowPosterData(searchResults, 'search'),
@@ -135,6 +161,18 @@ export default function Search() {
                 </Text>
               )
             }
+            ListFooterComponent={
+              <View className="pt-8">
+                {showTrending && searchResults.length === 0 && (
+                  <PosterSection
+                    horizontal={false}
+                    isLoading={trendingLoading}
+                    posters={trendingShows ?? []}
+                    title="Trending"
+                  />
+                )}
+              </View>
+            }
             ListHeaderComponent={
               <View>
                 {searched && !!searchTerm ? (
@@ -148,7 +186,7 @@ export default function Search() {
                   </View>
                 ) : (
                   <View style={styles.recentListHeader}>
-                    <Text size="lg" weight="bold">
+                    <Text size="xl" weight="bold">
                       Recent Searches
                     </Text>
                     {recentSearches.length > 0 && (

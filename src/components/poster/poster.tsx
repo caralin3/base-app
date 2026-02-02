@@ -16,7 +16,7 @@ export interface PosterProps {
   name: string;
   numberOfSeasons?: number;
   onFavorite?: () => void;
-  onPress?: () => void;
+  onPress?: (showId: number) => void;
   onWatch?: () => void;
   uri: string | null;
 }
@@ -25,6 +25,7 @@ export const Poster = ({
   firstAirDate,
   horizontal = false,
   href,
+  id,
   isFavorite,
   isWatching,
   name,
@@ -46,7 +47,7 @@ export const Poster = ({
   if (horizontal) {
     return (
       <View style={styles.container}>
-        <Link href={href} style={styles.flex} onPress={onPress}>
+        <Link href={href} style={styles.flex} onPress={() => onPress?.(id)}>
           <View style={styles.imageLink}>
             <PosterImage
               horizontal

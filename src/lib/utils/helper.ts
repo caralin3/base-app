@@ -60,6 +60,14 @@ export const getShowPosterData = (
   });
 };
 
+export const formatShowToPoster = (show: Show, posterPath?: string) => ({
+  ...show,
+  href: `/show/${show.id}` as const,
+  isFavorite: show.favoritedAt != null,
+  isWatching: show.watchingAt != null,
+  uri: getTmdbUri(posterPath ?? show.posterPath),
+});
+
 export function formatTvShow(show: TvShowDetails, genreList?: Genre[]): Show {
   const genres = genreList ?? show.genres ?? [];
 

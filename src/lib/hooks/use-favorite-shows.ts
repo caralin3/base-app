@@ -1,6 +1,10 @@
 import { useEffect } from 'react';
 
-import { setFavoriteShowsInStore, useFavoriteShowsStore } from '@/lib/store';
+import {
+  type FavoriteShow,
+  setFavoriteShowsInStore,
+  useFavoriteShowsStore,
+} from '@/lib/store';
 
 import { useFavoriteShowsQuery } from './queries/use-favorite-shows-query';
 
@@ -10,7 +14,7 @@ export function useFavoriteShows(sortDirection: 'asc' | 'desc' = 'desc') {
 
   useEffect(() => {
     if (query.data) {
-      setFavoriteShowsInStore(query.data);
+      setFavoriteShowsInStore(query.data as FavoriteShow[]);
     }
   }, [query.data]);
 

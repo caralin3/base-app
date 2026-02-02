@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 
 import {
+  type CurrentlyWatchingShow,
   setCurrentlyWatchingShowsInStore,
   useCurrentlyWatchingShowsStore,
 } from '@/lib/store';
 
-import { useCurrentlyWatchingQuery } from './queries/use-currently-watching-query';
+import { useCurrentlyWatchingQuery } from './queries';
 
 export function useCurrentlyWatching(sortDirection: 'asc' | 'desc' = 'desc') {
   const query = useCurrentlyWatchingQuery(sortDirection);
@@ -13,7 +14,7 @@ export function useCurrentlyWatching(sortDirection: 'asc' | 'desc' = 'desc') {
 
   useEffect(() => {
     if (query.data) {
-      setCurrentlyWatchingShowsInStore(query.data);
+      setCurrentlyWatchingShowsInStore(query.data as CurrentlyWatchingShow[]);
     }
   }, [query.data]);
 

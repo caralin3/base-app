@@ -12,7 +12,7 @@ interface PosterListProps {
   inTabPanel?: boolean;
   isLoading?: boolean;
   ListEmptyComponent?: React.ComponentType<any> | React.ReactElement | null;
-  onPress?: () => void;
+  onPress?: (showId: number) => void;
   refreshControl?:
     | React.ReactElement<
         RefreshControlProps,

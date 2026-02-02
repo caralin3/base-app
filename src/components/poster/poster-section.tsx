@@ -6,6 +6,7 @@ import { type PosterProps } from './poster';
 import { PosterList } from './poster-list';
 
 interface PosterSectionProps {
+  horizontal?: boolean;
   isLoading?: boolean;
   posters: PosterProps[];
   title: string;
@@ -13,6 +14,7 @@ interface PosterSectionProps {
 }
 
 export const PosterSection = ({
+  horizontal = true,
   isLoading,
   posters,
   title,
@@ -46,7 +48,12 @@ export const PosterSection = ({
           {title}
         </Text>
       )}
-      <PosterList data={posters} isLoading={isLoading} />
+      <PosterList
+        data={posters}
+        isLoading={isLoading}
+        horizontal={horizontal}
+        horizontalItem={!horizontal}
+      />
     </View>
   );
 };

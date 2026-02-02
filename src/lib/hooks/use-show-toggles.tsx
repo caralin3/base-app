@@ -24,6 +24,8 @@ import {
   removeCurrentlyWatchingShowFromStore,
   removeFavoriteEpisodeFromStore,
   removeFavoriteShowFromStore,
+  updateCurrentlyWatchingShowInStore,
+  updateFavoriteShowInStore,
 } from '@/lib/store';
 import { type Episode, type Show } from '@/lib/types';
 import { getTmdbUri } from '@/lib/utils';
@@ -58,6 +60,17 @@ export function useShowToggles(showId: string) {
           uri: getTmdbUri(data.posterPath),
         };
         addFavoriteShowToStore(transformedShow);
+
+        // Update isFavorite in currently watching store if exists
+        const watchingShow = currentlyWatchingShows?.find(
+          (show) => show.id === data.id
+        );
+        if (watchingShow?.documentId) {
+          updateCurrentlyWatchingShowInStore(watchingShow.documentId, {
+            isFavorite: true,
+            favoritedAt: data.favoritedAt,
+          });
+        }
       }
       queryClient.invalidateQueries({
         queryKey: [FIRESTORE_COLLECTIONS.FAVORITE_SHOWS, userId],
@@ -71,9 +84,24 @@ export function useShowToggles(showId: string) {
   const removeFavoriteShowMutation = useMutation({
     mutationFn: (documentId: string) => deleteFavoriteShow(documentId),
     onSuccess: (docId?: string) => {
-      console.log('Removed favorite show with docId:', docId);
       if (docId) {
+        const removedShow = favoriteShows?.find(
+          (show) => show.documentId === docId
+        );
         removeFavoriteShowFromStore(docId);
+
+        // Update isFavorite in currently watching store if exists
+        if (removedShow) {
+          const watchingShow = currentlyWatchingShows?.find(
+            (show) => show.id === removedShow.id
+          );
+          if (watchingShow?.documentId) {
+            updateCurrentlyWatchingShowInStore(watchingShow.documentId, {
+              isFavorite: false,
+              favoritedAt: undefined,
+            });
+          }
+        }
       }
       queryClient.invalidateQueries({
         queryKey: [FIRESTORE_COLLECTIONS.FAVORITE_SHOWS, userId],
@@ -98,6 +126,15 @@ export function useShowToggles(showId: string) {
           uri: getTmdbUri(data.posterPath),
         };
         addCurrentlyWatchingShowToStore(transformedShow);
+
+        // Update isWatching in favorite shows store if exists
+        const favShow = favoriteShows?.find((show) => show.id === data.id);
+        if (favShow?.documentId) {
+          updateFavoriteShowInStore(favShow.documentId, {
+            isWatching: true,
+            watchingAt: data.watchingAt,
+          });
+        }
       }
       queryClient.invalidateQueries({
         queryKey: [FIRESTORE_COLLECTIONS.CURRENTLY_WATCHING_SHOWS, userId],
@@ -112,7 +149,23 @@ export function useShowToggles(showId: string) {
     mutationFn: (documentId: string) => deleteCurrentlyWatchingShow(documentId),
     onSuccess: (docId?: string) => {
       if (docId) {
+        const removedShow = currentlyWatchingShows?.find(
+          (show) => show.documentId === docId
+        );
         removeCurrentlyWatchingShowFromStore(docId);
+
+        // Update isWatching in favorite shows store if exists
+        if (removedShow) {
+          const favShow = favoriteShows?.find(
+            (show) => show.id === removedShow.id
+          );
+          if (favShow?.documentId) {
+            updateFavoriteShowInStore(favShow.documentId, {
+              isWatching: false,
+              watchingAt: undefined,
+            });
+          }
+        }
       }
       queryClient.invalidateQueries({
         queryKey: [FIRESTORE_COLLECTIONS.CURRENTLY_WATCHING_SHOWS, userId],

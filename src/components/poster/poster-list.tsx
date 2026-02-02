@@ -2,10 +2,12 @@ import { FlatList, type RefreshControlProps } from 'react-native';
 
 import { TabsFlatList } from '../tabs-view';
 import { View } from '../ui';
-import { Poster, type PosterProps } from './poster';
+import { type PosterProps } from './poster';
+import { PosterListItem } from './poster-list-item';
 import { PosterListSkeleton } from './poster-list-skeleton';
 
 interface PosterListProps {
+  canToggle?: boolean;
   data: PosterProps[];
   horizontal?: boolean;
   horizontalItem?: boolean;
@@ -22,6 +24,7 @@ interface PosterListProps {
 }
 
 export const PosterList = ({
+  canToggle = false,
   data,
   horizontal = true,
   horizontalItem = false,
@@ -47,7 +50,12 @@ export const PosterList = ({
         horizontal={horizontal}
         ItemSeparatorComponent={() => <View className="h-2" />}
         renderItem={({ item }) => (
-          <Poster {...item} horizontal={horizontalItem} onPress={onPress} />
+          <PosterListItem
+            item={item as any}
+            horizontalItem={horizontalItem}
+            onPress={onPress}
+            canToggle={canToggle}
+          />
         )}
         ListEmptyComponent={emptyComponent}
         keyExtractor={(item) => item.id.toString()}
@@ -65,7 +73,12 @@ export const PosterList = ({
       data={data}
       horizontal={horizontal}
       renderItem={({ item }) => (
-        <Poster {...item} horizontal={horizontalItem} onPress={onPress} />
+        <PosterListItem
+          item={item as any}
+          horizontalItem={horizontalItem}
+          onPress={onPress}
+          canToggle={canToggle}
+        />
       )}
       ListEmptyComponent={emptyComponent}
       ItemSeparatorComponent={() => <View className="h-2" />}

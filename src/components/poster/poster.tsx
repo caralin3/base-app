@@ -77,9 +77,7 @@ export const Poster = ({
             <IconButton
               iconName={isFavorite ? 'heart.fill' : 'heart'}
               color={colors.primary[600]}
-              onPress={() => {
-                onFavorite();
-              }}
+              onPress={onFavorite}
             />
           )}
         </View>

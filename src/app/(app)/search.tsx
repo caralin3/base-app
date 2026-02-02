@@ -88,7 +88,7 @@ export default function Search() {
     }
   };
 
-  // eslint-disable-next-line react-compiler/react-compiler
+  // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(debounce(handleSearch, 500), []);
 
   const handleChangeText = (text: string) => {

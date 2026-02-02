@@ -1,19 +1,15 @@
-/* eslint-disable max-lines-per-function */
 import {
   BottomSheetFlatList,
   type BottomSheetModal,
 } from '@gorhom/bottom-sheet';
-import { useColorScheme } from 'nativewind';
-import React from 'react';
+import React, { forwardRef, memo, useCallback, useMemo } from 'react';
 import type { FieldValues } from 'react-hook-form';
 import { useController } from 'react-hook-form';
 import { Pressable, type PressableProps, View } from 'react-native';
-import type { SvgProps } from 'react-native-svg';
-import Svg, { Path } from 'react-native-svg';
 import { tv } from 'tailwind-variants';
 
 import colors from './colors';
-import { CaretDown } from './icons';
+import { CaretDown, Check } from './icons';
 import type { InputControllerType } from './input';
 import { Modal, useModal } from './modal';
 import { Text } from './text';
@@ -21,12 +17,11 @@ import { Text } from './text';
 const selectTv = tv({
   slots: {
     container: 'mb-4 flex-1',
-    label: 'text-grey-100 mb-1 text-lg dark:text-neutral-100',
+    label: 'mb-1 text-lg text-white',
     input:
-      'mt-0 flex-row items-center justify-center rounded-xl border-[0.5px] border-neutral-300  p-3 dark:border-neutral-700',
-    inputValue: 'dark:text-neutral-100',
+      'mt-0 flex-row items-center justify-center rounded-md bg-charcoal-300 p-4 font-inter text-lg font-medium leading-5 text-white',
+    inputValue: 'text-white',
   },
-
   variants: {
     focused: {
       true: {
@@ -49,12 +44,15 @@ const selectTv = tv({
   defaultVariants: {
     error: false,
     disabled: false,
+    background: 'default',
   },
 });
 
 export type OptionType = { label: string; value: string | number };
 
 type OptionsProps = {
+  background?: 'default' | 'neutral' | 'dark' | 'transparent';
+  defaultSnapPoints?: string[];
   options: OptionType[];
   onSelect: (option: OptionType) => void;
   testID?: string;
@@ -66,15 +64,37 @@ function keyExtractor(item: OptionType) {
   return `select-item-${item.value}`;
 }
 
-export const Options = React.forwardRef<BottomSheetModal, OptionsProps>(
-  ({ options, onSelect, value, testID, title }, ref) => {
+export const Options = forwardRef<BottomSheetModal, OptionsProps>(
+  (
+    {
+      background = 'default',
+      defaultSnapPoints,
+      options,
+      onSelect,
+      value,
+      testID,
+      title,
+    },
+    ref
+  ) => {
     const maxHeight = 400;
     const height = Math.min(options.length * 70 + 100, maxHeight);
-    const snapPoints = React.useMemo(() => [height], [height]);
-    const { colorScheme } = useColorScheme();
-    const isDark = colorScheme === 'dark';
+    const snapPoints = useMemo(() => [height], [height]);
 
-    const renderSelectItem = React.useCallback(
+    const backgroundColor = useMemo(() => {
+      switch (background) {
+        case 'neutral':
+          return colors.neutral[800];
+        case 'dark':
+          return colors.neutral[900];
+        case 'transparent':
+          return 'rgba(0, 0, 0, 0.67)';
+        default:
+          return colors.charcoal[300];
+      }
+    }, [background]);
+
+    const renderSelectItem = useCallback(
       ({ item }: { item: OptionType }) => (
         <Option
           key={`select-item-${item.value}`}
@@ -91,9 +111,9 @@ export const Options = React.forwardRef<BottomSheetModal, OptionsProps>(
       <Modal
         ref={ref}
         index={0}
-        snapPoints={snapPoints}
+        snapPoints={defaultSnapPoints ?? snapPoints}
         backgroundStyle={{
-          backgroundColor: isDark ? colors.neutral[800] : colors.white,
+          backgroundColor,
         }}
         title={title}
       >
@@ -109,7 +129,7 @@ export const Options = React.forwardRef<BottomSheetModal, OptionsProps>(
   }
 );
 
-const Option = React.memo(
+const Option = memo(
   ({
     label,
     selected = false,
@@ -119,11 +139,8 @@ const Option = React.memo(
     label: string;
   }) => {
     return (
-      <Pressable
-        className="flex-row items-center border-b border-neutral-300 bg-white px-3 py-2 dark:border-neutral-700 dark:bg-neutral-800"
-        {...props}
-      >
-        <Text className="flex-1 dark:text-neutral-100 ">{label}</Text>
+      <Pressable className="flex-row items-center gap-2 p-4" {...props}>
+        <Text className="text-white">{label}</Text>
         {selected && <Check />}
       </Pressable>
     );
@@ -131,40 +148,44 @@ const Option = React.memo(
 );
 
 export interface SelectProps {
+  background?: 'default' | 'neutral' | 'dark' | 'transparent';
   keyValue?: 'label' | 'value';
-  value?: string | number;
-  label?: string;
+  defaultSnapPoints?: string[];
   disabled?: boolean;
   error?: string;
   helpText?: string;
+  label?: string;
   options?: OptionType[];
   optionsTitle?: string;
   onSelect?: (value: string | number) => void;
   placeholder?: string;
   required?: boolean;
   testID?: string;
+  value?: string | number;
 }
 interface ControlledSelectProps<T extends FieldValues>
   extends SelectProps, InputControllerType<T> {}
 
 export const Select = (props: SelectProps) => {
   const {
+    background = 'default',
+    defaultSnapPoints,
+    disabled = false,
+    error,
+    helpText,
     keyValue = 'label',
     label,
-    value,
-    error,
-    placeholder = 'Select...',
-    helpText,
-    disabled = false,
     onSelect,
     options = [],
     optionsTitle,
-    testID,
+    placeholder = 'Select...',
     required = false,
+    testID,
+    value,
   } = props;
   const modal = useModal();
 
-  const onSelectOption = React.useCallback(
+  const onSelectOption = useCallback(
     (option: OptionType) => {
       onSelect?.(option.value);
       modal.dismiss();
@@ -172,7 +193,7 @@ export const Select = (props: SelectProps) => {
     [modal, onSelect]
   );
 
-  const styles = React.useMemo(
+  const styles = useMemo(
     () =>
       selectTv({
         error: Boolean(error),
@@ -181,7 +202,7 @@ export const Select = (props: SelectProps) => {
     [error, disabled]
   );
 
-  const textValue = React.useMemo(() => {
+  const textValue = useMemo(() => {
     const selectedOption = options?.find((t) => t.value === value);
     return selectedOption ? selectedOption[keyValue] : placeholder;
   }, [value, options, placeholder, keyValue]);
@@ -229,10 +250,13 @@ export const Select = (props: SelectProps) => {
         )}
       </View>
       <Options
+        background={background}
+        defaultSnapPoints={defaultSnapPoints}
         testID={testID}
         ref={modal.ref}
         options={options}
         onSelect={onSelectOption}
+        value={value}
         title={optionsTitle}
       />
     </>
@@ -246,7 +270,7 @@ export function ControlledSelect<T extends FieldValues>(
   const { name, control, rules, onSelect: onNSelect, ...selectProps } = props;
 
   const { field, fieldState } = useController({ control, name, rules });
-  const onSelect = React.useCallback(
+  const onSelect = useCallback(
     (value: string | number) => {
       field.onChange(value);
       onNSelect?.(value);
@@ -262,21 +286,3 @@ export function ControlledSelect<T extends FieldValues>(
     />
   );
 }
-
-const Check = ({ ...props }: SvgProps) => (
-  <Svg
-    width={25}
-    height={24}
-    fill="none"
-    viewBox="0 0 25 24"
-    {...props}
-    className="stroke-black dark:stroke-white"
-  >
-    <Path
-      d="m20.256 6.75-10.5 10.5L4.506 12"
-      strokeWidth={2.438}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </Svg>
-);

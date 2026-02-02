@@ -1,4 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
 
 import {
   colors,
@@ -23,13 +24,20 @@ import { getTmdbUri } from '@/lib/utils';
 export default function Show() {
   const local = useLocalSearchParams<ShowRouteParams>();
   const showId = local.id;
+  const [seasonNumber, setSeasonNumber] = useState(1);
+  const [myEpisodesSeasonNumber, setMyEpisodesSeasonNumber] = useState(0);
+
+  useEffect(() => {
+    setSeasonNumber(1);
+    setMyEpisodesSeasonNumber(0);
+  }, [showId]);
 
   const { data: showDetails, isLoading: isLoadingShowDetails } =
     useShowDetailsQuery(showId);
   const {
     getEpisodes,
-    seasonQuery: { data: season },
-  } = useSeasonEpisodesQuery(showId, 1);
+    seasonQuery: { data: season, isLoading: isLoadingSeason },
+  } = useSeasonEpisodesQuery(showId, seasonNumber);
   const { data: recommendedShows } = useRecommendedQuery(showId);
 
   const {
@@ -110,10 +118,14 @@ export default function Show() {
                     ? getEpisodes(season.episodes, favoriteEpisodes ?? [])
                     : []
                 }
+                numberOfSeasons={showDetails.numberOfSeasons}
+                seasonNumber={seasonNumber}
+                setSeasonNumber={(value) => setSeasonNumber(value as number)}
                 show={showDetails}
                 onFavoriteEpisode={(episode) =>
                   toggleFavoriteEpisode(episode, showDetails)
                 }
+                isLoading={isLoadingSeason}
               />
             ),
           },
@@ -126,6 +138,12 @@ export default function Show() {
                   toggleFavoriteEpisode(episode, showDetails)
                 }
                 show={showDetails}
+                numberOfSeasons={showDetails.numberOfSeasons}
+                seasonNumber={myEpisodesSeasonNumber}
+                setSeasonNumber={(value) =>
+                  setMyEpisodesSeasonNumber(value as number)
+                }
+                isLoading={false}
               />
             ),
           },

@@ -22,7 +22,7 @@ import {
   useRecentSearchesStore,
 } from '@/lib/store';
 import { type Show } from '@/lib/types';
-import { formatTvShow, getShowPosterData } from '@/lib/utils';
+import { formatTvShow, getShowPosterData, sortByDate } from '@/lib/utils';
 
 export interface RecentSearch {
   id: string;
@@ -32,7 +32,9 @@ export interface RecentSearch {
 
 export default function Search() {
   const queryClient = useQueryClient();
-  const recentSearches = useRecentSearchesStore.use.recentSearches();
+  const recentSearches = useRecentSearchesStore.use
+    .recentSearches()
+    .sort((a, b) => sortByDate(b.timestamp, a.timestamp, 'asc'));
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showTrending, setShowTrending] = useState(true);

@@ -33,21 +33,11 @@ require('dotenv').config({
  * for example: if the APP_ENV is staging, the bundle id will be com.appName.staging
  */
 
-const BUNDLE_ID = 'com.caralin3.bingebuddy'; // ios bundle id
-const PACKAGE = 'com.caralin3.bingebuddy'; // android package name
+const BUNDLE_ID = 'com.bingebuddy'; // ios bundle id
+const PACKAGE = 'com.bingebuddy'; // android package name
 const NAME = 'Binge Buddy'; // app name
 const SLUG = 'binge-buddy'; // app slug
 const SCHEME = 'bingebuddy'; // app scheme
-/**
- * We declare a function withEnvSuffix that will add a suffix to the variable name based on the APP_ENV
- * Add a suffix to variable env based on APP_ENV
- * @param {string} name
- * @returns  {string}
- */
-
-const withEnvSuffix = (name) => {
-  return APP_ENV === 'production' ? name : `${name}.${APP_ENV}`;
-};
 
 /**
  * 2nd part: Define your env variables schema
@@ -79,7 +69,7 @@ const client = z.object({
   // ADD YOUR CLIENT ENV VARS HERE
   FIREBASE_API_KEY: z.string(),
   FIREBASE_ANDROID_APP_ID: z.string(),
-  FIREBASE_IOS_APP_ID: z.string(),
+  FIREBASE_IOS_APP_ID: z.string().optional(),
   FIREBASE_PROJECT_ID: z.string(),
   TMDB_API_URL: z.string(),
   TMDB_IMAGE_URL: z.string(),
@@ -87,10 +77,10 @@ const client = z.object({
 });
 
 const buildTime = z.object({
-  EXPO_ACCOUNT_OWNER: z.string(),
-  EAS_PROJECT_ID: z.string(),
+  EXPO_ACCOUNT_OWNER: z.string().optional(),
+  EAS_PROJECT_ID: z.string().optional(),
   // ADD YOUR BUILD TIME ENV VARS HERE
-  GOOGLE_SERVICES_JSON: z.string(),
+  GOOGLE_SERVICES_FILE: z.string().optional(),
 });
 
 /**
@@ -101,8 +91,8 @@ const _clientEnv = {
   NAME: NAME,
   SCHEME: SCHEME,
   SLUG: SLUG,
-  BUNDLE_ID: withEnvSuffix(BUNDLE_ID),
-  PACKAGE: withEnvSuffix(PACKAGE),
+  BUNDLE_ID: BUNDLE_ID,
+  PACKAGE: PACKAGE,
   VERSION: packageJSON.version,
 
   // ADD YOUR ENV VARS HERE TOO
@@ -122,7 +112,7 @@ const _buildTimeEnv = {
   EXPO_ACCOUNT_OWNER: process.env.EXPO_ACCOUNT_OWNER,
   EAS_PROJECT_ID: process.env.EAS_PROJECT_ID,
   // ADD YOUR ENV VARS HERE TOO
-  GOOGLE_SERVICES_JSON: process.env.GOOGLE_SERVICES_JSON,
+  GOOGLE_SERVICES_FILE: process.env.GOOGLE_SERVICES_FILE,
 };
 
 /**
@@ -158,5 +148,4 @@ const ClientEnv = client.parse(_clientEnv);
 module.exports = {
   Env,
   ClientEnv,
-  withEnvSuffix,
 };

@@ -33,7 +33,7 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
       behavior="padding"
       keyboardVerticalOffset={10}
     >
-      <View className="flex-1 justify-center gap-4 p-8">
+      <View className="flex-1 justify-center gap-4 bg-black p-8">
         <View className="items-center justify-center">
           <Image
             source={require('../assets/images/splash-icon.png')}
@@ -76,8 +76,8 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
           size="lg"
         />
         <View className="items-center justify-center">
-          <Text className="flex flex-row items-start text-center text-gray-500">
-            Already have an account?
+          <Text className="flex flex-row items-start text-center text-white">
+            Need an account?
           </Text>
           <Button
             label="Register"

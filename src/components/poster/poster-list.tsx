@@ -48,7 +48,7 @@ export const PosterList = ({
       <TabsFlatList
         data={data}
         horizontal={horizontal}
-        ItemSeparatorComponent={() => <View className="h-2" />}
+        ItemSeparatorComponent={() => <View className="h-3" />}
         renderItem={({ item }) => (
           <PosterListItem
             item={item as any}
@@ -81,7 +81,7 @@ export const PosterList = ({
         />
       )}
       ListEmptyComponent={emptyComponent}
-      ItemSeparatorComponent={() => <View className="h-2" />}
+      ItemSeparatorComponent={() => <View className="h-3" />}
       keyExtractor={(item) => item.id.toString()}
       showsHorizontalScrollIndicator={false}
       refreshControl={refreshControl}

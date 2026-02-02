@@ -56,11 +56,15 @@ export const Poster = ({
               style={styles.horizontalImage}
             />
             <View style={styles.flex}>
-              <Text size="base" weight="bold" style={styles.name}>
+              <Text size="xl" weight="bold" style={styles.name}>
                 {name}
               </Text>
               {!!startYear && <Text>{startYear}</Text>}
-              {!!numberOfSeasons && <Text>{numberOfSeasons} seasons</Text>}
+              {!!numberOfSeasons && (
+                <Text>
+                  {numberOfSeasons} season{numberOfSeasons > 1 ? 's' : ''}
+                </Text>
+              )}
             </View>
           </View>
         </Link>
@@ -71,6 +75,7 @@ export const Poster = ({
               iconType="community"
               color={colors.primary[600]}
               onPress={onWatch}
+              size={28}
             />
           )}
           {!!onFavorite && (
@@ -78,6 +83,7 @@ export const Poster = ({
               iconName={isFavorite ? 'heart.fill' : 'heart'}
               color={colors.primary[600]}
               onPress={onFavorite}
+              size={28}
             />
           )}
         </View>
@@ -98,16 +104,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
     gap: 8,
   },
   flex: {
     flex: 1,
+    gap: 4,
   },
   imageLink: {
     flexDirection: 'row',
-    alignItems: 'center',
     gap: 16,
   },
   horizontalImage: {
@@ -119,8 +124,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    alignItems: 'flex-start',
+    gap: 16,
   },
   verticalContainer: {
     flex: 1,

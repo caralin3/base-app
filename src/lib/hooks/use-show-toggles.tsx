@@ -217,8 +217,6 @@ export function useShowToggles(showId: string) {
     const favoritedShow = favoriteShows?.find(
       (show) => show.id.toString() === showId
     );
-    console.log('Toggling favorite show:', show);
-    console.log('favorited show:', favoritedShow);
     if (favoritedShow && favoritedShow?.isFavorite) {
       removeFavoriteShowHandler(favoritedShow.documentId);
       // Also remove any favorited episodes for this show
@@ -232,6 +230,7 @@ export function useShowToggles(showId: string) {
       const newFavoriteShow: NewFavoriteShowDocument = {
         ...show,
         userId,
+        isFavorite: true,
         favoritedAt: new Date().toISOString(),
       };
       addFavoriteShowHandler(newFavoriteShow);
@@ -245,6 +244,7 @@ export function useShowToggles(showId: string) {
       const newCurrentlyWatchingShow: NewCurrentlyWatchingShowDocument = {
         ...show,
         userId,
+        isWatching: true,
         watchingAt: new Date().toISOString(),
       };
       addCurrentlyWatchingShowHandler(newCurrentlyWatchingShow);
@@ -263,6 +263,7 @@ export function useShowToggles(showId: string) {
         ...episode,
         userId,
         favoritedAt: new Date().toISOString(),
+        isFavorite: true,
       };
       addFavoriteEpisodeHandler(newFavoriteEpisode);
 
@@ -272,6 +273,7 @@ export function useShowToggles(showId: string) {
           ...show,
           userId,
           favoritedAt: new Date().toISOString(),
+          isFavorite: true,
         };
         addFavoriteShowHandler(newFavoriteShow);
       }

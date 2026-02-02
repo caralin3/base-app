@@ -1,5 +1,4 @@
 import { formatDate, parseISO } from 'date-fns';
-import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { getTmdbImageUrl } from '@/lib/api/tmdb/endpoints';
@@ -22,8 +21,6 @@ export const EpisodeItem = ({
   posterPath,
   type = 'expanded',
 }: EpisodeItemProps) => {
-  const [hearted, setHearted] = useState(episode.isFavorite);
-
   if (type === 'simple') {
     return (
       <View style={styles.container}>
@@ -31,11 +28,10 @@ export const EpisodeItem = ({
           title={`S${episode.seasonNumber} E${episode.episodeNumber} - ${episode.name}`}
           rightAction={
             <IconButton
-              iconName={hearted ? 'heart.fill' : 'heart'}
+              iconName={episode.isFavorite ? 'heart.fill' : 'heart'}
               color={colors.primary[600]}
               onPress={() => {
                 onFavorite(episode);
-                setHearted(!hearted);
               }}
             />
           }
@@ -81,11 +77,10 @@ export const EpisodeItem = ({
         </View>
         <View>
           <IconButton
-            iconName={hearted ? 'heart.fill' : 'heart'}
+            iconName={episode.isFavorite ? 'heart.fill' : 'heart'}
             color={colors.primary[600]}
             onPress={() => {
               onFavorite(episode);
-              setHearted(!hearted);
             }}
           />
         </View>

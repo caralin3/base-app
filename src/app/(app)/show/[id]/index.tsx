@@ -11,12 +11,14 @@ import {
   TabsView,
   Text,
   View,
+  WatchProviders,
 } from '@/components';
 import {
   useRecommendedQuery,
   useSeasonEpisodesQuery,
   useShowDetailsQuery,
   useShowToggles,
+  useWatchProvidersQuery,
 } from '@/lib/hooks';
 import { type ShowRouteParams } from '@/lib/types';
 import { getTmdbUri } from '@/lib/utils';
@@ -34,6 +36,7 @@ export default function Show() {
 
   const { data: showDetails, isLoading: isLoadingShowDetails } =
     useShowDetailsQuery(showId);
+  const { data: watchProviders } = useWatchProvidersQuery(showId);
   const {
     getEpisodes,
     seasonQuery: { data: season, isLoading: isLoadingSeason },
@@ -76,6 +79,7 @@ export default function Show() {
           {showDetails.name}
         </Text>
         <Text clipText>{showDetails.overview}</Text>
+        <WatchProviders providers={watchProviders} />
       </View>
     </View>
   );

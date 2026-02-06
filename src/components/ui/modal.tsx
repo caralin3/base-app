@@ -73,7 +73,6 @@ export const useModal = () => {
 };
 
 export const Modal = React.forwardRef(
-  // eslint-disable-next-line max-lines-per-function
   (
     {
       snapPoints: _snapPoints = ['60%'],
@@ -207,20 +206,20 @@ const ModalHeader = React.memo(
           <View
             className={`flex-row ${Platform.select({
               ios: 'p-6 pb-4',
-              android: 'px-3 pt-6 pb-0',
+              android: 'px-3 pt-6 pb-4',
             })}`}
           >
             <View className="flex-1 flex-row items-center justify-between">
               {onLeftActionPress ? (
                 <IconButton
-                  icon="chevron.left"
+                  iconName="chevron.left"
                   size={Platform.select({ ios: 28, android: 40 })}
                   onPress={onLeftActionPress}
                 />
               ) : (
                 <View className="size-[24px]" />
               )}
-              <Text className="text-center text-[20px] font-bold text-[#26313D] dark:text-white">
+              <Text className="text-center text-[20px] font-bold text-white">
                 {title}
               </Text>
               <View className="size-[24px]" />

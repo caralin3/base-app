@@ -34,6 +34,7 @@ export const EpisodeTabHeader = ({
         options={options}
         value={seasonNumber}
         onSelect={(option) => setSeasonNumber(option)}
+        optionsTitle="Seasons"
       />
     </View>
   );

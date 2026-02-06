@@ -225,3 +225,29 @@ export const SearchTvResponse = z.object({
 });
 
 export type SearchTvResponse = z.infer<typeof SearchTvResponse>;
+
+export const WatchProvider = z.object({
+  display_priority: z.number(),
+  logo_path: z.string().nullable(),
+  provider_id: z.number(),
+  provider_name: z.string(),
+});
+
+export type WatchProvider = z.infer<typeof WatchProvider>;
+
+export const WatchProvidersResponse = z.object({
+  id: z.number(),
+  results: z
+    .record(
+      z.string(),
+      z.object({
+        flatrate: z.array(WatchProvider).optional(),
+        rent: z.array(WatchProvider).optional(),
+        buy: z.array(WatchProvider).optional(),
+        ads: z.array(WatchProvider).optional(),
+      })
+    )
+    .optional(),
+});
+
+export type WatchProvidersResponse = z.infer<typeof WatchProvidersResponse>;

@@ -73,3 +73,6 @@ export const getTrendingTvUrl = (
   timeWindow?: 'day' | 'week',
   params?: TrendingTvQueryParams
 ) => getTmdbApiUrl(`/trending/tv/${timeWindow}`, transformParams(params));
+
+export const getWatchProvidersUrl = (seriesId: number) =>
+  getTmdbApiUrl(`/tv/${seriesId}/watch/providers`);

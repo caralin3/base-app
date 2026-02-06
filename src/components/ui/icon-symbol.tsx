@@ -34,6 +34,7 @@ const MAPPING = {
   'chevron.right': 'chevron-right',
   creditcard: 'credit-card',
   dollarsign: 'attach-money',
+  'square.and.arrow.up': 'exit-to-app',
   heart: 'favorite-outline',
   'heart.fill': 'favorite',
   'house.fill': 'home',

@@ -5,3 +5,4 @@ export * from './use-recommended-query';
 export * from './use-season-episodes-query';
 export * from './use-show-details-query';
 export * from './use-trending-shows-query';
+export * from './use-watch-providers-query';

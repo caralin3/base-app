@@ -11,13 +11,16 @@ import {
   TabsView,
   Text,
   View,
+  WatchedToggle,
   WatchProviders,
 } from '@/components';
 import {
+  useAuth,
   useRecommendedQuery,
   useSeasonEpisodesQuery,
   useShowDetailsQuery,
   useShowToggles,
+  useWatchedShowsByIdQuery,
   useWatchProvidersQuery,
 } from '@/lib/hooks';
 import { type ShowRouteParams } from '@/lib/types';
@@ -28,6 +31,7 @@ export default function Show() {
   const showId = local.id;
   const [seasonNumber, setSeasonNumber] = useState(1);
   const [myEpisodesSeasonNumber, setMyEpisodesSeasonNumber] = useState(0);
+  const userId = useAuth().user?.id ?? '';
 
   useEffect(() => {
     setSeasonNumber(1);
@@ -42,6 +46,7 @@ export default function Show() {
     seasonQuery: { data: season, isLoading: isLoadingSeason },
   } = useSeasonEpisodesQuery(showId, seasonNumber);
   const { data: recommendedShows } = useRecommendedQuery(showId);
+  const { data: watchedShow } = useWatchedShowsByIdQuery(showId);
 
   const {
     currentlyWatchingShow,
@@ -80,6 +85,11 @@ export default function Show() {
         </Text>
         <Text clipText>{showDetails.overview}</Text>
         <WatchProviders providers={watchProviders} />
+        <WatchedToggle
+          showId={Number(showId)}
+          userId={userId}
+          watchedShow={watchedShow ?? null}
+        />
       </View>
     </View>
   );

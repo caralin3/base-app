@@ -82,3 +82,17 @@ export const NewFavoriteEpisodeDocument = z.discriminatedUnion('type', [
 export type NewFavoriteEpisodeDocument = z.infer<
   typeof NewFavoriteEpisodeDocument
 >;
+
+export const WatchedShowDocument = z.object({
+  showId: z.number(),
+  documentId: z.string(),
+  userId: z.string(),
+});
+
+export type WatchedShowDocument = z.infer<typeof WatchedShowDocument>;
+
+export const NewWatchedShowDocument = z.discriminatedUnion('type', [
+  WatchedShowDocument.omit({ documentId: true }),
+]);
+
+export type NewWatchedShowDocument = z.infer<typeof NewWatchedShowDocument>;

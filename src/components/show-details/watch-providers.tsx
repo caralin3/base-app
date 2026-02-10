@@ -46,7 +46,9 @@ export const WatchProviders = ({ providers }: WatchProvidersProps) => {
   return (
     <View className="gap-2">
       <View className="mt-4 flex-row flex-wrap items-center gap-3">
-        <Text weight="bold">Stream on:</Text>
+        <Text weight="bold">
+          {streamingProviders?.length > 0 ? 'Stream on:' : 'Buy/Rent:'}
+        </Text>
         {streamingProviders?.map((provider) => (
           <Image
             key={provider.provider_id}

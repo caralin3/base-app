@@ -4,9 +4,11 @@ import {
   addCurrentlyWatchingShow,
   addFavoriteEpisode,
   addFavoriteShow,
+  addWatchlistShow,
   deleteCurrentlyWatchingShow,
   deleteFavoriteEpisode,
   deleteFavoriteShow,
+  deleteWatchlistShow,
   FIRESTORE_COLLECTIONS,
 } from '@/lib/firebase';
 import {
@@ -16,14 +18,18 @@ import {
   type NewCurrentlyWatchingShowDocument,
   type NewFavoriteEpisodeDocument,
   type NewFavoriteShowDocument,
+  type NewWatchlistShowDocument,
+  type WatchlistShowDocument,
 } from '@/lib/firebase/types';
 import {
   addCurrentlyWatchingShowToStore,
   addFavoriteEpisodeToStore,
   addFavoriteShowToStore,
+  addWatchlistShowToStore,
   removeCurrentlyWatchingShowFromStore,
   removeFavoriteEpisodeFromStore,
   removeFavoriteShowFromStore,
+  removeWatchlistShowFromStore,
   updateCurrentlyWatchingShowInStore,
   updateFavoriteShowInStore,
 } from '@/lib/store';
@@ -34,6 +40,7 @@ import { useAuth } from './use-auth';
 import { useCurrentlyWatching } from './use-currently-watching';
 import { useFavoriteEpisodes } from './use-favorite-episodes';
 import { useFavoriteShows } from './use-favorite-shows';
+import { useWatchlistShows } from './use-watchlist-shows';
 
 export function useShowToggles(showId: string) {
   const queryClient = useQueryClient();
@@ -47,6 +54,10 @@ export function useShowToggles(showId: string) {
     (show) => show.id.toString() === showId
   );
   const { favoriteEpisodes } = useFavoriteEpisodes(showId);
+  const { watchlistShows } = useWatchlistShows();
+  const watchlistShow = watchlistShows?.find(
+    (show) => show.id.toString() === showId
+  );
 
   const addFavoriteShowMutation = useMutation({
     mutationFn: (data: NewFavoriteShowDocument) => addFavoriteShow(data),
@@ -214,6 +225,43 @@ export function useShowToggles(showId: string) {
     },
   });
 
+  const addWatchlistShowMutation = useMutation({
+    mutationFn: (data: NewWatchlistShowDocument) => addWatchlistShow(data),
+    onSuccess: (data?: WatchlistShowDocument) => {
+      if (data) {
+        const transformedShow = {
+          ...data,
+          href: `/show/${data.id}` as const,
+          isFavorite: data.favoritedAt != null,
+          isWatching: data.watchingAt != null,
+          uri: getTmdbUri(data.posterPath),
+        };
+        addWatchlistShowToStore(transformedShow);
+      }
+      queryClient.invalidateQueries({
+        queryKey: [FIRESTORE_COLLECTIONS.WATCHLIST_SHOWS, userId],
+      });
+    },
+    onError: (error) => {
+      console.error('Error adding watchlist show:', error);
+    },
+  });
+
+  const removeWatchlistShowMutation = useMutation({
+    mutationFn: (documentId: string) => deleteWatchlistShow(documentId),
+    onSuccess: (docId?: string) => {
+      if (docId) {
+        removeWatchlistShowFromStore(docId);
+      }
+      queryClient.invalidateQueries({
+        queryKey: [FIRESTORE_COLLECTIONS.WATCHLIST_SHOWS, userId],
+      });
+    },
+    onError: (error) => {
+      console.error('Error removing watchlist show:', error);
+    },
+  });
+
   const addFavoriteShowHandler = (showData: NewFavoriteShowDocument) => {
     if (!userId) {
       console.error('User not authenticated');
@@ -264,6 +312,22 @@ export function useShowToggles(showId: string) {
       return;
     }
     removeFavoriteEpisodeMutation.mutate(documentId);
+  };
+
+  const addWatchlistShowHandler = (showData: NewWatchlistShowDocument) => {
+    if (!userId) {
+      console.error('User not authenticated');
+      return;
+    }
+    addWatchlistShowMutation.mutate(showData);
+  };
+
+  const removeWatchlistShowHandler = (documentId: string) => {
+    if (!userId) {
+      console.error('User not authenticated');
+      return;
+    }
+    removeWatchlistShowMutation.mutate(documentId);
   };
 
   const toggleFavoriteShow = (show: Show) => {
@@ -333,12 +397,30 @@ export function useShowToggles(showId: string) {
     }
   };
 
+  const toggleWatchlistShow = (show: Show) => {
+    const watchlistedShow = watchlistShows?.find(
+      (s) => s.id.toString() === showId
+    );
+    if (watchlistedShow) {
+      removeWatchlistShowHandler(watchlistedShow.documentId);
+    } else {
+      const newWatchlistShow: NewWatchlistShowDocument = {
+        ...show,
+        userId,
+        addedAt: new Date().toISOString(),
+      };
+      addWatchlistShowHandler(newWatchlistShow);
+    }
+  };
+
   return {
     currentlyWatchingShow,
     favoriteEpisodes,
     favoriteShow,
+    watchlistShow,
     toggleFavoriteEpisode,
     toggleFavoriteShow,
     toggleCurrentlyWatchingShow,
+    toggleWatchlistShow,
   };
 }

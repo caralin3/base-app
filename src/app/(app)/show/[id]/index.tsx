@@ -57,6 +57,8 @@ export default function Show() {
     toggleFavoriteEpisode,
     toggleFavoriteShow,
     toggleCurrentlyWatchingShow,
+    toggleWatchlistShow,
+    watchlistShow,
   } = useShowToggles(showId);
 
   if (isLoadingShowDetails) {
@@ -109,6 +111,16 @@ export default function Show() {
                   ? 'eye.fill'
                   : 'eye',
               type: 'community',
+            },
+          },
+          {
+            onPress: () => toggleWatchlistShow(showDetails),
+            icon: {
+              color: colors.primary[600],
+              name:
+                watchlistShow?.id.toString() === showId
+                  ? 'bookmark.fill'
+                  : 'bookmark',
             },
           },
           {

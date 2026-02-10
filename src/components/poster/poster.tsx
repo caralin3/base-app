@@ -12,12 +12,14 @@ export interface PosterProps {
   href: LinkProps['href'];
   id: number;
   isFavorite: boolean;
-  isWatching?: boolean;
+  isCurrentlyWatching?: boolean;
+  isInWatchlist?: boolean;
   name: string;
   numberOfSeasons?: number;
+  onCurrentlyWatching?: () => void;
   onFavorite?: () => void;
   onPress?: (showId: number) => void;
-  onWatch?: () => void;
+  onSaveToWatchlist?: () => void;
   uri: string | null;
 }
 
@@ -26,13 +28,15 @@ export const Poster = ({
   horizontal = false,
   href,
   id,
+  isCurrentlyWatching,
   isFavorite,
-  isWatching,
+  isInWatchlist,
   name,
   numberOfSeasons,
+  onCurrentlyWatching,
   onFavorite,
   onPress,
-  onWatch,
+  onSaveToWatchlist,
   uri,
 }: PosterProps) => {
   const startYear = useMemo(
@@ -74,12 +78,20 @@ export const Poster = ({
           </View>
         </Link>
         <View style={styles.buttonContainer}>
-          {!!onWatch && (
+          {!!onCurrentlyWatching && (
             <IconButton
-              iconName={isWatching ? 'eye.fill' : 'eye'}
+              iconName={isCurrentlyWatching ? 'eye.fill' : 'eye'}
               iconType="community"
               color={colors.primary[600]}
-              onPress={onWatch}
+              onPress={onCurrentlyWatching}
+              size={28}
+            />
+          )}
+          {!!onSaveToWatchlist && (
+            <IconButton
+              iconName={isInWatchlist ? 'bookmark.fill' : 'bookmark'}
+              color={colors.primary[600]}
+              onPress={onSaveToWatchlist}
               size={28}
             />
           )}
@@ -130,7 +142,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 16,
+    gap: 10,
   },
   verticalContainer: {
     flex: 1,

@@ -21,6 +21,7 @@ export default function Favorites() {
       <View className="flex-1 p-4">
         <PosterList
           canToggle
+          list="favorites"
           data={favoriteShows ?? []}
           horizontal={false}
           horizontalItem

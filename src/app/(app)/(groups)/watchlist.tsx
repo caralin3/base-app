@@ -3,11 +3,10 @@ import { RefreshControl } from 'react-native-gesture-handler';
 
 import { Screen, Text, View } from '@/components';
 import { PosterList } from '@/components/poster/poster-list';
-import { useCurrentlyWatching } from '@/lib/hooks';
+import { useWatchlistShows } from '@/lib/hooks';
 
-export default function CurrentlyWatching() {
-  const { currentlyWatchingShows, refetch, isRefetching } =
-    useCurrentlyWatching();
+export default function Watchlist() {
+  const { watchlistShows, refetch, isRefetching } = useWatchlistShows();
 
   const onRefresh = useCallback(() => {
     refetch();
@@ -16,14 +15,14 @@ export default function CurrentlyWatching() {
   return (
     <Screen
       headerProps={{
-        title: 'Currently Watching',
+        title: 'Watch List',
       }}
     >
       <View className="flex-1 p-4">
         <PosterList
           canToggle
-          list="currentlyWatching"
-          data={currentlyWatchingShows ?? []}
+          list="watchlist"
+          data={watchlistShows ?? []}
           horizontal={false}
           horizontalItem
           isLoading={isRefetching}
@@ -33,10 +32,10 @@ export default function CurrentlyWatching() {
           ListEmptyComponent={
             <View className="flex-1 px-4 py-8">
               <Text className="text-white" align="center">
-                You don&apos;t have any shows in your currently watching yet.
+                You don&apos;t have any shows in your watchlist yet.
               </Text>
               <Text className="text-white" align="center">
-                Browse shows and tap the eye icon to add them here!
+                Browse shows and tap the heart icon to add them here!
               </Text>
             </View>
           }

@@ -96,3 +96,22 @@ export const NewWatchedShowDocument = z.discriminatedUnion('type', [
 ]);
 
 export type NewWatchedShowDocument = z.infer<typeof NewWatchedShowDocument>;
+
+export const WatchlistShowDocument = z.object({
+  ...Show.shape,
+  documentId: z.string(),
+  isFavorite: z.boolean().optional(),
+  isWatching: z.boolean().optional(),
+  lastViewedSeason: z.number().optional(),
+  watched: z.boolean().optional(),
+  userId: z.string(),
+  addedAt: z.string().optional(),
+});
+
+export type WatchlistShowDocument = z.infer<typeof WatchlistShowDocument>;
+
+export const NewWatchlistShowDocument = z.discriminatedUnion('type', [
+  WatchlistShowDocument.omit({ documentId: true }),
+]);
+
+export type NewWatchlistShowDocument = z.infer<typeof NewWatchlistShowDocument>;

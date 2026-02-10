@@ -6,3 +6,4 @@ export * from './use-favorite-episodes';
 export * from './use-favorite-shows';
 export * from './use-selected-theme';
 export * from './use-show-toggles';
+export * from './use-watchlist-shows';

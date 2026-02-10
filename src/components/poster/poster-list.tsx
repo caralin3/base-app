@@ -13,6 +13,7 @@ interface PosterListProps {
   horizontalItem?: boolean;
   inTabPanel?: boolean;
   isLoading?: boolean;
+  list?: 'favorites' | 'currentlyWatching' | 'watchlist';
   ListEmptyComponent?: React.ComponentType<any> | React.ReactElement | null;
   onPress?: (showId: number) => void;
   refreshControl?:
@@ -30,6 +31,7 @@ export const PosterList = ({
   horizontalItem = false,
   inTabPanel = false,
   isLoading,
+  list,
   ListEmptyComponent,
   onPress,
   refreshControl,
@@ -55,6 +57,7 @@ export const PosterList = ({
             horizontalItem={horizontalItem}
             onPress={onPress}
             canToggle={canToggle}
+            list={list}
           />
         )}
         ListEmptyComponent={emptyComponent}
@@ -79,6 +82,7 @@ export const PosterList = ({
           horizontalItem={horizontalItem}
           onPress={onPress}
           canToggle={canToggle}
+          list={list}
         />
       )}
       ListEmptyComponent={emptyComponent}

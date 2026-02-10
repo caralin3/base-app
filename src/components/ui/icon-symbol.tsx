@@ -26,6 +26,8 @@ const MAPPING = {
   airplane: 'flight',
   'arrow.backward': 'arrow-back',
   'bag.fill': 'shopping-bag',
+  bookmark: 'bookmark-outline',
+  'bookmark.fill': 'bookmark',
   calendar: 'calendar-today',
   'car.fill': 'directions-car',
   checklist: 'checklist',
@@ -65,6 +67,7 @@ const COMMUNITY_MAPPING = {
   tv: 'television-classic',
 } as Partial<
   Record<
+    // eslint-disable-next-line @typescript-eslint/consistent-type-imports
     import('expo-symbols').SymbolViewProps['name'],
     React.ComponentProps<typeof MaterialCommunityIcons>['name']
   >

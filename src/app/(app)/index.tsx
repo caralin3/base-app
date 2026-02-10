@@ -6,6 +6,7 @@ import {
   useCurrentlyWatching,
   useFavoriteShows,
   useTrendingShowsQuery,
+  useWatchlistShows,
 } from '@/lib/hooks';
 
 export default function Home() {
@@ -27,11 +28,23 @@ export default function Home() {
     isRefetching: isRefetchingTrendingShows,
   } = useTrendingShowsQuery();
 
+  const {
+    watchlistShows,
+    refetch: refetchWatchlistShows,
+    isRefetching: isRefetchingWatchlistShows,
+  } = useWatchlistShows();
+
   const onRefresh = useCallback(() => {
     refetchFavoriteShows();
     refetchCurrentlyWatching();
     refetchTrendingShows();
-  }, [refetchFavoriteShows, refetchCurrentlyWatching, refetchTrendingShows]);
+    refetchWatchlistShows();
+  }, [
+    refetchCurrentlyWatching,
+    refetchFavoriteShows,
+    refetchTrendingShows,
+    refetchWatchlistShows,
+  ]);
 
   return (
     <Screen
@@ -49,7 +62,8 @@ export default function Home() {
             refreshing={
               isRefetchingFavoriteShows ||
               isRefetchingCurrentlyWatching ||
-              isRefetchingTrendingShows
+              isRefetchingTrendingShows ||
+              isRefetchingWatchlistShows
             }
             onRefresh={onRefresh}
           />
@@ -64,6 +78,11 @@ export default function Home() {
           title="My Favorites"
           posters={favoriteShows ?? []}
           viewAllHref="/(groups)/favorites"
+        />
+        <PosterSection
+          title="Watch List"
+          posters={watchlistShows ?? []}
+          viewAllHref="/(groups)/watchlist"
         />
         <PosterSection title="Trending Shows" posters={trendingShows ?? []} />
       </ScrollView>

@@ -71,6 +71,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="(groups)/watchlist"
+        options={{
+          title: 'Watch List',
+          href: null,
+        }}
+      />
+      <Tabs.Screen
         name="show/[id]"
         options={{
           href: null,

@@ -117,7 +117,6 @@ export const Modal = React.forwardRef(
       [title, modal.dismiss, dismissible, props.showCloseButton]
     );
 
-    // @TODO: Fix
     const handleChange = (
       index: number,
       position: number,
@@ -140,7 +139,7 @@ export const Modal = React.forwardRef(
         enablePanDownToClose={dismissible}
         handleComponent={renderHandleComponent}
         bottomInset={insets.bottom}
-        // onChange={handleChange}
+        onChange={handleChange}
       />
     );
   }

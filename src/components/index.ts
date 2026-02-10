@@ -7,6 +7,7 @@ export * from './layout';
 export * from './login-form';
 export * from './poster';
 export * from './register-form';
+export * from './scrollable-header';
 export * from './search';
 export * from './settings';
 export * from './show-details';

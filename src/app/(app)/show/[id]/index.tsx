@@ -9,6 +9,7 @@ import {
   MyEpisodesTabContent,
   RecommendedTabContent,
   Screen,
+  ScrollableHeader,
   TabsView,
   Text,
   View,
@@ -75,7 +76,7 @@ export default function Show() {
   }
 
   const Header = () => (
-    <View style={styles.container} pointerEvents="box-none">
+    <ScrollableHeader style={styles.container}>
       <Image
         source={{ uri: getTmdbUri(showDetails.backdropPath) ?? '' }}
         style={styles.image}
@@ -92,7 +93,7 @@ export default function Show() {
           watchedShow={watchedShow ?? null}
         />
       </View>
-    </View>
+    </ScrollableHeader>
   );
 
   return (

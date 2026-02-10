@@ -47,7 +47,12 @@ export const Poster = ({
   if (horizontal) {
     return (
       <View style={styles.container}>
-        <Link href={href} style={styles.flex} onPress={() => onPress?.(id)}>
+        <Link
+          href={href}
+          push
+          style={styles.flex}
+          onPress={() => onPress?.(id)}
+        >
           <View style={styles.imageLink}>
             <PosterImage
               horizontal
@@ -93,7 +98,7 @@ export const Poster = ({
 
   return (
     <View style={styles.verticalContainer}>
-      <Link href={href}>
+      <Link href={href} push onPress={() => onPress?.(id)}>
         <PosterImage alt={alt} uri={uri} style={styles.verticalImage} />
       </Link>
     </View>

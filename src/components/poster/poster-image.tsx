@@ -65,8 +65,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   horizontalPlaceholder: {
-    height: 75,
-    width: 125,
+    height: 140,
+    width: 92,
   },
   verticalPlaceholder: {
     height: 175,

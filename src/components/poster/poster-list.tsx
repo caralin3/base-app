@@ -60,6 +60,7 @@ export const PosterList = ({
         ListEmptyComponent={emptyComponent}
         keyExtractor={(item) => item.id.toString()}
         showsHorizontalScrollIndicator={false}
+        ListHeaderComponent={<View className="h-4" />}
         contentContainerStyle={{
           padding: 8,
         }}

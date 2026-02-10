@@ -1,5 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 
 import {
   colors,
@@ -74,13 +75,13 @@ export default function Show() {
   }
 
   const Header = () => (
-    <View className="bg-black">
+    <View style={styles.container} pointerEvents="box-none">
       <Image
         source={{ uri: getTmdbUri(showDetails.backdropPath) ?? '' }}
-        className="h-64 w-full object-cover"
+        style={styles.image}
       />
-      <View className="px-2 py-4">
-        <Text className="pb-2" size="3xl" weight="bold">
+      <View style={styles.content}>
+        <Text style={styles.title} size="3xl" weight="bold">
           {showDetails.name}
         </Text>
         <Text clipText>{showDetails.overview}</Text>
@@ -170,3 +171,21 @@ export default function Show() {
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#000000',
+  },
+  image: {
+    height: 256,
+    width: '100%',
+    objectFit: 'cover',
+  },
+  content: {
+    paddingHorizontal: 8,
+    paddingTop: 16,
+  },
+  title: {
+    paddingBottom: 8,
+  },
+});

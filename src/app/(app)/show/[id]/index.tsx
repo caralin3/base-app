@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 import {
   colors,
@@ -54,12 +55,14 @@ export default function Show() {
     currentlyWatchingShow,
     favoriteEpisodes,
     favoriteShow,
+    isRefetchingFavoriteEpisodes,
+    refetchFavoriteEpisodes,
     toggleFavoriteEpisode,
     toggleFavoriteShow,
     toggleCurrentlyWatchingShow,
     toggleWatchlistShow,
     watchlistShow,
-  } = useShowToggles(showId);
+  } = useShowToggles(showId, true);
 
   if (isLoadingShowDetails) {
     return (
@@ -153,7 +156,13 @@ export default function Show() {
                 onFavoriteEpisode={(episode) =>
                   toggleFavoriteEpisode(episode, showDetails)
                 }
-                isLoading={isLoadingSeason}
+                isLoading={isLoadingSeason || isRefetchingFavoriteEpisodes}
+                refreshControl={
+                  <RefreshControl
+                    onRefresh={() => refetchFavoriteEpisodes()}
+                    refreshing={isRefetchingFavoriteEpisodes}
+                  />
+                }
               />
             ),
           },
@@ -171,7 +180,13 @@ export default function Show() {
                 setSeasonNumber={(value) =>
                   setMyEpisodesSeasonNumber(value as number)
                 }
-                isLoading={false}
+                isLoading={isLoadingSeason || isRefetchingFavoriteEpisodes}
+                refreshControl={
+                  <RefreshControl
+                    onRefresh={() => refetchFavoriteEpisodes()}
+                    refreshing={isRefetchingFavoriteEpisodes}
+                  />
+                }
               />
             ),
           },

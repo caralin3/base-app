@@ -23,7 +23,7 @@ export function Collapsible({
     <View>
       <View className="flex-row items-start justify-between gap-1.5">
         <TouchableOpacity
-          className="flex-row items-center gap-1.5"
+          className="flex-1 flex-row items-start gap-1.5"
           onPress={() => setIsOpen((value) => !value)}
           activeOpacity={0.8}
         >
@@ -35,7 +35,9 @@ export function Collapsible({
             style={{ transform: [{ rotate: isOpen ? '90deg' : '0deg' }] }}
           />
 
-          <Text weight="semibold">{title}</Text>
+          <Text weight="semibold" className="flex-1">
+            {title}
+          </Text>
         </TouchableOpacity>
         {rightAction}
       </View>

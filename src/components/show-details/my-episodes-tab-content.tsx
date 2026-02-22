@@ -36,11 +36,17 @@ export const MyEpisodesTabContent = ({
   const episodesBySeason = episodes.filter(
     (episode) => episode.seasonNumber === props.seasonNumber
   );
+  const allEpisodesSorted = episodes.sort((a, b) => {
+    if (a.seasonNumber !== b.seasonNumber) {
+      return a.seasonNumber - b.seasonNumber;
+    }
+    return a.episodeNumber - b.episodeNumber;
+  });
 
   return (
     <EpisodesBySeasonList
       inTabPanel
-      episodes={props.seasonNumber === 0 ? episodes : episodesBySeason}
+      episodes={props.seasonNumber === 0 ? allEpisodesSorted : episodesBySeason}
       isLoading={isLoading}
       ListEmptyComponent={
         isLoading ? undefined : (

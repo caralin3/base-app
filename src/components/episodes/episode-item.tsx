@@ -13,7 +13,7 @@ interface EpisodeItemProps {
   type?: 'simple' | 'expanded';
 }
 
-export const DATE_FORMAT = 'MM/dd/yyyy';
+export const DATE_FORMAT = 'MMM dd, yyyy';
 
 export const EpisodeItem = ({
   episode,
@@ -30,6 +30,7 @@ export const EpisodeItem = ({
             <IconButton
               iconName={episode.isFavorite ? 'heart.fill' : 'heart'}
               color={colors.primary[600]}
+              size={28}
               onPress={() => {
                 onFavorite(episode);
               }}
@@ -38,9 +39,11 @@ export const EpisodeItem = ({
         >
           <View style={styles.rowBetween}>
             {episode.runtime > 0 && (
-              <Text style={styles.info}>{episode.runtime} min</Text>
+              <Text style={[styles.info, styles.detail]}>
+                {episode.runtime} min
+              </Text>
             )}
-            <Text style={styles.info}>
+            <Text style={[styles.info, styles.detail]}>
               {formatDate(parseISO(episode.airDate), DATE_FORMAT)}
             </Text>
           </View>
@@ -68,18 +71,25 @@ export const EpisodeItem = ({
           )}
           <View style={styles.flex}>
             <Text style={styles.name}>
-              {episode.episodeNumber}. {episode.name}
+              S{episode.seasonNumber} E{episode.episodeNumber} - {episode.name}
             </Text>
             {episode.runtime > 0 && (
-              <Text style={styles.info}>{episode.runtime} min</Text>
+              <Text style={[styles.info, styles.detail]}>
+                {episode.runtime} min
+              </Text>
             )}
+            <Text style={[styles.info, styles.detail]}>
+              {formatDate(parseISO(episode.airDate), DATE_FORMAT)}
+            </Text>
           </View>
         </View>
         <View>
           <IconButton
             iconName={episode.isFavorite ? 'heart.fill' : 'heart'}
             color={colors.primary[600]}
+            size={28}
             onPress={() => {
+              console.log('Favorite button pressed for episode');
               onFavorite(episode);
             }}
           />
@@ -90,11 +100,6 @@ export const EpisodeItem = ({
           {episode.overview}
         </Text>
       )}
-      <View style={styles.rowEnd}>
-        <Text style={styles.info}>
-          Air Date: {formatDate(parseISO(episode.airDate), DATE_FORMAT)}
-        </Text>
-      </View>
     </View>
   );
 };
@@ -102,7 +107,7 @@ export const EpisodeItem = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 4,
+    gap: 8,
     paddingTop: 16,
   },
   row: {
@@ -122,6 +127,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   flex: {
+    alignItems: 'flex-start',
     flex: 1,
   },
   image: {
@@ -132,11 +138,14 @@ const styles = StyleSheet.create({
   },
   name: {
     flexWrap: 'wrap',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     textTransform: 'capitalize',
   },
   info: {
     fontSize: 14,
+  },
+  detail: {
+    color: colors.charcoal[500],
   },
 });

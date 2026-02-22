@@ -42,7 +42,10 @@ import { useFavoriteEpisodes } from './use-favorite-episodes';
 import { useFavoriteShows } from './use-favorite-shows';
 import { useWatchlistShows } from './use-watchlist-shows';
 
-export function useShowToggles(showId: string) {
+export function useShowToggles(
+  showId: string,
+  enableFavoriteEpisodes: boolean = false
+) {
   const queryClient = useQueryClient();
   const userId = useAuth().user?.id ?? '';
   const { favoriteShows } = useFavoriteShows();
@@ -53,7 +56,11 @@ export function useShowToggles(showId: string) {
   const currentlyWatchingShow = currentlyWatchingShows?.find(
     (show) => show.id.toString() === showId
   );
-  const { favoriteEpisodes } = useFavoriteEpisodes(showId);
+  const {
+    favoriteEpisodes,
+    isRefetching: isRefetchingFavoriteEpisodes,
+    refetch: refetchFavoriteEpisodes,
+  } = useFavoriteEpisodes(showId, 'asc', enableFavoriteEpisodes);
   const { watchlistShows } = useWatchlistShows();
   const watchlistShow = watchlistShows?.find(
     (show) => show.id.toString() === showId
@@ -371,7 +378,9 @@ export function useShowToggles(showId: string) {
   const toggleFavoriteEpisode = (episode: Episode, show: Show) => {
     const favoriteEpisode = favoriteEpisodes?.find(
       (ep) =>
-        show.id === episode.showId && ep.episodeNumber === episode.episodeNumber
+        show.id === episode.showId &&
+        ep.episodeNumber === episode.episodeNumber &&
+        ep.seasonNumber === episode.seasonNumber
     );
     if (favoriteEpisode) {
       removeFavoriteEpisodeHandler(favoriteEpisode.documentId);
@@ -417,10 +426,12 @@ export function useShowToggles(showId: string) {
     currentlyWatchingShow,
     favoriteEpisodes,
     favoriteShow,
-    watchlistShow,
+    isRefetchingFavoriteEpisodes,
+    refetchFavoriteEpisodes,
     toggleFavoriteEpisode,
     toggleFavoriteShow,
     toggleCurrentlyWatchingShow,
     toggleWatchlistShow,
+    watchlistShow,
   };
 }

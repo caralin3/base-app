@@ -7,7 +7,8 @@ import { useAuth } from '../use-auth';
 
 export function useFavoriteEpisodesQuery(
   showId: string,
-  sortDirection: 'asc' | 'desc' = 'asc'
+  sortDirection: 'asc' | 'desc' = 'asc',
+  enabled: boolean = false
 ) {
   const userId = useAuth().user?.id ?? '';
 
@@ -18,5 +19,6 @@ export function useFavoriteEpisodesQuery(
       favoriteEpisodes.sort((a, b) =>
         sortByDate(a.airDate || '', b.airDate || '', sortDirection)
       ),
+    enabled: enabled,
   });
 }

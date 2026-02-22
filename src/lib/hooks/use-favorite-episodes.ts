@@ -9,21 +9,22 @@ import { useFavoriteEpisodesQuery } from './queries/use-favorite-episodes-query'
 
 export function useFavoriteEpisodes(
   showId: string,
-  sortDirection: 'asc' | 'desc' = 'asc'
+  sortDirection: 'asc' | 'desc' = 'asc',
+  enabled: boolean = false
 ) {
-  const query = useFavoriteEpisodesQuery(showId, sortDirection);
+  const query = useFavoriteEpisodesQuery(showId, sortDirection, enabled);
   const { favoriteEpisodes } = useFavoriteEpisodesStore();
-
   useEffect(() => {
-    if (query.data) {
+    if (enabled && query.data) {
       setFavoriteEpisodesInStore(query.data);
     }
-  }, [query.data]);
+  }, [query.data, enabled]);
 
   return {
     favoriteEpisodes,
     isLoading: query.isLoading,
     isError: query.isError,
+    isRefetching: query.isRefetching,
     error: query.error,
     refetch: query.refetch,
   };

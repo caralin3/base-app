@@ -235,7 +235,7 @@ export const WatchProvider = z.object({
 
 export type WatchProvider = z.infer<typeof WatchProvider>;
 
-export const WatchProvidersResponse = z.object({
+export const WatchProvidersByShowResponse = z.object({
   id: z.number(),
   results: z
     .record(
@@ -250,4 +250,6 @@ export const WatchProvidersResponse = z.object({
     .optional(),
 });
 
-export type WatchProvidersResponse = z.infer<typeof WatchProvidersResponse>;
+export type WatchProvidersByShowResponse = z.infer<
+  typeof WatchProvidersByShowResponse
+>;

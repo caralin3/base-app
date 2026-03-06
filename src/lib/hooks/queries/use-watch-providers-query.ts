@@ -1,11 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { getWatchProviders, WATCH_PROVIDERS_QUERY_KEY } from '@/lib/api';
+import {
+  getWatchProvidersByShow,
+  WATCH_PROVIDERS_BY_SHOW_QUERY_KEY,
+} from '@/lib/api';
 
-export function useWatchProvidersQuery(showId: string) {
+export function useWatchProvidersByShowQuery(showId: string) {
   return useQuery({
-    queryKey: [WATCH_PROVIDERS_QUERY_KEY, showId],
-    queryFn: ({ queryKey }) => getWatchProviders(Number(queryKey[1])),
+    queryKey: [WATCH_PROVIDERS_BY_SHOW_QUERY_KEY, showId],
+    queryFn: ({ queryKey }) => getWatchProvidersByShow(Number(queryKey[1])),
     select: (data) => data.results?.US,
   });
 }

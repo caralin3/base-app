@@ -24,7 +24,7 @@ import {
   useShowDetailsQuery,
   useShowToggles,
   useWatchedShowsByIdQuery,
-  useWatchProvidersQuery,
+  useWatchProvidersByShowQuery,
 } from '@/lib/hooks';
 import { type ShowRouteParams } from '@/lib/types';
 import { getTmdbUri } from '@/lib/utils';
@@ -43,7 +43,7 @@ export default function Show() {
 
   const { data: showDetails, isLoading: isLoadingShowDetails } =
     useShowDetailsQuery(showId);
-  const { data: watchProviders } = useWatchProvidersQuery(showId);
+  const { data: watchProviders } = useWatchProvidersByShowQuery(showId);
   const {
     getEpisodes,
     seasonQuery: { data: season, isLoading: isLoadingSeason },

@@ -4,7 +4,7 @@ import {
   getTvEpisodeUrl,
   getTvSeasonUrl,
   getTvShowRecommendationsUrl,
-  getWatchProvidersUrl,
+  getWatchProvidersByShowUrl,
   searchTvUrl,
 } from './endpoints';
 import {
@@ -17,7 +17,7 @@ import {
   TvSeasonDetailsResponse,
   TvShowDetails,
   TvShowRecommendationsResponse,
-  WatchProvidersResponse,
+  WatchProvidersByShowResponse,
 } from './types';
 
 export const searchTv = async (params: SearchTvQueryParams) => {
@@ -156,19 +156,19 @@ export const getTrendingTvShows = async (
   }
 };
 
-export const getWatchProviders = async (seriesId: number) => {
-  const url = getWatchProvidersUrl(seriesId);
+export const getWatchProvidersByShow = async (seriesId: number) => {
+  const url = getWatchProvidersByShowUrl(seriesId);
 
   const response = await fetch(url);
   const errorMessage =
-    'Could not fetch watch providers. Please try again later.';
+    'Could not fetch watch providers for show. Please try again later.';
   if (!response.ok) {
     throw new Error(errorMessage);
   }
   const data = await response.json();
 
   try {
-    return WatchProvidersResponse.parse(data);
+    return WatchProvidersByShowResponse.parse(data);
   } catch (error) {
     console.error('GetWatchProviders', error);
     return Promise.reject(new Error(errorMessage));

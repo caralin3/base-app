@@ -1,12 +1,4 @@
-import {
-  getTrendingTvUrl,
-  getTvDetailsUrl,
-  getTvEpisodeUrl,
-  getTvSeasonUrl,
-  getTvShowRecommendationsUrl,
-  getWatchProvidersByShowUrl,
-  searchTvUrl,
-} from './endpoints';
+import { Env } from '../../env';
 import {
   type SearchTvQueryParams,
   SearchTvResponse,
@@ -15,28 +7,63 @@ import {
   type TvDetailsQueryParams,
   TvEpisodeDetails,
   TvSeasonDetailsResponse,
-  TvShowDetails,
+  TvShowDetailsWithRecommendations,
   TvShowRecommendationsResponse,
   WatchProvidersByShowResponse,
 } from './types';
 
-export const searchTv = async (params: SearchTvQueryParams) => {
-  const url = searchTvUrl({ ...params, include_adult: true });
+export async function tmdbRequest(
+  path: string,
+  params: { [key: string]: string } = {}
+) {
+  const url = new URL(`${Env.TMDB_API_URL}${path}`);
 
-  const response = await fetch(url);
-  const errorMessage =
-    'Could not fetch search results. Please try again later.';
-  if (!response.ok) {
-    throw new Error(errorMessage);
+  Object.entries(params).forEach(([key, value]) =>
+    url.searchParams.append(key, value)
+  );
+
+  const res = await fetch(url.toString(), {
+    headers: {
+      Authorization: `Bearer ${Env.TMDB_ACCESS_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`TMDB error ${res.status}: ${text}`);
   }
 
-  const data = await response.json();
+  return res.json();
+}
+
+const transformParams = (
+  params?: object
+): { [key: string]: string } | undefined => {
+  if (!params) {
+    return;
+  }
+  const searchParams: { [key: string]: string } = {};
+  Object.entries(params).forEach(([key, value]) => {
+    searchParams[key] = value.toString();
+  });
+  return searchParams;
+};
+
+export const searchTv = async (params: SearchTvQueryParams) => {
+  const data = await tmdbRequest(
+    '/search/tv',
+    transformParams({
+      ...params,
+      include_adult: true,
+    })
+  );
 
   try {
     return SearchTvResponse.parse(data);
   } catch (error) {
     console.error('Search TV', error);
-    return Promise.reject(new Error(errorMessage));
+    return Promise.reject(error);
   }
 };
 
@@ -44,25 +71,16 @@ export const getTvShowDetails = async (
   seriesId: number,
   params?: TvDetailsQueryParams
 ) => {
-  const url = getTvDetailsUrl(
-    seriesId,
-    params ?? { append_to_response: 'credits' }
+  console.log('Raw TV Show Details:', seriesId); // Log the raw response for debugging
+  const data = await tmdbRequest(
+    `/tv/${seriesId}`,
+    transformParams(params ?? { append_to_response: 'credits,recommendations' })
   );
-
-  const response = await fetch(url);
-  const errorMessage =
-    'Could not fetch tv show details. Please try again later.';
-  if (!response.ok) {
-    throw new Error(errorMessage);
-  }
-
-  const data = await response.json();
-
   try {
-    return TvShowDetails.parse(data);
+    return TvShowDetailsWithRecommendations.parse(data);
   } catch (error) {
     console.error('GetTvShowDetails', error);
-    return Promise.reject(new Error(errorMessage));
+    return Promise.reject(error);
   }
 };
 
@@ -71,21 +89,16 @@ export const getTvSeason = async (
   seasonNumber: number,
   params?: TvDetailsQueryParams
 ) => {
-  const url = getTvSeasonUrl(seriesId, seasonNumber, params);
-
-  const response = await fetch(url);
-  const errorMessage =
-    'Could not fetch tv season details. Please try again later.';
-  if (!response.ok) {
-    throw new Error(errorMessage);
-  }
-  const data = await response.json();
+  const data = await tmdbRequest(
+    `/tv/${seriesId}/season/${seasonNumber}`,
+    params
+  );
 
   try {
     return TvSeasonDetailsResponse.parse(data);
   } catch (error) {
     console.error('GetTvSeason', error);
-    return Promise.reject(new Error(errorMessage));
+    return Promise.reject(error);
   }
 };
 
@@ -95,21 +108,16 @@ export const getTvEpisode = async (
   episodeNumber: number,
   params?: TvDetailsQueryParams
 ) => {
-  const url = getTvEpisodeUrl(seriesId, seasonNumber, episodeNumber, params);
-
-  const response = await fetch(url);
-  const errorMessage =
-    'Could not fetch tv episode details. Please try again later.';
-  if (!response.ok) {
-    throw new Error(errorMessage);
-  }
-  const data = await response.json();
+  const data = await tmdbRequest(
+    `/tv/${seriesId}/season/${seasonNumber}/episode/${episodeNumber}`,
+    params
+  );
 
   try {
     return TvEpisodeDetails.parse(data);
   } catch (error) {
     console.error('GetTvEpisode', error);
-    return Promise.reject(new Error(errorMessage));
+    return Promise.reject(error);
   }
 };
 
@@ -117,21 +125,16 @@ export const getTvShowRecommendations = async (
   seriesId: number,
   params?: TvDetailsQueryParams
 ) => {
-  const url = getTvShowRecommendationsUrl(seriesId, params);
-
-  const response = await fetch(url);
-  const errorMessage =
-    'Could not fetch recommendations. Please try again later.';
-  if (!response.ok) {
-    throw new Error(errorMessage);
-  }
-  const data = await response.json();
+  const data = await tmdbRequest(
+    `/tv/${seriesId}/recommendations`,
+    transformParams(params)
+  );
 
   try {
     return TvShowRecommendationsResponse.parse(data);
   } catch (error) {
     console.error('GetTvShowRecommendations', error);
-    return Promise.reject(new Error(errorMessage));
+    return Promise.reject(error);
   }
 };
 
@@ -139,38 +142,26 @@ export const getTrendingTvShows = async (
   timeWindow: 'day' | 'week' = 'day',
   params?: TrendingTvQueryParams
 ) => {
-  const url = getTrendingTvUrl(timeWindow, params);
-
-  const response = await fetch(url);
-  const errorMessage = 'Could not fetch trending. Please try again later.';
-  if (!response.ok) {
-    throw new Error(errorMessage);
-  }
-  const data = await response.json();
+  const data = await tmdbRequest(
+    `/trending/tv/${timeWindow}`,
+    transformParams(params)
+  );
 
   try {
     return TrendingTvResponse.parse(data);
   } catch (error) {
     console.error('GetTrendingTvShows', error);
-    return Promise.reject(new Error(errorMessage));
+    return Promise.reject(error);
   }
 };
 
 export const getWatchProvidersByShow = async (seriesId: number) => {
-  const url = getWatchProvidersByShowUrl(seriesId);
-
-  const response = await fetch(url);
-  const errorMessage =
-    'Could not fetch watch providers for show. Please try again later.';
-  if (!response.ok) {
-    throw new Error(errorMessage);
-  }
-  const data = await response.json();
+  const data = await tmdbRequest(`/tv/${seriesId}/watch/providers`);
 
   try {
     return WatchProvidersByShowResponse.parse(data);
   } catch (error) {
     console.error('GetWatchProviders', error);
-    return Promise.reject(new Error(errorMessage));
+    return Promise.reject(error);
   }
 };

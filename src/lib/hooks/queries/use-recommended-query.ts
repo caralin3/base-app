@@ -15,5 +15,6 @@ export function useRecommendedQuery(showId: string, posterPath?: string) {
         .map((show) => formatTvShow(show))
         .map((show) => formatShowToPoster(show, posterPath));
     },
+    staleTime: 1000 * 60 * 60 * 24, // 24 hours
   });
 }

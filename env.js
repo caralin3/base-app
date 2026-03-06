@@ -74,6 +74,7 @@ const client = z.object({
   TMDB_API_URL: z.string(),
   TMDB_IMAGE_URL: z.string(),
   TMDB_API_KEY: z.string(),
+  TMDB_ACCESS_TOKEN: z.string(),
 });
 
 const buildTime = z.object({
@@ -103,6 +104,7 @@ const _clientEnv = {
   TMDB_API_URL: process.env.TMDB_API_URL,
   TMDB_IMAGE_URL: process.env.TMDB_IMAGE_URL,
   TMDB_API_KEY: process.env.TMDB_API_KEY,
+  TMDB_ACCESS_TOKEN: process.env.TMDB_ACCESS_TOKEN,
 };
 
 /**

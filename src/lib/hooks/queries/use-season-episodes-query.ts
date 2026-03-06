@@ -12,6 +12,7 @@ export function useSeasonEpisodesQuery(showId: string, seasonNumber: number) {
     select: (response) => {
       return formatSeason(response);
     },
+    staleTime: 1000 * 60 * 60 * 24, // 24 hours
   });
 
   const getEpisodes = (

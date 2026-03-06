@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 
-import { type WatchProvidersResponse } from '@/lib/api/tmdb/types';
+import { type WatchProvidersByShowResponse } from '@/lib/api/tmdb/types';
 import { getTmdbUri } from '@/lib/utils/helper';
 
 import { Image, Text, useModal, View } from '../ui';
 import { WatchProvidersList } from './watch-providers-list';
 
 interface WatchProvidersProps {
-  providers?: NonNullable<WatchProvidersResponse['results']>[string];
+  providers?: NonNullable<WatchProvidersByShowResponse['results']>[string];
 }
 
 export const WatchProviders = ({ providers }: WatchProvidersProps) => {

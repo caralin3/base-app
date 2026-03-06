@@ -6,14 +6,14 @@ import React, { forwardRef, useCallback } from 'react';
 
 import {
   type WatchProvider,
-  type WatchProvidersResponse,
+  type WatchProvidersByShowResponse,
 } from '@/lib/api/tmdb/types';
 
 import { colors, Modal, Pressable, Text, View } from '../ui';
 
 interface WatchProvidersListProps {
   onSelect: (option: WatchProvider) => void;
-  providers?: NonNullable<WatchProvidersResponse['results']>[string];
+  providers?: NonNullable<WatchProvidersByShowResponse['results']>[string];
 }
 
 interface OptionType {

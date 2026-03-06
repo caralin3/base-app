@@ -19,7 +19,6 @@ import {
 } from '@/components';
 import {
   useAuth,
-  useRecommendedQuery,
   useSeasonEpisodesQuery,
   useShowDetailsQuery,
   useShowToggles,
@@ -41,14 +40,13 @@ export default function Show() {
     setMyEpisodesSeasonNumber(0);
   }, [showId]);
 
-  const { data: showDetails, isLoading: isLoadingShowDetails } =
+  const { data: showDetailsData, isLoading: isLoadingShowDetails } =
     useShowDetailsQuery(showId);
   const { data: watchProviders } = useWatchProvidersByShowQuery(showId);
   const {
     getEpisodes,
     seasonQuery: { data: season, isLoading: isLoadingSeason },
   } = useSeasonEpisodesQuery(showId, seasonNumber);
-  const { data: recommendedShows } = useRecommendedQuery(showId);
   const { data: watchedShow } = useWatchedShowsByIdQuery(showId);
 
   const {
@@ -72,13 +70,15 @@ export default function Show() {
     );
   }
 
-  if (showDetails == null) {
+  if (showDetailsData == null) {
     return (
       <Screen>
         <Text className="text-white">Show not found.</Text>
       </Screen>
     );
   }
+
+  const { recommendations, ...showDetails } = showDetailsData;
 
   const Header = () => (
     <ScrollableHeader style={styles.container}>
@@ -192,7 +192,7 @@ export default function Show() {
           },
           {
             name: 'More Like This',
-            content: <RecommendedTabContent shows={recommendedShows} />,
+            content: <RecommendedTabContent shows={recommendations?.results} />,
           },
         ]}
       />

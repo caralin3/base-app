@@ -158,6 +158,10 @@ export const TvShowDetails = z.object({
 
 export type TvShowDetails = z.infer<typeof TvShowDetails>;
 
+export const TvShowDetailsWithRecommendations = TvShowDetails.extend({
+  recommendations: z.lazy(() => TvShowRecommendationsResponse).optional(),
+});
+
 export const TvSeasonDetailsResponse = z.object({
   _id: z.string(),
   air_date: z.string().nullable(),

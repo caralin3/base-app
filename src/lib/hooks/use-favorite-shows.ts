@@ -8,8 +8,11 @@ import {
 
 import { useFavoriteShowsQuery } from './queries/use-favorite-shows-query';
 
-export function useFavoriteShows(sortDirection: 'asc' | 'desc' = 'desc') {
-  const query = useFavoriteShowsQuery(sortDirection);
+export function useFavoriteShows(
+  sortDirection: 'asc' | 'desc' = 'desc',
+  enabled: boolean = true
+) {
+  const query = useFavoriteShowsQuery(sortDirection, enabled);
   const { favoriteShows } = useFavoriteShowsStore();
 
   useEffect(() => {

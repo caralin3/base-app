@@ -10,6 +10,7 @@ import { useAuth } from '../use-auth';
 
 export function useCurrentlyWatchingQuery(
   sortDirection: 'asc' | 'desc' = 'desc',
+  enabled: boolean = false,
   posterPath?: string
 ) {
   const userId = useAuth().user?.id ?? '';
@@ -23,5 +24,6 @@ export function useCurrentlyWatchingQuery(
           sortByDate(a.watchingAt || '', b.watchingAt || '', sortDirection)
         )
         .map((show) => formatShowToPoster(show, posterPath)),
+    enabled,
   });
 }

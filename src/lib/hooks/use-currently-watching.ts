@@ -8,8 +8,11 @@ import {
 
 import { useCurrentlyWatchingQuery } from './queries';
 
-export function useCurrentlyWatching(sortDirection: 'asc' | 'desc' = 'desc') {
-  const query = useCurrentlyWatchingQuery(sortDirection);
+export function useCurrentlyWatching(
+  sortDirection: 'asc' | 'desc' = 'desc',
+  enabled: boolean = true
+) {
+  const query = useCurrentlyWatchingQuery(sortDirection, enabled);
   const { currentlyWatchingShows } = useCurrentlyWatchingShowsStore();
 
   useEffect(() => {

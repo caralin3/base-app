@@ -27,7 +27,10 @@ export const PosterListItem = ({
     favoriteShow,
     currentlyWatchingShow,
     watchlistShow,
-  } = useShowToggles(item.id.toString());
+  } = useShowToggles(item.id.toString(), {
+    enableFavoriteShows: false,
+    enableCurrentlyWatching: false,
+  });
 
   // Use current values from stores instead of stale item prop
   const isFavorite = useMemo(

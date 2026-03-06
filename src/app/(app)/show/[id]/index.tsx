@@ -62,7 +62,7 @@ export default function Show() {
     toggleCurrentlyWatchingShow,
     toggleWatchlistShow,
     watchlistShow,
-  } = useShowToggles(showId, true);
+  } = useShowToggles(showId, { enableFavoriteEpisodes: true });
 
   if (isLoadingShowDetails) {
     return (

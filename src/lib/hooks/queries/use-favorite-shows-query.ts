@@ -7,6 +7,7 @@ import { useAuth } from '../use-auth';
 
 export function useFavoriteShowsQuery(
   sortDirection: 'asc' | 'desc' = 'desc',
+  enabled: boolean = false,
   posterPath?: string
 ) {
   const userId = useAuth().user?.id ?? '';
@@ -20,5 +21,6 @@ export function useFavoriteShowsQuery(
           sortByDate(a.favoritedAt || '', b.favoritedAt || '', sortDirection)
         )
         .map((show) => formatShowToPoster(show, posterPath)),
+    enabled,
   });
 }

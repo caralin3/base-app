@@ -44,15 +44,26 @@ import { useWatchlistShows } from './use-watchlist-shows';
 
 export function useShowToggles(
   showId: string,
-  enableFavoriteEpisodes: boolean = false
+  {
+    enableCurrentlyWatching = true,
+    enableFavoriteEpisodes = false,
+    enableFavoriteShows = true,
+  }: {
+    enableCurrentlyWatching?: boolean;
+    enableFavoriteEpisodes?: boolean;
+    enableFavoriteShows?: boolean;
+  } = {}
 ) {
   const queryClient = useQueryClient();
   const userId = useAuth().user?.id ?? '';
-  const { favoriteShows } = useFavoriteShows();
+  const { favoriteShows } = useFavoriteShows('desc', enableFavoriteShows);
   const favoriteShow = favoriteShows?.find(
     (show) => show.id.toString() === showId
   );
-  const { currentlyWatchingShows } = useCurrentlyWatching();
+  const { currentlyWatchingShows } = useCurrentlyWatching(
+    'desc',
+    enableCurrentlyWatching
+  );
   const currentlyWatchingShow = currentlyWatchingShows?.find(
     (show) => show.id.toString() === showId
   );

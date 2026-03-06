@@ -46,19 +46,23 @@ const MAPPING = {
   'figure.walk': 'directions-walk',
   'fork.knife': 'restaurant',
   gearshape: 'settings',
+  iphone: 'phone-android',
   suitcase: 'luggage',
   magnifyingglass: 'search',
   map: 'map',
   'music.note': 'music-note',
+  paintbrush: 'brush',
   'paperplane.fill': 'send',
   pencil: 'edit',
   'person.fill': 'person',
+  'play.circle': 'play-circle-outline',
   plus: 'add',
   xmark: 'close',
 } as IconMapping;
 
 const COMMUNITY_MAPPING = {
   'chevron.down': 'chevron-down',
+  envelope: 'email-outline',
   'eye.fill': 'eye',
   eye: 'eye-plus-outline',
   'house.fill': 'home-variant',

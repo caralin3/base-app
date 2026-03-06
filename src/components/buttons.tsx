@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Title } from './title';
-import { Button, View } from './ui';
+import { Button, colors, IconButton, View } from './ui';
 
 export const Buttons = () => {
   return (
@@ -31,6 +31,8 @@ export const Buttons = () => {
           />
           <Button label="small" size="sm" variant="ghost" className="mr-2" />
           <Button label="small" size="sm" disabled className="mr-2" />
+          <Button label="medium" className="mr-2" />
+          <Button label="large" size="lg" disabled className="mr-2" />
         </View>
         <Button label="Default Button" />
         <Button label="Secondary Button" variant="secondary" />
@@ -44,6 +46,19 @@ export const Buttons = () => {
           label="Secondary Button Disabled"
           disabled
           variant="secondary"
+        />
+        <Title text="Icon Buttons" />
+        <IconButton
+          iconName="xmark.circle"
+          size={24}
+          color={colors.white}
+          iconType="community"
+        />
+        <IconButton
+          iconName="chevron.right"
+          size={24}
+          color={colors.white}
+          label="View All"
         />
       </View>
     </>

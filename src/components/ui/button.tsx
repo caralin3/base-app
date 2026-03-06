@@ -47,11 +47,11 @@ const button = tv({
     },
     size: {
       default: {
-        container: 'h-10 px-4',
-        label: 'text-base font-semibold',
+        container: 'h-12 px-4',
+        label: 'text-base font-bold',
       },
       lg: {
-        container: 'h-12 px-8',
+        container: 'h-15 px-8',
         label: 'text-xl font-bold',
       },
       sm: {

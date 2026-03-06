@@ -9,6 +9,7 @@ interface CollapsibleProps extends PropsWithChildren {
   contentClassName?: string;
   rightAction?: React.ReactElement;
   title: string;
+  titleSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
 }
 
 export function Collapsible({
@@ -16,6 +17,7 @@ export function Collapsible({
   contentClassName,
   rightAction,
   title,
+  titleSize,
 }: CollapsibleProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -23,7 +25,7 @@ export function Collapsible({
     <View>
       <View className="flex-row items-start justify-between gap-1.5">
         <TouchableOpacity
-          className="flex-1 flex-row items-start gap-1.5"
+          className="flex-1 flex-row items-center gap-1.5"
           onPress={() => setIsOpen((value) => !value)}
           activeOpacity={0.8}
         >
@@ -35,7 +37,7 @@ export function Collapsible({
             style={{ transform: [{ rotate: isOpen ? '90deg' : '0deg' }] }}
           />
 
-          <Text weight="semibold" className="flex-1">
+          <Text weight="semibold" className="flex-1" size={titleSize ?? 'base'}>
             {title}
           </Text>
         </TouchableOpacity>

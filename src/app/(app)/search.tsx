@@ -34,7 +34,8 @@ export default function Search() {
   const queryClient = useQueryClient();
   const recentSearches = useRecentSearchesStore.use
     .recentSearches()
-    .sort((a, b) => sortByDate(b.timestamp, a.timestamp, 'asc'));
+    .sort((a, b) => sortByDate(b.timestamp, a.timestamp, 'asc'))
+    .slice(0, 5);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showTrending, setShowTrending] = useState(true);

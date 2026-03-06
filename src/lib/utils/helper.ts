@@ -110,6 +110,10 @@ export function formatTvShow(show: TvShowDetails, genreList?: Genre[]): Show {
       name: company.name,
       originCountry: company.origin_country,
     })),
+    seasons: show.seasons?.map((season) => ({
+      episodeCount: season.episode_count,
+      seasonNumber: season.season_number,
+    })),
     status: show.status,
     tagline: show.tagline,
     type: show.type,

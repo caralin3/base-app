@@ -89,6 +89,13 @@ export const Season = z.object({
 
 export type Season = z.infer<typeof Season>;
 
+export const ShowSeason = z.object({
+  episodeCount: z.number(),
+  seasonNumber: z.number(),
+});
+
+export type ShowSeason = z.infer<typeof ShowSeason>;
+
 export const Show = z.object({
   backdropPath: z.string().nullable().optional(),
   createdBy: z.array(Creator).optional(),
@@ -111,6 +118,7 @@ export const Show = z.object({
   popularity: z.number(),
   posterPath: z.string().nullable(),
   productionCompanies: z.array(Company).optional(),
+  seasons: z.array(ShowSeason).optional(),
   status: z.string().optional(),
   tagline: z.string().nullable().optional(),
   type: z.string().optional(),

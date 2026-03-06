@@ -149,7 +149,7 @@ export default function Show() {
                     ? getEpisodes(season.episodes, favoriteEpisodes ?? [])
                     : []
                 }
-                numberOfSeasons={showDetails.numberOfSeasons}
+                seasons={showDetails.seasons ?? []}
                 seasonNumber={seasonNumber}
                 setSeasonNumber={(value) => setSeasonNumber(value as number)}
                 show={showDetails}
@@ -175,7 +175,7 @@ export default function Show() {
                   toggleFavoriteEpisode(episode, showDetails)
                 }
                 show={showDetails}
-                numberOfSeasons={showDetails.numberOfSeasons}
+                seasons={showDetails.seasons ?? []}
                 seasonNumber={myEpisodesSeasonNumber}
                 setSeasonNumber={(value) =>
                   setMyEpisodesSeasonNumber(value as number)

@@ -8,7 +8,11 @@ import { Pressable, type PressableProps, StyleSheet } from 'react-native';
 import { colors, Modal, Text, useModal, View } from '../ui';
 import { CaretDown, Check } from '../ui/icons';
 
-export type OptionType = { label: string; value: string | number };
+export type OptionType = {
+  label: string;
+  subLabel?: string;
+  value: string | number;
+};
 
 type OptionsProps = {
   options: OptionType[];
@@ -29,6 +33,7 @@ const Options = forwardRef<BottomSheetModal, OptionsProps>(
         <Option
           key={`select-item-${item.value}`}
           label={item.label}
+          subLabel={item.subLabel}
           selected={value === item.value}
           onPress={() => onSelect(item)}
           testID={testID ? `${testID}-item-${item.value}` : undefined}
@@ -62,18 +67,23 @@ const Options = forwardRef<BottomSheetModal, OptionsProps>(
 const Option = memo(
   ({
     label,
+    subLabel,
     selected = false,
     ...props
   }: PressableProps & {
     selected?: boolean;
     label: string;
+    subLabel?: string;
   }) => {
     return (
       <Pressable style={optionStyles.container} {...props}>
-        <Text size="lg" style={optionStyles.label}>
-          {label}
-        </Text>
-        {selected && <Check />}
+        <View style={optionStyles.row}>
+          <Text size="lg" style={optionStyles.label}>
+            {label}
+          </Text>
+          {selected && <Check />}
+        </View>
+        {subLabel && <Text style={optionStyles.subLabel}>{subLabel}</Text>}
       </Pressable>
     );
   }
@@ -151,14 +161,24 @@ export const SeasonSelect = (props: SeasonSelectProps) => {
 };
 
 const optionStyles = StyleSheet.create({
-  container: {
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 8,
+  },
+  container: {
+    flexDirection: 'column',
     gap: 8,
     padding: 16,
   },
   label: {
     color: colors.white,
+  },
+  subLabel: {
+    color: colors.white,
+    opacity: 0.67,
+    fontSize: 14,
+    lineHeight: 20,
   },
 });
 

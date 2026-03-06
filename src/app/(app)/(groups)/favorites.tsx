@@ -1,26 +1,55 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { RefreshControl } from 'react-native-gesture-handler';
 
-import { Screen, Text, View } from '@/components';
+import { colors, Screen, Text, View } from '@/components';
 import { PosterList } from '@/components/poster/poster-list';
 import { useFavoriteShows } from '@/lib/hooks';
 
 export default function Favorites() {
   const { favoriteShows, refetch, isRefetching } = useFavoriteShows();
+  const [editMode, setEditMode] = useState(false);
 
   const onRefresh = useCallback(() => {
     refetch();
   }, [refetch]);
 
+  const handleEdit = () => {
+    setEditMode((prev) => !prev);
+  };
+
   return (
     <Screen
       headerProps={{
-        title: 'My Favorites',
+        bgColor: editMode ? colors.danger[600] : undefined,
+        title: editMode ? 'Edit Favorites' : 'My Favorites',
+        left: !editMode
+          ? undefined
+          : {
+              icon: {
+                name: 'xmark',
+                type: 'material',
+                color: 'white',
+              },
+              onPress: () => setEditMode(false),
+            },
+        right: editMode
+          ? undefined
+          : [
+              {
+                icon: {
+                  name: 'pencil',
+                  type: 'material',
+                  color: 'white',
+                },
+                onPress: handleEdit,
+              },
+            ],
       }}
     >
       <View className="flex-1 p-4">
         <PosterList
           canToggle
+          editMode={editMode}
           list="favorites"
           data={favoriteShows ?? []}
           horizontal={false}

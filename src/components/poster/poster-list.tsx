@@ -9,6 +9,7 @@ import { PosterListSkeleton } from './poster-list-skeleton';
 interface PosterListProps {
   canToggle?: boolean;
   data: PosterProps[];
+  editMode?: boolean;
   horizontal?: boolean;
   horizontalItem?: boolean;
   inTabPanel?: boolean;
@@ -27,6 +28,7 @@ interface PosterListProps {
 export const PosterList = ({
   canToggle = false,
   data,
+  editMode = false,
   horizontal = true,
   horizontalItem = false,
   inTabPanel = false,
@@ -78,6 +80,7 @@ export const PosterList = ({
       horizontal={horizontal}
       renderItem={({ item }) => (
         <PosterListItem
+          editMode={editMode}
           item={item as any}
           horizontalItem={horizontalItem}
           onPress={onPress}

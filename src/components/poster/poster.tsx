@@ -7,6 +7,7 @@ import { colors, IconButton, Text, View } from '../ui';
 import { PosterImage } from './poster-image';
 
 export interface PosterProps {
+  editMode?: boolean;
   firstAirDate?: string | null;
   horizontal?: boolean;
   href: LinkProps['href'];
@@ -19,11 +20,13 @@ export interface PosterProps {
   onCurrentlyWatching?: () => void;
   onFavorite?: () => void;
   onPress?: (showId: number) => void;
+  onRemove?: () => void;
   onSaveToWatchlist?: () => void;
   uri: string | null;
 }
 
 export const Poster = ({
+  editMode = false,
   firstAirDate,
   horizontal = false,
   href,
@@ -36,6 +39,7 @@ export const Poster = ({
   onCurrentlyWatching,
   onFavorite,
   onPress,
+  onRemove,
   onSaveToWatchlist,
   uri,
 }: PosterProps) => {
@@ -78,30 +82,42 @@ export const Poster = ({
           </View>
         </Link>
         <View style={styles.buttonContainer}>
-          {!!onCurrentlyWatching && (
+          {editMode && !!onRemove ? (
             <IconButton
-              iconName={isCurrentlyWatching ? 'eye.fill' : 'eye'}
+              iconName="trash"
               iconType="community"
-              color={colors.primary[600]}
-              onPress={onCurrentlyWatching}
+              color={colors.danger[600]}
+              onPress={onRemove}
               size={28}
             />
-          )}
-          {!!onSaveToWatchlist && (
-            <IconButton
-              iconName={isInWatchlist ? 'bookmark.fill' : 'bookmark'}
-              color={colors.primary[600]}
-              onPress={onSaveToWatchlist}
-              size={28}
-            />
-          )}
-          {!!onFavorite && (
-            <IconButton
-              iconName={isFavorite ? 'heart.fill' : 'heart'}
-              color={colors.primary[600]}
-              onPress={onFavorite}
-              size={28}
-            />
+          ) : (
+            <>
+              {!!onCurrentlyWatching && (
+                <IconButton
+                  iconName={isCurrentlyWatching ? 'eye.fill' : 'eye'}
+                  iconType="community"
+                  color={colors.primary[600]}
+                  onPress={onCurrentlyWatching}
+                  size={28}
+                />
+              )}
+              {!!onSaveToWatchlist && (
+                <IconButton
+                  iconName={isInWatchlist ? 'bookmark.fill' : 'bookmark'}
+                  color={colors.primary[600]}
+                  onPress={onSaveToWatchlist}
+                  size={28}
+                />
+              )}
+              {!!onFavorite && (
+                <IconButton
+                  iconName={isFavorite ? 'heart.fill' : 'heart'}
+                  color={colors.primary[600]}
+                  onPress={onFavorite}
+                  size={28}
+                />
+              )}
+            </>
           )}
         </View>
       </View>

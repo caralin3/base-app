@@ -51,6 +51,7 @@ const MAPPING = {
   map: 'map',
   'music.note': 'music-note',
   'paperplane.fill': 'send',
+  pencil: 'edit',
   'person.fill': 'person',
   plus: 'add',
   xmark: 'close',
@@ -64,6 +65,7 @@ const COMMUNITY_MAPPING = {
   'list.bullet.rectangle': 'view-list',
   'list.dash.header.rectangle': 'view-headline',
   'xmark.circle': 'close-circle-outline',
+  trash: 'trash-can-outline',
   tv: 'television-classic',
 } as Partial<
   Record<

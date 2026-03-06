@@ -7,6 +7,7 @@ import { Poster } from './poster';
 
 interface PosterListItemProps {
   canToggle?: boolean;
+  editMode?: boolean;
   item: CurrentlyWatchingShow | FavoriteShow;
   horizontalItem?: boolean;
   list?: 'favorites' | 'currentlyWatching' | 'watchlist';
@@ -15,6 +16,7 @@ interface PosterListItemProps {
 
 export const PosterListItem = ({
   canToggle = false,
+  editMode = false,
   item,
   horizontalItem,
   list,
@@ -60,9 +62,20 @@ export const PosterListItem = ({
     [canToggle, list]
   );
 
+  const handleRemove = () => {
+    if (list === 'favorites') {
+      toggleFavoriteShow(item);
+    } else if (list === 'currentlyWatching') {
+      toggleCurrentlyWatchingShow(item);
+    } else if (list === 'watchlist') {
+      toggleWatchlistShow(item);
+    }
+  };
+
   return (
     <Poster
       {...item}
+      editMode={editMode}
       isFavorite={isFavorite}
       isCurrentlyWatching={isCurrentlyWatching}
       isInWatchlist={isInWatchlist}
@@ -76,6 +89,7 @@ export const PosterListItem = ({
           ? () => toggleCurrentlyWatchingShow(item)
           : undefined
       }
+      onRemove={handleRemove}
       onSaveToWatchlist={
         canToggleWatchlist ? () => toggleWatchlistShow(item) : undefined
       }

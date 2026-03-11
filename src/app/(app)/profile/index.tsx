@@ -51,7 +51,12 @@ export default function Profile() {
         )}
 
         <View className="px-4 pt-8">
-          <Button label="Logout" variant="outline" onPress={signOut} />
+          <Button
+            label="Logout"
+            variant="outline"
+            onPress={signOut}
+            textClassName="text-white"
+          />
         </View>
       </View>
     </Screen>

@@ -8,6 +8,7 @@ import { EpisodeItem } from './episode-item';
 import { EpisodeListSkeleton } from './episode-list-skeleton';
 
 interface EpisodesBySeasonListProps {
+  backdropPath?: string | null;
   episodes: Episode[];
   inTabPanel?: boolean;
   isLoading?: boolean;
@@ -15,7 +16,6 @@ interface EpisodesBySeasonListProps {
   ListEmptyComponent?: React.ReactElement;
   ListHeaderComponent?: React.ReactElement;
   onFavorite: (episode: Episode) => void;
-  posterPath?: string | null;
   refreshControl?:
     | React.ReactElement<
         RefreshControlProps,
@@ -25,6 +25,7 @@ interface EpisodesBySeasonListProps {
 }
 
 export const EpisodesBySeasonList = ({
+  backdropPath,
   episodes,
   isLoading,
   inTabPanel,
@@ -32,7 +33,6 @@ export const EpisodesBySeasonList = ({
   ListEmptyComponent,
   ListHeaderComponent,
   onFavorite,
-  posterPath,
   refreshControl,
 }: EpisodesBySeasonListProps) => {
   const getEmptyComponent = () => {
@@ -62,7 +62,7 @@ export const EpisodesBySeasonList = ({
           <EpisodeItem
             episode={item}
             onFavorite={onFavorite}
-            posterPath={posterPath}
+            backdropPath={backdropPath}
             type={itemType}
           />
         )}
@@ -83,7 +83,7 @@ export const EpisodesBySeasonList = ({
         <EpisodeItem
           episode={item}
           onFavorite={onFavorite}
-          posterPath={posterPath}
+          backdropPath={backdropPath}
           type={itemType}
         />
       )}

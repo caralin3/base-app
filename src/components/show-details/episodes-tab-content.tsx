@@ -45,7 +45,7 @@ export const EpisodesTabContent = ({
     }
     ListHeaderComponent={<EpisodeTabHeader {...props} />}
     onFavorite={onFavoriteEpisode}
-    posterPath={show.posterPath}
+    backdropPath={show.backdropPath}
     itemType="expanded"
     refreshControl={refreshControl}
   />

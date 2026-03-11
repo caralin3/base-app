@@ -65,7 +65,7 @@ export const MyEpisodesTabContent = ({
         <EpisodeTabHeader {...props} showAll showEpisodeCount={false} />
       }
       onFavorite={onFavoriteEpisode}
-      posterPath={show.posterPath}
+      backdropPath={show.backdropPath}
       itemType={activeView}
       refreshControl={refreshControl}
     />

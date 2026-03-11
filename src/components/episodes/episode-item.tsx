@@ -7,18 +7,18 @@ import { type Episode } from '@/lib/types';
 import { Collapsible, colors, IconButton, Image, Text, View } from '../ui';
 
 interface EpisodeItemProps {
+  backdropPath?: string | null;
   episode: Episode;
   onFavorite: (episode: Episode) => void;
-  posterPath?: string | null;
   type?: 'simple' | 'expanded';
 }
 
 export const DATE_FORMAT = 'MMM dd, yyyy';
 
 export const EpisodeItem = ({
+  backdropPath,
   episode,
   onFavorite,
-  posterPath,
   type = 'expanded',
 }: EpisodeItemProps) => {
   if (type === 'simple') {
@@ -57,7 +57,7 @@ export const EpisodeItem = ({
     );
   }
 
-  const imagePath = episode.stillPath || posterPath;
+  const imagePath = episode.stillPath || backdropPath;
 
   return (
     <View style={styles.container}>

@@ -7,6 +7,7 @@ export * from './collapsible';
 export { default as colors } from './colors';
 export * from './focus-aware-status-bar';
 export * from './icon-button';
+export * from './icon-popup-menu';
 export * from './icon-symbol';
 export * from './image';
 export * from './input';

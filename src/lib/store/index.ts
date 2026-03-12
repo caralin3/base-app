@@ -4,4 +4,5 @@ export * from './use-currently-watching-store';
 export * from './use-favorite-episodes-store';
 export * from './use-favorite-shows-store';
 export * from './use-recent-searches-store';
+export * from './use-selected-providers-store';
 export * from './use-watchlist-shows-store';

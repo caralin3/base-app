@@ -6,6 +6,7 @@ import {
   TrendingTvResponse,
   type TvDetailsQueryParams,
   TvEpisodeDetails,
+  TvProvidersResponse,
   TvSeasonDetailsResponse,
   TvShowDetailsWithRecommendations,
   TvShowRecommendationsResponse,
@@ -162,6 +163,20 @@ export const getWatchProvidersByShow = async (seriesId: number) => {
     return WatchProvidersByShowResponse.parse(data);
   } catch (error) {
     console.error('GetWatchProviders', error);
+    return Promise.reject(error);
+  }
+};
+
+export const getTvProviders = async () => {
+  const data = await tmdbRequest('/watch/providers/tv', {
+    language: 'en-US',
+    watch_region: 'US',
+  });
+
+  try {
+    return TvProvidersResponse.parse(data);
+  } catch (error) {
+    console.error('GetTvProviders', error);
     return Promise.reject(error);
   }
 };

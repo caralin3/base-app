@@ -231,6 +231,7 @@ export const SearchTvResponse = z.object({
 export type SearchTvResponse = z.infer<typeof SearchTvResponse>;
 
 export const WatchProvider = z.object({
+  display_priorities: z.record(z.string(), z.number()).optional(),
   display_priority: z.number(),
   logo_path: z.string().nullable(),
   provider_id: z.number(),
@@ -257,3 +258,9 @@ export const WatchProvidersByShowResponse = z.object({
 export type WatchProvidersByShowResponse = z.infer<
   typeof WatchProvidersByShowResponse
 >;
+
+export const TvProvidersResponse = z.object({
+  results: z.array(WatchProvider),
+});
+
+export type TvProvidersResponse = z.infer<typeof TvProvidersResponse>;

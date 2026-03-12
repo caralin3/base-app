@@ -2,7 +2,7 @@ import {
   BottomSheetFlatList,
   type BottomSheetModal,
 } from '@gorhom/bottom-sheet';
-import React, { forwardRef, useCallback } from 'react';
+import React, { forwardRef, useCallback, useMemo } from 'react';
 
 import {
   type WatchProvider,
@@ -14,6 +14,7 @@ import { colors, Modal, Pressable, Text, View } from '../ui';
 interface WatchProvidersListProps {
   onSelect: (option: WatchProvider) => void;
   providers?: NonNullable<WatchProvidersByShowResponse['results']>[string];
+  selectedProviderIds: Set<number>;
 }
 
 interface OptionType {
@@ -24,20 +25,53 @@ interface OptionType {
 export const WatchProvidersList = forwardRef<
   BottomSheetModal,
   WatchProvidersListProps
->(({ onSelect, providers }, ref) => {
-  const data: OptionType[] = [
-    {
-      label: 'Streaming',
-      value: [
-        ...(providers?.flatrate ?? []),
-        ...(providers?.ads?.map((ad) => ({ ...ad, description: 'Ads' })) ?? []),
-      ],
-    },
-    {
-      label: 'Buy/Rent',
-      value: [...(providers?.buy ?? []), ...(providers?.rent ?? [])],
-    },
-  ];
+>(({ onSelect, providers, selectedProviderIds }, ref) => {
+  const data: OptionType[] = useMemo(() => {
+    const uniqueByProviderId = <T extends WatchProvider>(items: T[]) => {
+      const seenProviderIds = new Set<number>();
+
+      return items.filter((provider) => {
+        if (seenProviderIds.has(provider.provider_id)) {
+          return false;
+        }
+
+        seenProviderIds.add(provider.provider_id);
+        return true;
+      });
+    };
+
+    const sortSelectedFirst = (
+      providerA: WatchProvider,
+      providerB: WatchProvider
+    ) => {
+      const aIsSelected = selectedProviderIds.has(providerA.provider_id);
+      const bIsSelected = selectedProviderIds.has(providerB.provider_id);
+
+      if (aIsSelected !== bIsSelected) {
+        return aIsSelected ? -1 : 1;
+      }
+
+      return providerA.display_priority - providerB.display_priority;
+    };
+
+    return [
+      {
+        label: 'Streaming',
+        value: uniqueByProviderId([
+          ...(providers?.flatrate ?? []),
+          ...(providers?.ads?.map((ad) => ({ ...ad, description: 'Ads' })) ??
+            []),
+        ]).sort(sortSelectedFirst),
+      },
+      {
+        label: 'Buy/Rent',
+        value: uniqueByProviderId([
+          ...(providers?.buy ?? []),
+          ...(providers?.rent ?? []),
+        ]).sort(sortSelectedFirst),
+      },
+    ];
+  }, [providers, selectedProviderIds]);
 
   const renderSelectItem = useCallback(
     ({ item }: { item: OptionType }) => {

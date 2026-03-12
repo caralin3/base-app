@@ -65,6 +65,7 @@ const COMMUNITY_MAPPING = {
   envelope: 'email-outline',
   'eye.fill': 'eye',
   eye: 'eye-plus-outline',
+  'line.3.horizontal.decrease.circle': 'filter',
   'house.fill': 'home-variant',
   'list.bullet.rectangle': 'view-list',
   'list.dash.header.rectangle': 'view-headline',

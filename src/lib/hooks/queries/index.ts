@@ -5,6 +5,7 @@ export * from './use-recommended-query';
 export * from './use-season-episodes-query';
 export * from './use-show-details-query';
 export * from './use-trending-shows-query';
+export * from './use-tv-providers-query';
 export * from './use-watch-providers-query';
 export * from './use-watched-shows-by-id-query';
 export * from './use-watchlist-shows-query';

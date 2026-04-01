@@ -5,4 +5,5 @@ export const FIRESTORE_COLLECTIONS = {
   USERS: 'users',
   WATCHED_SHOWS: 'watched-shows',
   WATCHLIST_SHOWS: 'watchlist-shows',
+  PRODUCTION_ORDERS: 'production-orders',
 } as const;

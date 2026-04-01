@@ -115,3 +115,25 @@ export const NewWatchlistShowDocument = z.discriminatedUnion('type', [
 ]);
 
 export type NewWatchlistShowDocument = z.infer<typeof NewWatchlistShowDocument>;
+
+export const ProductionOrderDocument = z.object({
+  showId: z.number(),
+  seasonProductionOrders: z.array(
+    z.object({
+      seasonNumber: z.number(),
+      episodeIdsInProductionOrder: z.array(z.number()),
+    })
+  ),
+  documentId: z.string(),
+  userId: z.string(),
+});
+
+export type ProductionOrderDocument = z.infer<typeof ProductionOrderDocument>;
+
+export const NewProductionOrderDocument = ProductionOrderDocument.omit({
+  documentId: true,
+});
+
+export type NewProductionOrderDocument = z.infer<
+  typeof NewProductionOrderDocument
+>;

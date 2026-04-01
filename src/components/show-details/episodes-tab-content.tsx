@@ -1,5 +1,6 @@
 import { type RefreshControlProps } from 'react-native';
 
+import { type ProductionOrderDocument } from '@/lib/firebase/types';
 import { type Episode, type Show, type ShowSeason } from '@/lib/types';
 
 import { EpisodesBySeasonList } from '../episodes';
@@ -11,6 +12,7 @@ interface EpisodesTabContentProps {
   isLoading?: boolean;
   seasons: ShowSeason[];
   onFavoriteEpisode: (episode: Episode) => void;
+  productionOrder?: ProductionOrderDocument | null;
   refreshControl?:
     | React.ReactElement<
         RefreshControlProps,
@@ -20,14 +22,19 @@ interface EpisodesTabContentProps {
   seasonNumber: number;
   setSeasonNumber: (value: string | number) => void;
   show: Show;
+  sortByProductionOrder?: boolean;
+  onSortByProductionOrder?: (enabled: boolean) => void;
 }
 
 export const EpisodesTabContent = ({
   episodes,
   isLoading,
   onFavoriteEpisode,
+  productionOrder,
   refreshControl,
   show,
+  sortByProductionOrder,
+  onSortByProductionOrder,
   ...props
 }: EpisodesTabContentProps) => (
   <EpisodesBySeasonList
@@ -43,7 +50,15 @@ export const EpisodesTabContent = ({
         </View>
       )
     }
-    ListHeaderComponent={<EpisodeTabHeader {...props} />}
+    ListHeaderComponent={
+      <EpisodeTabHeader
+        show={show}
+        productionOrder={productionOrder}
+        sortByProductionOrder={sortByProductionOrder}
+        onSortByProductionOrder={onSortByProductionOrder}
+        {...props}
+      />
+    }
     onFavorite={onFavoriteEpisode}
     backdropPath={show.backdropPath}
     itemType="expanded"

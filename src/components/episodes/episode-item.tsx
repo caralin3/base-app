@@ -1,4 +1,5 @@
 import { formatDate, parseISO } from 'date-fns';
+import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { getTmdbImageUrl } from '@/lib/api/tmdb/endpoints';
@@ -8,8 +9,9 @@ import { Collapsible, colors, IconButton, Image, Text, View } from '../ui';
 
 interface EpisodeItemProps {
   backdropPath?: string | null;
+  draggable?: boolean;
   episode: Episode;
-  onFavorite: (episode: Episode) => void;
+  onFavorite?: (episode: Episode) => void;
   type?: 'simple' | 'expanded';
 }
 
@@ -17,24 +19,28 @@ export const DATE_FORMAT = 'MMM dd, yyyy';
 
 export const EpisodeItem = ({
   backdropPath,
+  draggable = false,
   episode,
   onFavorite,
   type = 'expanded',
 }: EpisodeItemProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
   if (type === 'simple') {
     return (
       <View style={styles.container}>
         <Collapsible
           title={`S${episode.seasonNumber} E${episode.episodeNumber} - ${episode.name}`}
           rightAction={
-            <IconButton
-              iconName={episode.isFavorite ? 'heart.fill' : 'heart'}
-              color={colors.primary[600]}
-              size={28}
-              onPress={() => {
-                onFavorite(episode);
-              }}
-            />
+            !!onFavorite ? (
+              <IconButton
+                iconName={episode.isFavorite ? 'heart.fill' : 'heart'}
+                color={colors.primary[600]}
+                size={28}
+                onPress={() => {
+                  onFavorite(episode);
+                }}
+              />
+            ) : undefined
           }
         >
           <View style={styles.rowBetween}>
@@ -63,7 +69,7 @@ export const EpisodeItem = ({
     <View style={styles.container}>
       <View style={styles.rowBetween}>
         <View style={styles.row}>
-          {!!imagePath && (
+          {!!imagePath && !draggable && (
             <Image
               source={{ uri: getTmdbImageUrl(imagePath) }}
               style={styles.image}
@@ -73,33 +79,51 @@ export const EpisodeItem = ({
             <Text style={styles.name}>
               S{episode.seasonNumber} E{episode.episodeNumber} - {episode.name}
             </Text>
-            {episode.runtime > 0 && (
+            {episode.runtime > 0 && !draggable && (
               <Text style={[styles.info, styles.detail]}>
                 {episode.runtime} min
               </Text>
             )}
             <Text style={[styles.info, styles.detail]}>
+              {!!draggable ? 'Air Date: ' : ''}
               {formatDate(parseISO(episode.airDate), DATE_FORMAT)}
             </Text>
           </View>
         </View>
-        <View>
-          <IconButton
-            iconName={episode.isFavorite ? 'heart.fill' : 'heart'}
-            color={colors.primary[600]}
-            size={28}
-            onPress={() => {
-              console.log('Favorite button pressed for episode');
-              onFavorite(episode);
-            }}
-          />
-        </View>
+        {!!onFavorite && (
+          <View>
+            <IconButton
+              iconName={episode.isFavorite ? 'heart.fill' : 'heart'}
+              color={colors.primary[600]}
+              size={28}
+              onPress={() => {
+                console.log('Favorite button pressed for episode');
+                onFavorite(episode);
+              }}
+            />
+          </View>
+        )}
       </View>
-      {!!episode.overview && (
-        <Text clipText style={styles.info}>
-          {episode.overview}
-        </Text>
-      )}
+      {!!episode.overview &&
+        (draggable ? (
+          <>
+            <Text
+              style={{ color: colors.primary[600] }}
+              onPress={() => setIsExpanded(!isExpanded)}
+            >
+              {isExpanded ? 'Hide info' : 'Show info'}
+            </Text>
+            {isExpanded && (
+              <Text clipText style={styles.info}>
+                {episode.overview}
+              </Text>
+            )}
+          </>
+        ) : (
+          <Text clipText style={styles.info}>
+            {episode.overview}
+          </Text>
+        ))}
     </View>
   );
 };
@@ -146,6 +170,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   detail: {
-    color: colors.charcoal[500],
+    color: colors.charcoal[200],
   },
 });

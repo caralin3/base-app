@@ -17,11 +17,11 @@ export function useSeasonEpisodesQuery(showId: string, seasonNumber: number) {
 
   const getEpisodes = (
     seasonEpisodes: Episode[],
-    favoriteEpisodes: Episode[]
+    favoriteEpisodes?: Episode[]
   ): Episode[] => {
     return seasonEpisodes.map((episode) => ({
       ...episode,
-      isFavorite: !!favoriteEpisodes.find(
+      isFavorite: !!favoriteEpisodes?.find(
         (favEpisode) => favEpisode.id === episode.id
       ),
     }));

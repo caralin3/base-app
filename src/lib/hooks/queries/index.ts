@@ -1,6 +1,7 @@
 export * from './use-currently-watching-query';
 export * from './use-favorite-episodes-query';
 export * from './use-favorite-shows-query';
+export * from './use-production-order-by-show-id-query';
 export * from './use-recommended-query';
 export * from './use-season-episodes-query';
 export * from './use-show-details-query';

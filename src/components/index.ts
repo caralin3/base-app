@@ -1,6 +1,7 @@
 export * from './buttons';
 export * from './card';
 export * from './colors';
+export { EpisodeItem } from './episodes';
 export * from './haptic-tab';
 export * from './inputs';
 export * from './layout';

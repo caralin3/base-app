@@ -16,6 +16,7 @@ interface HeaderProps extends PropsWithChildren {
   brand?: boolean;
   containerClassName?: string;
   left?: {
+    disabled?: boolean;
     icon: {
       color?: string;
       name: IconSymbolName;
@@ -24,6 +25,7 @@ interface HeaderProps extends PropsWithChildren {
     onPress: () => void;
   };
   right?: {
+    disabled?: boolean;
     icon: {
       color?: string;
       name: IconSymbolName;
@@ -58,7 +60,7 @@ export const Header = ({
     >
       <View style={{ backgroundColor }} className="flex-row items-center gap-4">
         {left ? (
-          <TouchableOpacity onPress={left.onPress}>
+          <TouchableOpacity onPress={left.onPress} disabled={left.disabled}>
             <IconSymbol
               size={32}
               name={left.icon.name}
@@ -101,7 +103,11 @@ export const Header = ({
       <View style={{ backgroundColor }} className="flex-row items-center gap-4">
         {!!right?.length &&
           right.map((rt) => (
-            <TouchableOpacity key={rt.icon.name} onPress={rt.onPress}>
+            <TouchableOpacity
+              key={rt.icon.name}
+              onPress={rt.onPress}
+              disabled={rt.disabled}
+            >
               <IconSymbol
                 size={28}
                 name={rt.icon.name}

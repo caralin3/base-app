@@ -19,13 +19,14 @@ import {
 } from '@/components';
 import {
   useAuth,
+  useProductionOrderByShowIdQuery,
   useSeasonEpisodesQuery,
   useShowDetailsQuery,
   useShowToggles,
   useWatchedShowsByIdQuery,
   useWatchProvidersByShowQuery,
 } from '@/lib/hooks';
-import { type ShowRouteParams } from '@/lib/types';
+import { type Episode, type ShowRouteParams } from '@/lib/types';
 import { getTmdbUri } from '@/lib/utils';
 
 export default function Show() {
@@ -33,6 +34,7 @@ export default function Show() {
   const showId = local.id;
   const [seasonNumber, setSeasonNumber] = useState(1);
   const [myEpisodesSeasonNumber, setMyEpisodesSeasonNumber] = useState(0);
+  const [sortByProductionOrder, setSortByProductionOrder] = useState(false);
   const userId = useAuth().user?.id ?? '';
 
   useEffect(() => {
@@ -48,6 +50,18 @@ export default function Show() {
     seasonQuery: { data: season, isLoading: isLoadingSeason },
   } = useSeasonEpisodesQuery(showId, seasonNumber);
   const { data: watchedShow } = useWatchedShowsByIdQuery(showId);
+  const { data: productionOrder } = useProductionOrderByShowIdQuery(showId);
+
+  // Get production order for current season
+  const currentSeasonProductionOrder =
+    productionOrder?.seasonProductionOrders.find(
+      (order) => order.seasonNumber === seasonNumber
+    );
+
+  // Enable production order sorting by default if available for current season
+  useEffect(() => {
+    setSortByProductionOrder(!!currentSeasonProductionOrder);
+  }, [currentSeasonProductionOrder, seasonNumber]);
 
   const {
     currentlyWatchingShow,
@@ -79,6 +93,32 @@ export default function Show() {
   }
 
   const { recommendations, ...showDetails } = showDetailsData;
+
+  // Apply production order sorting if enabled
+  const sortedEpisodes = (() => {
+    if (!season) return [];
+    const baseEpisodes = getEpisodes(season.episodes, favoriteEpisodes ?? []);
+
+    if (!sortByProductionOrder || !currentSeasonProductionOrder) {
+      return baseEpisodes;
+    }
+
+    // Reorder episodes based on production order
+    const orderedEpisodes =
+      currentSeasonProductionOrder.episodeIdsInProductionOrder
+        .map((episodeId) => baseEpisodes.find((ep) => ep.id === episodeId))
+        .filter((ep): ep is Episode => ep !== undefined);
+
+    // Add any episodes not in the saved order to the end
+    const unorderedEpisodes = baseEpisodes.filter(
+      (ep) =>
+        !currentSeasonProductionOrder.episodeIdsInProductionOrder.includes(
+          ep.id
+        )
+    );
+
+    return [...orderedEpisodes, ...unorderedEpisodes];
+  })();
 
   const Header = () => (
     <ScrollableHeader style={styles.container}>
@@ -144,24 +184,27 @@ export default function Show() {
             name: 'Episodes',
             content: (
               <EpisodesTabContent
-                episodes={
-                  season
-                    ? getEpisodes(season.episodes, favoriteEpisodes ?? [])
-                    : []
-                }
+                episodes={sortedEpisodes}
                 seasons={showDetails.seasons ?? []}
                 seasonNumber={seasonNumber}
-                setSeasonNumber={(value) => setSeasonNumber(value as number)}
+                setSeasonNumber={(value) => {
+                  setSeasonNumber(value as number);
+                  setSortByProductionOrder(false);
+                }}
                 show={showDetails}
                 onFavoriteEpisode={(episode) =>
                   toggleFavoriteEpisode(episode, showDetails)
                 }
-                isLoading={isLoadingSeason || isRefetchingFavoriteEpisodes}
                 refreshControl={
                   <RefreshControl
                     onRefresh={() => refetchFavoriteEpisodes()}
                     refreshing={isRefetchingFavoriteEpisodes}
                   />
+                }
+                productionOrder={productionOrder}
+                sortByProductionOrder={sortByProductionOrder}
+                onSortByProductionOrder={(enabled) =>
+                  setSortByProductionOrder(enabled)
                 }
               />
             ),

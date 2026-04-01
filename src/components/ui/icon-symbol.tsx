@@ -39,6 +39,7 @@ const MAPPING = {
   'chevron.right': 'chevron-right',
   creditcard: 'credit-card',
   dollarsign: 'attach-money',
+  ellipsis: 'more-vert',
   'square.and.arrow.up': 'exit-to-app',
   heart: 'favorite-outline',
   'heart.fill': 'favorite',
@@ -47,7 +48,7 @@ const MAPPING = {
   'fork.knife': 'restaurant',
   gearshape: 'settings',
   iphone: 'phone-android',
-  suitcase: 'luggage',
+  'line.3.horizontal': 'drag-indicator',
   magnifyingglass: 'search',
   map: 'map',
   'music.note': 'music-note',
@@ -57,10 +58,12 @@ const MAPPING = {
   'person.fill': 'person',
   'play.circle': 'play-circle-outline',
   plus: 'add',
+  suitcase: 'luggage',
   xmark: 'close',
 } as IconMapping;
 
 const COMMUNITY_MAPPING = {
+  'arrow.up.arrow.down': 'sort',
   'chevron.down': 'chevron-down',
   envelope: 'email-outline',
   'eye.fill': 'eye',
@@ -69,9 +72,10 @@ const COMMUNITY_MAPPING = {
   'house.fill': 'home-variant',
   'list.bullet.rectangle': 'view-list',
   'list.dash.header.rectangle': 'view-headline',
-  'xmark.circle': 'close-circle-outline',
+  slowmo: 'dots-circle',
   trash: 'trash-can-outline',
   tv: 'television-classic',
+  'xmark.circle': 'close-circle-outline',
 } as Partial<
   Record<
     // eslint-disable-next-line @typescript-eslint/consistent-type-imports

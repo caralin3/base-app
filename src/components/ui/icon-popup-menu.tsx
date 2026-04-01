@@ -28,6 +28,7 @@ interface IconPopupMenuProps {
   iconName: IconSymbolName;
   iconType?: IconSymbolType;
   items: IconPopupMenuItem[];
+  label?: string;
   menuWidth?: number;
   triggerColor?: string;
   triggerSize?: number;
@@ -41,6 +42,7 @@ export function IconPopupMenu({
   iconName,
   iconType = 'material',
   items,
+  label,
   menuWidth = 220,
   triggerColor,
   triggerSize = 24,
@@ -134,6 +136,11 @@ export function IconPopupMenu({
             },
           ]}
         >
+          {!!label && (
+            <View>
+              <Text weight="bold">{label}</Text>
+            </View>
+          )}
           {items.map((item, index) => (
             <Pressable
               key={`${item.label}-${index}`}

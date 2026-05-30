@@ -1,7 +1,9 @@
 import React from 'react';
 import type { PressableProps, View } from 'react-native';
-import { ActivityIndicator, Pressable, Text } from 'react-native';
+import { ActivityIndicator, Pressable } from 'react-native';
 import { tv } from 'tailwind-variants';
+
+import { Text } from './text';
 
 const button = tv({
   slots: {
@@ -10,7 +12,6 @@ const button = tv({
     label: 'font-inter text-base font-semibold',
     indicator: 'h-6 text-white',
   },
-
   variants: {
     variant: {
       default: {
@@ -46,11 +47,11 @@ const button = tv({
     },
     size: {
       default: {
-        container: 'h-10 px-4',
-        label: 'text-base font-semibold',
+        container: 'h-12 px-4 py-1',
+        label: 'text-base font-bold',
       },
       lg: {
-        container: 'h-12 px-8',
+        container: 'h-15 px-8 py-2',
         label: 'text-xl font-bold',
       },
       sm: {

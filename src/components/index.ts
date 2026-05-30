@@ -3,6 +3,7 @@ export * from './card';
 export * from './colors';
 export * from './haptic-tab';
 export * from './inputs';
+export * from './layout';
 export * from './login-form';
 export * from './register-form';
 export * from './settings';

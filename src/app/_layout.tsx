@@ -13,6 +13,7 @@ import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { FocusAwareStatusBar, useThemeConfig } from '@/components';
 import { useAuth } from '@/lib';
@@ -105,8 +106,10 @@ function Providers({ children }: { children: React.ReactNode }) {
         <KeyboardProvider>
           <ThemeProvider value={theme}>
             <BottomSheetModalProvider>
-              <FocusAwareStatusBar />
-              {children}
+              <SafeAreaProvider>
+                <FocusAwareStatusBar />
+                {children}
+              </SafeAreaProvider>
             </BottomSheetModalProvider>
           </ThemeProvider>
         </KeyboardProvider>

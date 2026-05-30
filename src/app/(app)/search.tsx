@@ -1,16 +1,15 @@
-import { Button, Text, View } from '@/components';
+import { Button, Screen, Text } from '@/components';
 
 export default function Search() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+    <Screen
+      headerProps={{
+        title: 'Search',
+        showBackButton: false,
       }}
     >
       <Text>Search</Text>
       <Button label="small" size="sm" className="mr-2" />
-    </View>
+    </Screen>
   );
 }

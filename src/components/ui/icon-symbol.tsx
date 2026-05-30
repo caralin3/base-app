@@ -1,5 +1,6 @@
 // Fallback for using MaterialIcons on Android and web.
 
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { type SymbolViewProps, type SymbolWeight } from 'expo-symbols';
 import { type ComponentProps } from 'react';
@@ -22,6 +23,7 @@ export type IconSymbolName = keyof typeof MAPPING;
  */
 const MAPPING = {
   airplane: 'flight',
+  'arrow.backward': 'arrow-back',
   'bag.fill': 'shopping-bag',
   calendar: 'calendar-today',
   'car.fill': 'directions-car',
@@ -44,6 +46,22 @@ const MAPPING = {
   plus: 'add',
 } as IconMapping;
 
+const COMMUNITY_MAPPING = {
+  'chevron.down': 'chevron-down',
+  'eye.fill': 'eye',
+  eye: 'eye-plus-outline',
+  'house.fill': 'home-variant',
+  'list.bullet.rectangle': 'view-list',
+  'list.dash.header.rectangle': 'view-headline',
+  'xmark.circle': 'close-circle-outline',
+  tv: 'television-classic',
+} as Partial<
+  Record<
+    import('expo-symbols').SymbolViewProps['name'],
+    React.ComponentProps<typeof MaterialCommunityIcons>['name']
+  >
+>;
+
 /**
  * An icon component that uses native SF Symbols on iOS, and Material Icons on Android and web.
  * This ensures a consistent look across platforms, and optimal resource usage.
@@ -54,13 +72,26 @@ export function IconSymbol({
   size = 24,
   color,
   style,
+  type = 'material',
 }: {
   name: IconSymbolName;
   size?: number;
   color: string | OpaqueColorValue;
   style?: StyleProp<TextStyle>;
+  type?: 'material' | 'community';
   weight?: SymbolWeight;
 }) {
+  if (type === 'community') {
+    return (
+      <MaterialCommunityIcons
+        color={color}
+        size={size}
+        name={COMMUNITY_MAPPING[name]}
+        style={style}
+      />
+    );
+  }
+
   return (
     <MaterialIcons
       color={color}

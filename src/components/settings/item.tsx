@@ -1,38 +1,77 @@
-import { useColorScheme } from 'nativewind';
 import React from 'react';
+import { StyleSheet } from 'react-native';
 
-import { colors, IconSymbol, Pressable, Text, View } from '../ui';
+import {
+  colors,
+  IconSymbol,
+  type IconSymbolName,
+  Pressable,
+  Text,
+  View,
+} from '../ui';
 
 type ItemProps = {
   text: string;
   value?: string;
   onPress?: () => void;
-  icon?: React.ReactNode;
+  icon?: {
+    color?: string;
+    name: IconSymbolName;
+    type?: 'community' | 'material';
+  };
 };
 
 export const Item = ({ text, value, icon, onPress }: ItemProps) => {
   const isPressable = onPress !== undefined;
-  const { colorScheme } = useColorScheme();
-  const iconColor =
-    colorScheme === 'dark' ? colors.neutral[400] : colors.neutral[500];
+
   return (
     <Pressable
       onPress={onPress}
       pointerEvents={isPressable ? 'auto' : 'none'}
-      className="flex-1 flex-row items-center justify-between px-4 py-2"
+      style={styles.container}
     >
-      <View className="flex-row items-center">
-        {icon && <View className="pr-2">{icon}</View>}
+      <View style={styles.leftSection}>
+        {icon && (
+          <IconSymbol
+            size={24}
+            name={icon.name}
+            color={icon.color ?? colors.white}
+            type={icon.type}
+          />
+        )}
         <Text tx={text} />
       </View>
-      <View className="flex-row items-center">
-        <Text className="text-neutral-600 dark:text-white">{value}</Text>
+      <View style={styles.rightSection}>
+        <Text>{value}</Text>
         {isPressable && (
-          <View className="pl-2">
-            <IconSymbol name="chevron.right" size={16} color={iconColor} />
+          <View style={styles.chevronContainer}>
+            <IconSymbol name="chevron.right" size={24} color={colors.white} />
           </View>
         )}
       </View>
     </Pressable>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: colors.charcoal[400],
+    padding: 16,
+  },
+  leftSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  rightSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  chevronContainer: {
+    paddingLeft: 8,
+  },
+});

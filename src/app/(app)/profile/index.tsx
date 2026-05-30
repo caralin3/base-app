@@ -1,14 +1,7 @@
 import { Env } from '@env';
 import { useRouter } from 'expo-router';
 
-import {
-  Item,
-  ItemsContainer,
-  Screen,
-  ScrollView,
-  ThemeItem,
-  View,
-} from '@/components';
+import { Button, Item, ItemsContainer, Screen, View } from '@/components';
 import { useAuth } from '@/lib/hooks';
 
 export default function Profile() {
@@ -19,42 +12,45 @@ export default function Profile() {
   return (
     <Screen
       headerProps={{
-        title: 'Profile',
+        title: 'Profile Settings',
         showBackButton: false,
       }}
     >
-      <ScrollView className="flex-1 px-4 pt-8">
-        {!!user && (
-          <ItemsContainer title="Profile">
-            <Item text="Email" value={user.email ?? 'No email'} />
-            <Item text="Display Name" value={user.displayName ?? ''} />
-          </ItemsContainer>
-        )}
-
-        <ItemsContainer title="General">
-          <ThemeItem />
-        </ItemsContainer>
-
+      <View className="flex-1">
         <ItemsContainer title="About">
-          <Item text="App Name" value={Env.NAME} />
-          <Item text="Version" value={Env.VERSION} />
-        </ItemsContainer>
-
-        <ItemsContainer title="Links">
-          <Item text="Privacy" onPress={() => {}} />
-          <Item text="Terms" onPress={() => {}} />
+          {!!user && (
+            <Item
+              icon={{ name: 'envelope', type: 'community' }}
+              text="Email"
+              value={user.email ?? 'No email'}
+            />
+          )}
           <Item
-            text="Style"
-            onPress={() => router.navigate('/(app)/profile/style')}
+            text="App Version"
+            icon={{ name: 'iphone' }}
+            value={Env.VERSION}
           />
         </ItemsContainer>
 
-        <View className="my-8">
-          <ItemsContainer>
-            <Item text="Logout" onPress={signOut} />
+        {Env.APP_ENV === 'development' && (
+          <ItemsContainer title="Development">
+            <Item
+              text="Style"
+              icon={{ name: 'paintbrush' }}
+              onPress={() => router.navigate('/(app)/profile/style')}
+            />
           </ItemsContainer>
+        )}
+
+        <View className="px-4 pt-8">
+          <Button
+            label="Logout"
+            variant="outline"
+            onPress={signOut}
+            textClassName="text-white"
+          />
         </View>
-      </ScrollView>
+      </View>
     </Screen>
   );
 }

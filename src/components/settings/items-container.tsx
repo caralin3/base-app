@@ -10,12 +10,8 @@ type Props = {
 export const ItemsContainer = ({ children, title }: Props) => {
   return (
     <>
-      {title && <Text className="pb-2 pt-4 text-lg" tx={title} />}
-      {
-        <View className=" rounded-md border border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800">
-          {children}
-        </View>
-      }
+      {!!title && <Text className="p-4 pt-8 text-xl font-bold" tx={title} />}
+      {<View>{children}</View>}
     </>
   );
 };

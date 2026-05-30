@@ -1,6 +1,6 @@
 import { type PropsWithChildren } from 'react';
 
-import { SafeAreaView, View } from '../ui';
+import { colors, View } from '../ui';
 import { Header } from './header';
 
 interface ScreenProps extends PropsWithChildren {
@@ -8,8 +8,12 @@ interface ScreenProps extends PropsWithChildren {
 }
 
 export const Screen = ({ children, headerProps }: ScreenProps) => (
-  <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+  <View
+    style={{
+      flex: 1,
+    }}
+  >
     <Header {...headerProps} />
-    <View style={{ flex: 1 }}>{children}</View>
-  </SafeAreaView>
+    <View style={{ flex: 1, backgroundColor: colors.black }}>{children}</View>
+  </View>
 );

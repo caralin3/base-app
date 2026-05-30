@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { RegisterForm, type RegisterFormProps } from '@/components';
-import { useAuth } from '@/lib';
+import { useAuth } from '@/lib/hooks';
 
 export default function Register() {
   const register = useAuth.use.register();

@@ -2,7 +2,7 @@ import { Redirect, Tabs } from 'expo-router';
 import { Platform } from 'react-native';
 
 import { colors, HapticTab, IconSymbol } from '@/components';
-import { useAuth } from '@/lib';
+import { useAuth } from '@/lib/hooks';
 
 export default function TabLayout() {
   const status = useAuth.use.status();

@@ -1,3 +1,4 @@
+import { Env } from '@env';
 import { useRouter } from 'expo-router';
 
 import {
@@ -8,7 +9,7 @@ import {
   ThemeItem,
   View,
 } from '@/components';
-import { Env, useAuth } from '@/lib';
+import { useAuth } from '@/lib/hooks';
 
 export default function Profile() {
   const router = useRouter();

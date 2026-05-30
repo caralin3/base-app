@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { LoginForm, type LoginFormProps } from '@/components';
-import { useAuth } from '@/lib';
+import { useAuth } from '@/lib/hooks';
 
 export default function Login() {
   const signIn = useAuth.use.signIn();

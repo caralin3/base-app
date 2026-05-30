@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 
-import { type ColorSchemeType, useSelectedTheme } from '../../lib';
+import { type ColorSchemeType, useSelectedTheme } from '@/lib/hooks';
+
 import { Options, type OptionType, useModal } from '../ui';
 import { Item } from './item';
 

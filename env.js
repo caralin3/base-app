@@ -10,47 +10,42 @@
  */
 /**
  * 1st part: Import packages and Load your env variables
- * we use dotenv to load the correct variables from the .env file based on the APP_ENV variable (default is development)
- * APP_ENV is passed as an inline variable while executing the command, for example: APP_ENV=preview pnpm build:android
+ * we use dotenv to load the correct variables from scoped .env files based on APP_PROJECT and APP_ENV
+ * APP_PROJECT/APP_ENV can be passed inline, for example: APP_PROJECT=binge-buddy APP_ENV=preview pnpm build:android
  */
+const fs = require('fs');
 const path = require('path');
 const z = require('zod');
 
 const packageJSON = require('./package.json');
 const APP_ENV = process.env.APP_ENV ?? 'development';
-// eslint-disable-next-line no-undef
-const envPath = path.resolve(__dirname, `.env.${APP_ENV}.local`);
+const APP_PROJECT = z
+  .enum(['base-app', 'binge-buddy'])
+  .parse(process.env.APP_PROJECT ?? 'binge-buddy');
+
+const envFileName = `.env.${APP_PROJECT}.${APP_ENV}.local`;
+const envPath = path.resolve(process.cwd(), envFileName);
+
+if (!fs.existsSync(envPath)) {
+  throw new Error(
+    `Missing env file: ${envFileName}. Set APP_PROJECT and APP_ENV to match an existing scoped env file.`
+  );
+}
 
 require('dotenv').config({
   path: envPath,
 });
 
 /**
- * 2nd part: Define some static variables for the app
+ * 2nd part: Define app identity variables from env
  * Such as: bundle id, package name, app name.
- *
- * You can add them to the .env file but we think it's better to keep them here as as we use prefix to generate this values based on the APP_ENV
- * for example: if the APP_ENV is preview, the bundle id will be com.appName.preview
  */
 
-// TODO: Replace these values with your own
-
-const BUNDLE_ID = 'com.appName'; // ios bundle id
-const PACKAGE = 'com.appName'; // android package name
-const NAME = 'App Name'; // app name
-const SLUG = 'app-slug'; // app slug
-const SCHEME = 'appName'; // app scheme
-
-/**
- * We declare a function withEnvSuffix that will add a suffix to the variable name based on the APP_ENV
- * Add a suffix to variable env based on APP_ENV
- * @param {string} name
- * @returns  {string}
- */
-
-const withEnvSuffix = (name) => {
-  return APP_ENV === 'production' ? name : `${name}.${APP_ENV}`;
-};
+const BUNDLE_ID = process.env.BUNDLE_ID; // ios bundle id
+const PACKAGE = process.env.PACKAGE; // android package name
+const NAME = process.env.NAME; // app name
+const SLUG = process.env.SLUG; // app slug
+const SCHEME = process.env.SCHEME; // app scheme
 
 /**
  * 2nd part: Define your env variables schema
@@ -72,6 +67,7 @@ const withEnvSuffix = (name) => {
 
 const client = z.object({
   APP_ENV: z.enum(['development', 'preview', 'production']),
+  APP_PROJECT: z.enum(['base-app', 'binge-buddy']),
   NAME: z.string(),
   SCHEME: z.string(),
   SLUG: z.string(),
@@ -98,6 +94,7 @@ const buildTime = z.object({
  */
 const _clientEnv = {
   APP_ENV,
+  APP_PROJECT,
   NAME: NAME,
   SCHEME: SCHEME,
   SLUG: SLUG,
@@ -141,8 +138,8 @@ if (parsed.success === false) {
     '❌ Invalid environment variables:',
     parsed.error.flatten().fieldErrors,
 
-    `\n❌ Missing variables in .env.${APP_ENV} file, Make sure all required variables are defined in the .env.${APP_ENV} file.`,
-    `\n💡 Tip: If you recently updated the .env.${APP_ENV} file and the error still persists, try restarting the server with the -c flag to clear the cache.`
+    `\n❌ Missing variables in ${envFileName}. Make sure all required variables are defined in ${envFileName}.`,
+    `\n💡 Tip: If you recently updated ${envFileName} and the error still persists, try restarting the server with the -c flag to clear the cache.`
   );
   throw new Error(
     'Invalid environment variables, Check terminal for more details '

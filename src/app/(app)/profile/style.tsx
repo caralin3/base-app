@@ -4,7 +4,10 @@ import {
   Inputs,
   Screen,
   ScrollView,
+  Skeleton,
+  Title,
   Typography,
+  View,
 } from '@/components';
 
 export default function Style() {
@@ -15,6 +18,11 @@ export default function Style() {
         <Colors />
         <Buttons />
         <Inputs />
+        <Title text="Skeletons" />
+        <View className="p-4">
+          <Skeleton />
+          <Skeleton variant="circular" className="mt-4 size-16" />
+        </View>
       </ScrollView>
     </Screen>
   );

@@ -15,6 +15,7 @@ type IconMapping = Record<
   ComponentProps<typeof MaterialIcons>['name']
 >;
 export type IconSymbolName = keyof typeof MAPPING;
+export type IconSymbolType = 'material' | 'community';
 
 /**
  * Add your SF Symbols to Material Icons mappings here.
@@ -33,6 +34,8 @@ const MAPPING = {
   'chevron.right': 'chevron-right',
   creditcard: 'credit-card',
   dollarsign: 'attach-money',
+  heart: 'favorite-outline',
+  'heart.fill': 'favorite',
   'house.fill': 'home',
   'figure.walk': 'directions-walk',
   'fork.knife': 'restaurant',
@@ -78,7 +81,7 @@ export function IconSymbol({
   size?: number;
   color: string | OpaqueColorValue;
   style?: StyleProp<TextStyle>;
-  type?: 'material' | 'community';
+  type?: IconSymbolType;
   weight?: SymbolWeight;
 }) {
   if (type === 'community') {

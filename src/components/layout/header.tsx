@@ -7,8 +7,14 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-import { Image } from '../image';
-import { colors, IconSymbol, type IconSymbolName, Text, View } from '../ui';
+import {
+  colors,
+  IconSymbol,
+  type IconSymbolName,
+  Image,
+  Text,
+  View,
+} from '../ui';
 
 interface HeaderProps extends PropsWithChildren {
   brand?: boolean;

@@ -12,11 +12,25 @@ import {
 } from '../ui';
 
 interface HeaderProps extends PropsWithChildren {
+  bgColor?: string;
   brand?: boolean;
   containerClassName?: string;
+  left?: {
+    disabled?: boolean;
+    icon: {
+      color?: string;
+      name: IconSymbolName;
+      type?: 'community' | 'material';
+    };
+    onPress: () => void;
+  };
   right?: {
-    iconName: IconSymbolName;
-    iconType?: 'community' | 'material';
+    disabled?: boolean;
+    icon: {
+      color?: string;
+      name: IconSymbolName;
+      type?: 'community' | 'material';
+    };
     onPress: () => void;
   }[];
   showBackButton?: boolean;
@@ -25,16 +39,18 @@ interface HeaderProps extends PropsWithChildren {
 }
 
 export const Header = ({
+  bgColor,
   brand,
   children,
   containerClassName,
+  left,
   right,
   showBackButton = true,
   title,
   titleColor,
 }: HeaderProps) => {
   const router = useRouter();
-  const backgroundColor = colors.charcoal[400];
+  const backgroundColor = bgColor ?? colors.charcoal[400];
   const color = colors.white;
 
   return (
@@ -43,10 +59,23 @@ export const Header = ({
       className={`z-[1] flex-row items-center justify-between py-4 shadow-md ${containerClassName ?? 'px-4'}`}
     >
       <View style={{ backgroundColor }} className="flex-row items-center gap-4">
-        {showBackButton && (
-          <TouchableOpacity onPress={() => router.canGoBack() && router.back()}>
-            <IconSymbol size={32} name="arrow.backward" color={color} />
+        {left ? (
+          <TouchableOpacity onPress={left.onPress} disabled={left.disabled}>
+            <IconSymbol
+              size={32}
+              name={left.icon.name}
+              color={left.icon.color ?? color}
+              type={left.icon.type}
+            />
           </TouchableOpacity>
+        ) : (
+          showBackButton && (
+            <TouchableOpacity
+              onPress={() => router.canGoBack() && router.back()}
+            >
+              <IconSymbol size={32} name="arrow.backward" color={color} />
+            </TouchableOpacity>
+          )
         )}
         <View style={{ backgroundColor }} className="flex-row items-center">
           {brand && (
@@ -72,14 +101,18 @@ export const Header = ({
       </View>
       {children}
       <View style={{ backgroundColor }} className="flex-row items-center gap-4">
-        {right?.length &&
+        {!!right?.length &&
           right.map((rt) => (
-            <TouchableOpacity key={rt.iconName} onPress={rt.onPress}>
+            <TouchableOpacity
+              key={rt.icon.name}
+              onPress={rt.onPress}
+              disabled={rt.disabled}
+            >
               <IconSymbol
                 size={28}
-                name={rt.iconName}
-                color={color}
-                type={rt.iconType}
+                name={rt.icon.name}
+                color={rt.icon.color ?? color}
+                type={rt.icon.type}
               />
             </TouchableOpacity>
           ))}

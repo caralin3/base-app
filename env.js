@@ -18,23 +18,26 @@ const path = require('path');
 const z = require('zod');
 
 const packageJSON = require('./package.json');
-const APP_ENV = process.env.APP_ENV ?? 'development';
+const APP_ENV = z
+  .enum(['development', 'preview', 'production'])
+  .parse(process.env.APP_ENV ?? process.env.EAS_BUILD_PROFILE ?? 'development');
 const APP_PROJECT = z
   .enum(['base-app', 'binge-buddy'])
   .parse(process.env.APP_PROJECT ?? 'binge-buddy');
+const isEasBuild = Boolean(process.env.EAS_BUILD || process.env.CI);
 
 const envFileName = `.env.${APP_PROJECT}.${APP_ENV}.local`;
 const envPath = path.resolve(process.cwd(), envFileName);
 
-if (!fs.existsSync(envPath)) {
+if (fs.existsSync(envPath)) {
+  require('dotenv').config({
+    path: envPath,
+  });
+} else if (!isEasBuild) {
   throw new Error(
     `Missing env file: ${envFileName}. Set APP_PROJECT and APP_ENV to match an existing scoped env file.`
   );
 }
-
-require('dotenv').config({
-  path: envPath,
-});
 
 /**
  * 2nd part: Define app identity variables from env
@@ -138,7 +141,7 @@ if (parsed.success === false) {
     '❌ Invalid environment variables:',
     parsed.error.flatten().fieldErrors,
 
-    `\n❌ Missing variables in ${envFileName}. Make sure all required variables are defined in ${envFileName}.`,
+    `\n❌ Missing variables in ${envFileName}. Make sure all required variables are defined in ${envFileName} or provided through the EAS build environment.`,
     `\n💡 Tip: If you recently updated ${envFileName} and the error still persists, try restarting the server with the -c flag to clear the cache.`
   );
   throw new Error(

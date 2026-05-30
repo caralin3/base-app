@@ -3,6 +3,7 @@ import Svg from 'react-native-svg';
 
 export * from './button';
 export * from './checkbox';
+export * from './collapsible';
 export { default as colors } from './colors';
 export * from './focus-aware-status-bar';
 export * from './icon-button';

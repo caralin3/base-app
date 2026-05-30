@@ -45,7 +45,7 @@ export const Header = ({
       <View style={{ backgroundColor }} className="flex-row items-center gap-4">
         {showBackButton && (
           <TouchableOpacity onPress={() => router.canGoBack() && router.back()}>
-            <IconSymbol size={28} name="arrow.backward" color={color} />
+            <IconSymbol size={32} name="arrow.backward" color={color} />
           </TouchableOpacity>
         )}
         <View style={{ backgroundColor }} className="flex-row items-center">
@@ -53,8 +53,9 @@ export const Header = ({
             <Image
               contentFit="cover"
               source={require('../../assets/images/splash-icon.png')}
+              className="-ml-4"
               style={{
-                width: 50,
+                width: 60,
                 height: 40,
               }}
             />
@@ -62,7 +63,7 @@ export const Header = ({
           {!!title && (
             <Text
               style={{ color: titleColor ?? color }}
-              className="text-xl font-bold leading-6"
+              className={`text-2xl font-bold leading-7 ${brand ? '-ml-2' : ''}`}
             >
               {title}
             </Text>

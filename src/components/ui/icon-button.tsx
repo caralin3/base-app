@@ -46,7 +46,11 @@ export const IconButton = ({
       onPress={onPress}
       disabled={disabled}
     >
-      {!!label && <Text>{label}</Text>}
+      {!!label && (
+        <Text transform="uppercase" weight="semibold">
+          {label}
+        </Text>
+      )}
       <IconSymbol
         name={iconName}
         size={size}

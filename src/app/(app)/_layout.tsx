@@ -1,5 +1,4 @@
 import { Redirect, Tabs } from 'expo-router';
-import { Platform } from 'react-native';
 
 import { colors, HapticTab, IconSymbol } from '@/components';
 import { useAuth } from '@/lib/hooks';
@@ -33,22 +32,15 @@ export default function TabLayout() {
         tabBarActiveTintColor: colors.primary[600],
         tabBarButton: HapticTab,
         tabBarShowLabel: false,
-        tabBarIconStyle: Platform.select({
-          ios: {
-            padding: 0,
-          },
-        }),
-        tabBarStyle: Platform.select({
-          ios: {
-            backgroundColor: colors.charcoal[400],
-            paddingTop: 10,
-          },
-          default: {
-            backgroundColor: colors.charcoal[400],
-            height: 95,
-            paddingTop: 5,
-          },
-        }),
+        tabBarIconStyle: {
+          height: 50,
+          width: '100%',
+        },
+        tabBarStyle: {
+          backgroundColor: colors.charcoal[400],
+          borderTopWidth: 0,
+          height: 60,
+        },
       }}
     >
       <Tabs.Screen
@@ -57,7 +49,7 @@ export default function TabLayout() {
           // headerShown: false,
           title: 'App Name',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
+            <IconSymbol size={32} name="house.fill" color={color} />
           ),
         }}
       />
@@ -66,7 +58,7 @@ export default function TabLayout() {
         options={{
           title: 'Search',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="magnifyingglass" color={color} />
+            <IconSymbol size={32} name="magnifyingglass" color={color} />
           ),
         }}
       />
@@ -76,7 +68,7 @@ export default function TabLayout() {
           headerShown: false,
           title: 'Profile',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="person.fill" color={color} />
+            <IconSymbol size={32} name="person.fill" color={color} />
           ),
         }}
       />

@@ -46,7 +46,7 @@ export const RegisterForm = ({ onSubmit = () => {} }: RegisterFormProps) => {
       behavior="padding"
       keyboardVerticalOffset={10}
     >
-      <View className="flex-1 justify-center gap-4 p-8">
+      <View className="flex-1 justify-center gap-4 bg-black p-8">
         <View className="items-center justify-center">
           {/* <Image
             source={require('../assets/images/splash-icon.png')}
@@ -99,8 +99,8 @@ export const RegisterForm = ({ onSubmit = () => {} }: RegisterFormProps) => {
           size="lg"
         />
         <View className="items-center justify-center">
-          <Text className="flex flex-row items-start text-center text-gray-500">
-            Need an account?
+          <Text className="flex flex-row items-start text-center text-white">
+            Already have an account?
           </Text>
           <Button
             label="Login"

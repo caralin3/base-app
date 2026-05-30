@@ -1,11 +1,6 @@
 import { useRouter } from 'expo-router';
 import { type PropsWithChildren } from 'react';
-import {
-  type StyleProp,
-  StyleSheet,
-  TouchableOpacity,
-  type ViewStyle,
-} from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import {
   colors,
@@ -18,7 +13,7 @@ import {
 
 interface HeaderProps extends PropsWithChildren {
   brand?: boolean;
-  containerStyle?: StyleProp<ViewStyle>;
+  containerClassName?: string;
   right?: {
     iconName: IconSymbolName;
     iconType?: 'community' | 'material';
@@ -32,7 +27,7 @@ interface HeaderProps extends PropsWithChildren {
 export const Header = ({
   brand,
   children,
-  containerStyle,
+  containerClassName,
   right,
   showBackButton = true,
   title,
@@ -44,19 +39,16 @@ export const Header = ({
 
   return (
     <View
-      style={[
-        { backgroundColor },
-        styles.container,
-        containerStyle ?? { paddingHorizontal: 16 },
-      ]}
+      style={{ backgroundColor }}
+      className={`z-[1] flex-row items-center justify-between py-4 shadow-md ${containerClassName ?? 'px-4'}`}
     >
-      <View style={[{ backgroundColor }, styles.row]}>
+      <View style={{ backgroundColor }} className="flex-row items-center gap-4">
         {showBackButton && (
           <TouchableOpacity onPress={() => router.canGoBack() && router.back()}>
             <IconSymbol size={28} name="arrow.backward" color={color} />
           </TouchableOpacity>
         )}
-        <View style={[{ backgroundColor }, styles.brand]}>
+        <View style={{ backgroundColor }} className="flex-row items-center">
           {brand && (
             <Image
               contentFit="cover"
@@ -68,14 +60,17 @@ export const Header = ({
             />
           )}
           {!!title && (
-            <Text style={[styles.title, { color: titleColor ?? color }]}>
+            <Text
+              style={{ color: titleColor ?? color }}
+              className="text-xl font-bold leading-6"
+            >
               {title}
             </Text>
           )}
         </View>
       </View>
       {children}
-      <View style={[{ backgroundColor }, styles.row]}>
+      <View style={{ backgroundColor }} className="flex-row items-center gap-4">
         {right?.length &&
           right.map((rt) => (
             <TouchableOpacity key={rt.iconName} onPress={rt.onPress}>
@@ -91,32 +86,3 @@ export const Header = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    elevation: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    zIndex: 1,
-  },
-  row: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 16,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    lineHeight: 24,
-  },
-  brand: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-});

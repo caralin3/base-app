@@ -47,6 +47,7 @@ const MAPPING = {
   'paperplane.fill': 'send',
   'person.fill': 'person',
   plus: 'add',
+  xmark: 'close',
 } as IconMapping;
 
 const COMMUNITY_MAPPING = {
@@ -60,6 +61,7 @@ const COMMUNITY_MAPPING = {
   tv: 'television-classic',
 } as Partial<
   Record<
+    // eslint-disable-next-line @typescript-eslint/consistent-type-imports
     import('expo-symbols').SymbolViewProps['name'],
     React.ComponentProps<typeof MaterialCommunityIcons>['name']
   >

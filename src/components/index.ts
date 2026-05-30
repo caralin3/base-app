@@ -6,6 +6,7 @@ export * from './inputs';
 export * from './layout';
 export * from './login-form';
 export * from './register-form';
+export * from './search';
 export * from './settings';
 export * from './title';
 export * from './typography';

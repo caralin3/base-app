@@ -54,6 +54,7 @@
     "expo-system-ui": "~6.0.9",
     "expo-web-browser": "~15.0.10",
     "firebase": "^12.7.0",
+    "lodash.debounce": "^4.0.8",
     "moti": "^0.30.0",
     "nativewind": "^4.2.1",
     "react": "19.1.0",
@@ -77,6 +78,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",
+    "@types/lodash.debounce": "^4.0.9",
     "@types/react": "~19.1.0",
     "babel-plugin-module-resolver": "^5.0.2",
     "cross-env": "^10.1.0",

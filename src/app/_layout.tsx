@@ -14,14 +14,18 @@ import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
-import { useThemeConfig } from '../components';
-import { useAuth } from '../lib';
-import { firebaseAuth } from '../lib/firebase/config';
+import { useThemeConfig } from '@/components';
+import { useAuth } from '@/lib';
+import { firebaseAuth } from '@/lib/firebase/config';
 
 export default function RootLayout() {
   return (
     <Providers>
-      <Stack screenOptions={{ headerShown: false }} />
+      <Stack>
+        <Stack.Screen name="(app)" options={{ headerShown: false }} />
+        <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="register" options={{ headerShown: false }} />
+      </Stack>
     </Providers>
   );
 }
@@ -71,7 +75,7 @@ function Providers({ children }: { children: React.ReactNode }) {
             id: user.uid,
           },
         });
-        router.replace('/(app)/(home)');
+        router.replace('/(app)');
       } else {
         // User is signed out
         console.log('User is signed out');

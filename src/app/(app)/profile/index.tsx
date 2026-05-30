@@ -7,10 +7,10 @@ import {
   ScrollView,
   ThemeItem,
   View,
-} from '../../../components';
-import { Env, useAuth } from '../../../lib';
+} from '@/components';
+import { Env, useAuth } from '@/lib';
 
-export default function Settings() {
+export default function Profile() {
   const router = useRouter();
   const signOut = useAuth.use.signOut();
   const user = useAuth.use.user();
@@ -41,7 +41,7 @@ export default function Settings() {
           <Item text="Terms" onPress={() => {}} />
           <Item
             text="Style"
-            onPress={() => router.navigate('/(app)/(home)/style')}
+            onPress={() => router.navigate('/(app)/profile/style')}
           />
         </ItemsContainer>
 

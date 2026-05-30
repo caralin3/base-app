@@ -4,8 +4,8 @@ import {
   FocusAwareStatusBar,
   LoginForm,
   type LoginFormProps,
-} from '../components';
-import { useAuth } from '../lib';
+} from '@/components';
+import { useAuth } from '@/lib';
 
 export default function Login() {
   const signIn = useAuth.use.signIn();

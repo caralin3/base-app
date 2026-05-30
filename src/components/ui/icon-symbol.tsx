@@ -36,9 +36,11 @@ const MAPPING = {
   'fork.knife': 'restaurant',
   gearshape: 'settings',
   suitcase: 'luggage',
+  magnifyingglass: 'search',
   map: 'map',
   'music.note': 'music-note',
   'paperplane.fill': 'send',
+  'person.fill': 'person',
   plus: 'add',
 } as IconMapping;
 

@@ -5,8 +5,7 @@
     "baseUrl": ".",
     "allowArbitraryExtensions": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@env": ["./src/lib/env.js"]
+      "@/*": ["./src/*"]
     },
     "esModuleInterop": true,
     "checkJs": true

@@ -4,18 +4,22 @@ import { StyleSheet, type TextInputProps } from 'react-native';
 import { colors, IconButton, IconSymbol, Input, View } from '../ui';
 
 interface SearchInputProps {
+  autoFocus?: boolean;
   onBlur?: TextInputProps['onBlur'];
   onChangeText: (text: string) => void;
   onFocus?: TextInputProps['onFocus'];
   onSubmitEditing?: TextInputProps['onSubmitEditing'];
+  placeholder?: string;
   value: string;
 }
 
 export const SearchInput = ({
+  autoFocus = true,
   onBlur,
   onChangeText,
   onFocus,
   onSubmitEditing,
+  placeholder,
   value,
 }: SearchInputProps) => {
   const [showClear, setShowClear] = useState(false);
@@ -49,9 +53,9 @@ export const SearchInput = ({
         onChangeText={handleChangeText}
         onFocus={onFocus}
         onSubmitEditing={onSubmitEditing}
-        autoFocus
+        autoFocus={autoFocus}
         enterKeyHint="search"
-        placeholder="Search"
+        placeholder={placeholder ?? 'Search'}
       />
       <IconButton
         iconName="xmark.circle"

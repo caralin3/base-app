@@ -3,7 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "cross-env EXPO_NO_DOTENV=1 expo start",
+    "start": "node ./scripts/start.js",
     "prebuild": "cross-env EXPO_NO_DOTENV=1 pnpm expo prebuild",
     "android": "cross-env EXPO_NO_DOTENV=1 expo run:android",
     "ios": "cross-env EXPO_NO_DOTENV=1 expo run:ios",

@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import type { TextProps, TextStyle } from 'react-native';
-import { StyleSheet, Text as NNText } from 'react-native';
+import { StyleSheet, Text as RNText, View } from 'react-native';
 import { tv } from 'tailwind-variants';
+
+import colors from './colors';
 
 const text = tv({
   base: 'font-inter',
@@ -46,36 +48,92 @@ type TextVariants = Omit<
   NonNullable<Parameters<typeof text>[0]>,
   'class' | 'className'
 >;
+const MAX_NUMBER_OF_LINES = 3;
 
 interface Props extends TextVariants, TextProps {
   className?: string;
+  clipText?: boolean;
   tx?: string;
 }
 
 export const Text = ({
-  variant,
-  size,
-  weight,
   align,
+  children,
   className,
+  clipText,
+  size,
   style,
   tx,
-  children,
+  variant,
+  weight,
   ...props
 }: Props) => {
-  const textStyle = React.useMemo(
+  const textStyle = useMemo(
     () => text({ variant, size, weight, align, className }),
     [variant, size, weight, align, className]
   );
 
-  const nStyle = React.useMemo(
+  const nStyle = useMemo(
     () => StyleSheet.flatten([style]) as TextStyle,
     [style]
   );
 
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [actualLineCount, setActualLineCount] = useState(0);
+  const [isMeasured, setIsMeasured] = useState(false);
+
+  const shouldShowToggle = actualLineCount > MAX_NUMBER_OF_LINES;
+  const numberOfLines = isExpanded ? undefined : MAX_NUMBER_OF_LINES;
+
+  if (clipText) {
+    return (
+      <View>
+        {/* Hidden text to measure actual line count */}
+        {!isMeasured && (
+          <RNText
+            className={textStyle}
+            style={[nStyle, styles.hiddenText]}
+            onTextLayout={(e) => {
+              setActualLineCount(e.nativeEvent.lines.length);
+              setIsMeasured(true);
+            }}
+            {...props}
+          >
+            {tx ? tx : children}
+          </RNText>
+        )}
+        <RNText
+          className={textStyle}
+          style={nStyle}
+          numberOfLines={numberOfLines}
+          onPress={() => (shouldShowToggle ? setIsExpanded(!isExpanded) : null)}
+          {...props}
+        >
+          {tx ? tx : children}
+        </RNText>
+        {shouldShowToggle && (
+          <RNText
+            style={{ color: colors.primary[600] }}
+            onPress={() => setIsExpanded(!isExpanded)}
+          >
+            {isExpanded ? 'Show less' : 'Show more'}
+          </RNText>
+        )}
+      </View>
+    );
+  }
+
   return (
-    <NNText className={textStyle} style={nStyle} {...props}>
+    <RNText className={textStyle} style={nStyle} {...props}>
       {tx ? tx : children}
-    </NNText>
+    </RNText>
   );
 };
+
+const styles = StyleSheet.create({
+  hiddenText: {
+    position: 'absolute',
+    opacity: 0,
+    pointerEvents: 'none',
+  },
+});

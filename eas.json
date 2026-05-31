@@ -18,6 +18,15 @@
     "preview": {
       "distribution": "internal",
       "env": {
+        "APP_PROJECT": "binge-buddy",
+        "APP_ENV": "preview",
+        "NAME": "Binge Buddy",
+        "SCHEME": "bingebuddy",
+        "SLUG": "binge-buddy",
+        "BUNDLE_ID": "com.bingebuddy",
+        "PACKAGE": "com.bingebuddy",
+        "EXPO_ACCOUNT_OWNER": "caralin3",
+        "EAS_PROJECT_ID": "8dd9b6c4-f04a-4dbc-8108-d9f6f47bd936",
         "TMDB_API_URL": "https://api.themoviedb.org/3",
         "TMDB_IMAGE_URL": "https://image.tmdb.org"
       },

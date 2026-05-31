@@ -1,8 +1,6 @@
-import type { ConfigContext, ExpoConfig } from '@expo/config';
+const { ClientEnv, Env } = require('./env');
 
-import { ClientEnv, Env } from './env';
-
-export default ({ config }: ConfigContext): ExpoConfig => ({
+module.exports = ({ config }) => ({
   ...config,
   name: Env.NAME,
   description: `${Env.NAME} Mobile App`,

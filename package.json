@@ -20,9 +20,9 @@
     "build:development:ios": "cross-env APP_ENV=development EXPO_NO_DOTENV=1 eas build --profile development --platform ios",
     "build:development:android": "cross-env APP_ENV=development EXPO_NO_DOTENV=1 eas build --profile development --platform android ",
     "build:preview:ios": "cross-env APP_ENV=preview EXPO_NO_DOTENV=1 eas build --profile preview --platform ios",
-    "build:preview:android": "cross-env APP_ENV=preview EXPO_NO_DOTENV=1 eas build --profile preview --platform android ",
-    "build:production:ios": "cross-env APP_ENV=production EXPO_NO_DOTENV=1 eas build --profile production --platform ios",
-    "build:production:android": "cross-env APP_ENV=production EXPO_NO_DOTENV=1 eas build --profile production --platform android ",
+    "build:preview:android": "cross-env APP_PROJECT=binge-buddy APP_ENV=preview EXPO_NO_DOTENV=1 eas build --profile preview --platform android",
+    "build:production:ios": "cross-env APP_PROJECT=binge-buddy APP_ENV=production EXPO_NO_DOTENV=1 eas build --profile production --platform ios",
+    "build:production:android": "cross-env APP_PROJECT=binge-buddy APP_ENV=production EXPO_NO_DOTENV=1 eas build --profile production --platform android ",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "pretty": "prettier --write \"src/**/*.{ts,tsx}\"",
     "type-check": "tsc  --noemit"

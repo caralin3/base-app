@@ -2,14 +2,7 @@ import { useRouter } from 'expo-router';
 import { type PropsWithChildren } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import {
-  colors,
-  IconSymbol,
-  type IconSymbolName,
-  Image,
-  Text,
-  View,
-} from '../ui';
+import { colors, IconSymbol, type IconSymbolName, Text, View } from '../ui';
 
 interface HeaderProps extends PropsWithChildren {
   bgColor?: string;
@@ -78,7 +71,7 @@ export const Header = ({
           )
         )}
         <View style={{ backgroundColor }} className="flex-row items-center">
-          {brand && (
+          {/* {brand && (
             <Image
               contentFit="cover"
               source={require('../../assets/images/splash-icon.png')}
@@ -88,7 +81,7 @@ export const Header = ({
                 height: 40,
               }}
             />
-          )}
+          )} */}
           {!!title && (
             <Text
               style={{ color: titleColor ?? color }}

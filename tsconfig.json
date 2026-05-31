@@ -6,7 +6,7 @@
     "allowArbitraryExtensions": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@env": ["./src/lib/env.js"]
+      "@env": ["./src/lib/env"]
     },
     "esModuleInterop": true,
     "checkJs": true

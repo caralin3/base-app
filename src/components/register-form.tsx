@@ -30,10 +30,14 @@ const schema = z
 type FormType = z.infer<typeof schema>;
 
 export type RegisterFormProps = {
+  authError?: string | null;
   onSubmit?: SubmitHandler<FormType>;
 };
 
-export const RegisterForm = ({ onSubmit = () => {} }: RegisterFormProps) => {
+export const RegisterForm = ({
+  onSubmit = () => {},
+  authError = null,
+}: RegisterFormProps) => {
   const router = useRouter();
 
   const { handleSubmit, control, formState } = useForm<FormType>({
@@ -92,6 +96,11 @@ export const RegisterForm = ({ onSubmit = () => {} }: RegisterFormProps) => {
           required
           error={formState.errors.confirmPassword?.message}
         />
+        {authError ? (
+          <Text testID="auth-error" className="mb-2 text-center text-red-400">
+            {authError}
+          </Text>
+        ) : null}
         <Button
           testID="register-button"
           label="Register"

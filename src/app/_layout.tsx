@@ -7,7 +7,7 @@ import { ThemeProvider } from '@react-navigation/native';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { onlineManager, QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import { Stack, useRouter } from 'expo-router';
+import { Stack } from 'expo-router';
 import { onAuthStateChanged, type Unsubscribe } from 'firebase/auth';
 import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
@@ -16,7 +16,8 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import { FocusAwareStatusBar, useThemeConfig } from '@/components';
-import { firebaseAuth } from '@/lib/firebase/config';
+import { Env } from '@/lib';
+import { firebaseAuth, firebaseInitError } from '@/lib/firebase/config';
 import { useAuth } from '@/lib/hooks';
 
 export default function RootLayout() {
@@ -47,7 +48,6 @@ const asyncPersist = createAsyncStoragePersister({
 
 function Providers({ children }: { children: React.ReactNode }) {
   const theme = useThemeConfig();
-  const router = useRouter();
 
   useEffect(() => {
     return NetInfo.addEventListener((state) => {
@@ -62,6 +62,28 @@ function Providers({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let authListener: Unsubscribe;
+    const hasFirebaseApiKey = Boolean(Env.FIREBASE_API_KEY?.trim());
+
+    if (!firebaseAuth) {
+      if (!hasFirebaseApiKey) {
+        useAuth.setState({
+          status: 'signIn',
+          user: {
+            id: 'local-dev-user',
+            displayName: 'Local Dev User',
+            email: 'local-dev-user@example.com',
+          },
+        });
+        return;
+      }
+
+      if (firebaseInitError) {
+        console.warn('Firebase auth init warning:', firebaseInitError.message);
+      }
+
+      useAuth.setState({ status: 'signOut', user: null });
+      return;
+    }
 
     authListener = onAuthStateChanged(firebaseAuth, (user) => {
       if (user) {
@@ -76,12 +98,10 @@ function Providers({ children }: { children: React.ReactNode }) {
             id: user.uid,
           },
         });
-        router.replace('/(app)');
       } else {
         // User is signed out
         console.log('User is signed out');
         useAuth.setState({ status: 'signOut', user: null });
-        router.replace('/login');
       }
     });
 

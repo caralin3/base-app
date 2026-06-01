@@ -17,10 +17,14 @@ const schema = z.object({
 type FormType = z.infer<typeof schema>;
 
 export type LoginFormProps = {
+  authError?: string | null;
   onSubmit?: SubmitHandler<FormType>;
 };
 
-export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
+export const LoginForm = ({
+  onSubmit = () => {},
+  authError = null,
+}: LoginFormProps) => {
   const router = useRouter();
 
   const { handleSubmit, control, formState } = useForm<FormType>({
@@ -69,6 +73,11 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
           required
           error={formState.errors.password?.message}
         />
+        {authError ? (
+          <Text testID="auth-error" className="mb-2 text-center text-red-400">
+            {authError}
+          </Text>
+        ) : null}
         <Button
           testID="login-button"
           label="Login"

@@ -23,17 +23,13 @@ export const useSelectedTheme = () => {
     })();
   }, []);
 
-  const setValue = async (value: ColorSchemeType) => {
-    await setItem(SELECTED_THEME, value);
-    setTheme(value);
-  };
-
   const setSelectedTheme = useCallback(
-    (t: ColorSchemeType) => {
+    async (t: ColorSchemeType) => {
       setColorScheme(t);
-      setValue(t);
+      await setItem(SELECTED_THEME, t);
+      setTheme(t);
     },
-    [setColorScheme, setValue]
+    [setColorScheme]
   );
 
   const selectedTheme = (theme ?? 'system') as ColorSchemeType;

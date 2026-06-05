@@ -3,7 +3,13 @@ import { StyleSheet } from 'react-native';
 import type { SvgProps } from 'react-native-svg';
 import Svg, { Path } from 'react-native-svg';
 
-export const ArrowRight = ({ color = '#CCC', style, ...props }: SvgProps) => (
+import colors from '../colors';
+
+export const ArrowRight = ({
+  color = colors.neutral[300],
+  style,
+  ...props
+}: SvgProps) => (
   <Svg
     width={7}
     height={14}

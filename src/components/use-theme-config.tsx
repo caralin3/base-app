@@ -5,17 +5,20 @@ import {
 } from '@react-navigation/native';
 import { useColorScheme } from 'nativewind';
 
-import colors from './ui/colors';
+import { Env } from '@/lib';
+import { getAppTheme } from '@/theme/app-themes';
+
+const appTheme = getAppTheme(Env.APP_PROJECT);
 
 const DarkTheme: Theme = {
   ..._DarkTheme,
   colors: {
     ..._DarkTheme.colors,
-    primary: colors.primary[600],
-    background: colors.charcoal[950],
-    text: colors.charcoal[100],
-    border: colors.charcoal[500],
-    card: colors.charcoal[850],
+    primary: appTheme.dark.primary,
+    background: appTheme.dark.background,
+    text: appTheme.dark.foreground,
+    border: appTheme.dark.border,
+    card: appTheme.dark.surface,
   },
 };
 
@@ -23,8 +26,11 @@ const LightTheme: Theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: colors.primary[600],
-    background: colors.white,
+    primary: appTheme.light.primary,
+    background: appTheme.light.background,
+    text: appTheme.light.foreground,
+    border: appTheme.light.border,
+    card: appTheme.light.surface,
   },
 };
 

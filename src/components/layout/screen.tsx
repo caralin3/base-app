@@ -1,6 +1,6 @@
 import { type PropsWithChildren } from 'react';
 
-import { colors, View } from '../ui';
+import { View } from '../ui';
 import { Header } from './header';
 
 interface ScreenProps extends PropsWithChildren {
@@ -19,6 +19,8 @@ export const Screen = ({
     }}
   >
     {showHeader && <Header {...headerProps} />}
-    <View style={{ flex: 1, backgroundColor: colors.black }}>{children}</View>
+    <View className="flex-1 bg-background dark:bg-background-dark">
+      {children}
+    </View>
   </View>
 );

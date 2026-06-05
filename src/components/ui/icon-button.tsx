@@ -6,7 +6,8 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-import colors from './colors';
+import { useAppColors } from '@/theme/use-app-colors';
+
 import {
   IconSymbol,
   type IconSymbolName,
@@ -37,7 +38,8 @@ export const IconButton = ({
   size = 24,
   style,
 }: IconButtonProps) => {
-  const defaultColor = colors.white;
+  const colors = useAppColors();
+  const defaultColor = colors.foreground;
 
   const PressableIcon = (
     <Pressable

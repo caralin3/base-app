@@ -1,7 +1,8 @@
 import React from 'react';
 import { Dimensions, Modal, Pressable, StyleSheet, View } from 'react-native';
 
-import colors from './colors';
+import { useAppColors } from '@/theme/use-app-colors';
+
 import {
   IconSymbol,
   type IconSymbolName,
@@ -47,9 +48,27 @@ export function IconPopupMenu({
   triggerColor,
   triggerSize = 24,
 }: IconPopupMenuProps) {
+  const colors = useAppColors();
   const triggerRef = React.useRef<View>(null);
   const [visible, setVisible] = React.useState(false);
   const [anchor, setAnchor] = React.useState<Anchor | null>(null);
+
+  const menuStyle = React.useMemo(
+    () => [
+      styles.menu,
+      {
+        backgroundColor: colors.surface,
+        borderColor: colors.border,
+        shadowColor: colors.foreground,
+      },
+    ],
+    [colors.border, colors.foreground, colors.surface]
+  );
+
+  const pressedStyle = React.useMemo(
+    () => ({ backgroundColor: colors.border }),
+    [colors.border]
+  );
 
   const dismiss = React.useCallback(() => {
     setVisible(false);
@@ -108,7 +127,7 @@ export function IconPopupMenu({
           <IconSymbol
             name={iconName}
             type={iconType}
-            color={triggerColor || colors.white}
+            color={triggerColor || colors.foreground}
             size={triggerSize}
           />
         </Pressable>
@@ -128,7 +147,7 @@ export function IconPopupMenu({
 
         <View
           style={[
-            styles.menu,
+            menuStyle,
             {
               left: menuPosition.left,
               top: menuPosition.top,
@@ -146,7 +165,7 @@ export function IconPopupMenu({
               key={`${item.label}-${index}`}
               style={({ pressed }) => [
                 styles.item,
-                pressed ? styles.itemPressed : undefined,
+                pressed ? pressedStyle : undefined,
               ]}
               onPress={() => handleItemPress(item)}
               disabled={item.disabled}
@@ -157,13 +176,13 @@ export function IconPopupMenu({
                 {item.iconName ? (
                   <IconSymbol
                     name={item.iconName}
-                    color={item.destructive ? colors.danger[500] : colors.white}
+                    color={item.destructive ? colors.danger : colors.foreground}
                     size={18}
                   />
                 ) : null}
                 <Text
                   style={{
-                    color: item.destructive ? colors.danger[500] : colors.white,
+                    color: item.destructive ? colors.danger : colors.foreground,
                     opacity: item.disabled ? 0.5 : 1,
                   }}
                   weight="semibold"
@@ -193,19 +212,13 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingVertical: 8,
   },
-  itemPressed: {
-    backgroundColor: colors.charcoal[400],
-  },
   menu: {
-    backgroundColor: colors.charcoal[300],
-    borderColor: colors.charcoal[300],
     borderRadius: 8,
     borderWidth: 1,
     elevation: 8,
     paddingHorizontal: 16,
     paddingVertical: 8,
     position: 'absolute',
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,

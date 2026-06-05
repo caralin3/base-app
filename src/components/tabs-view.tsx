@@ -7,7 +7,7 @@ import {
   Tabs,
 } from 'react-native-collapsible-tab-view';
 
-import { colors } from './ui';
+import { useAppColors } from '@/theme/use-app-colors';
 
 interface Tab {
   name: string;
@@ -20,15 +20,17 @@ interface TabsViewProps {
 }
 
 export const TabsView = ({ header, tabs }: TabsViewProps) => {
+  const colors = useAppColors();
+
   const TabBar = (props: TabBarProps) => (
     <MaterialTabBar
       {...props}
       scrollEnabled={false}
-      contentContainerStyle={{ backgroundColor: colors.black }}
+      contentContainerStyle={{ backgroundColor: colors.background }}
       labelStyle={styles.labelStyle}
-      indicatorStyle={{ backgroundColor: colors.primary[600] }}
-      activeColor={colors.white}
-      inactiveColor={colors.neutral[500]}
+      indicatorStyle={{ backgroundColor: colors.primary }}
+      activeColor={colors.foreground}
+      inactiveColor={colors.muted}
       // remove auto uppercase
       getLabelText={(name) => name}
       TabItemComponent={(itemProps) => {

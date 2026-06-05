@@ -1,8 +1,10 @@
 import { useRouter } from 'expo-router';
 import { type PropsWithChildren } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { colors, IconSymbol, type IconSymbolName, Text, View } from '../ui';
+import { useAppColors } from '@/theme/use-app-colors';
+
+import { IconSymbol, type IconSymbolName, Text, View } from '../ui';
 
 interface HeaderProps extends PropsWithChildren {
   bgColor?: string;
@@ -43,13 +45,22 @@ export const Header = ({
   titleColor,
 }: HeaderProps) => {
   const router = useRouter();
-  const backgroundColor = bgColor ?? colors.charcoal[400];
-  const color = colors.white;
+  const colors = useAppColors();
+  const backgroundColor = bgColor ?? colors.surface;
+  const color = colors.foreground;
+  const containerStyle = StyleSheet.flatten([
+    styles.container,
+    {
+      backgroundColor,
+      borderBottomColor: colors.border,
+      shadowColor: colors.foreground,
+    },
+  ]);
 
   return (
     <View
-      style={{ backgroundColor }}
-      className={`z-[1] flex-row items-center justify-between py-4 shadow-md ${containerClassName ?? 'px-4'}`}
+      style={containerStyle}
+      className={`z-[1] flex-row items-center justify-between p-4 ${containerClassName ?? ''}`}
     >
       <View style={{ backgroundColor }} className="flex-row items-center gap-4">
         {left ? (
@@ -113,3 +124,13 @@ export const Header = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    borderBottomWidth: 1,
+    elevation: 2,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 3,
+  },
+});

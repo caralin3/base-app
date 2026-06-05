@@ -3,17 +3,15 @@ import type { TextProps, TextStyle } from 'react-native';
 import { StyleSheet, Text as RNText, View } from 'react-native';
 import { tv } from 'tailwind-variants';
 
-import colors from './colors';
-
 const text = tv({
   base: 'font-inter',
   variants: {
     variant: {
-      default: 'text-white',
-      muted: 'text-neutral-500',
-      accent: 'text-primary-600',
-      destructive: 'text-red-500',
-      link: 'text-blue-600 underline',
+      default: 'text-foreground dark:text-foreground-dark',
+      muted: 'text-muted dark:text-muted-dark',
+      accent: 'text-primary dark:text-primary-dark',
+      destructive: 'text-danger dark:text-danger-dark',
+      link: 'text-primary underline dark:text-primary-dark',
     },
     size: {
       xs: 'text-xs',
@@ -120,7 +118,7 @@ export const Text = ({
         </RNText>
         {shouldShowToggle && (
           <RNText
-            style={{ color: colors.primary[600] }}
+            className="text-primary dark:text-primary-dark"
             onPress={() => setIsExpanded(!isExpanded)}
           >
             {isExpanded ? 'Show less' : 'Show more'}

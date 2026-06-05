@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, type TextInputProps } from 'react-native';
 
-import { colors, IconButton, IconSymbol, Input, View } from '../ui';
+import { useAppColors } from '@/theme/use-app-colors';
+
+import { IconButton, IconSymbol, Input, View } from '../ui';
 
 interface SearchInputProps {
   autoFocus?: boolean;
@@ -23,7 +25,8 @@ export const SearchInput = ({
   value,
 }: SearchInputProps) => {
   const [showClear, setShowClear] = useState(false);
-  const color = colors.white;
+  const colors = useAppColors();
+  const color = colors.foreground;
 
   useEffect(() => {
     setShowClear(!!value);

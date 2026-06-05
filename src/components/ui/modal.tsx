@@ -102,7 +102,7 @@ export const Modal = React.forwardRef(
       () => (
         <>
           <View
-            className={`${!title ? 'mb-8' : ''} mt-2 h-1 w-12 self-center rounded-lg bg-gray-400 dark:bg-gray-700`}
+            className={`${!title ? 'mb-8' : ''} mt-2 h-1 w-12 self-center rounded-lg bg-border dark:bg-border-dark`}
           />
 
           <ModalHeader
@@ -218,7 +218,7 @@ const ModalHeader = React.memo(
               ) : (
                 <View className="size-[24px]" />
               )}
-              <Text className="text-center text-[20px] font-bold text-[#26313D] dark:text-white">
+              <Text className="text-center text-[20px] font-bold text-foreground dark:text-foreground-dark">
                 {title}
               </Text>
               <View className="size-[24px]" />

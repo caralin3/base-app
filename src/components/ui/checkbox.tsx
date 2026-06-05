@@ -163,7 +163,7 @@ export const RadioIcon = ({ checked = false }: IconProps) => {
         borderColor: color,
       }}
       className="items-center justify-center rounded-[20px] border-2 bg-transparent"
-      from={{ borderColor: '#CCCFD6' }}
+      from={{ borderColor: colors.neutral[300] }}
       animate={{
         borderColor: color,
       }}
@@ -232,7 +232,7 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
           height: THUMB_HEIGHT,
           width: THUMB_WIDTH,
           position: 'absolute',
-          backgroundColor: 'white',
+          backgroundColor: colors.white,
           borderRadius: 13,
           right: 0,
         }}

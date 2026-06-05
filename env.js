@@ -23,7 +23,7 @@ const APP_ENV = z
   .parse(process.env.APP_ENV ?? process.env.EAS_BUILD_PROFILE ?? 'development');
 const APP_PROJECT = z
   .enum(['base-app', 'binge-buddy'])
-  .parse(process.env.APP_PROJECT ?? 'binge-buddy');
+  .parse(process.env.APP_PROJECT ?? packageJSON.name ?? 'base-app');
 const isEasBuild = Boolean(process.env.EAS_BUILD || process.env.CI);
 
 const envFileName = `.env.${APP_PROJECT}.${APP_ENV}.local`;

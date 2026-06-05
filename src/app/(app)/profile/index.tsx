@@ -1,7 +1,14 @@
 import { Env } from '@env';
 import { useRouter } from 'expo-router';
 
-import { Button, Item, ItemsContainer, Screen, View } from '@/components';
+import {
+  Button,
+  Item,
+  ItemsContainer,
+  Screen,
+  ThemeItem,
+  View,
+} from '@/components';
 import { useAuth } from '@/lib/hooks';
 
 export default function Profile() {
@@ -32,6 +39,10 @@ export default function Profile() {
           />
         </ItemsContainer>
 
+        <ItemsContainer title="Appearance">
+          <ThemeItem />
+        </ItemsContainer>
+
         {Env.APP_ENV === 'development' && (
           <ItemsContainer title="Development">
             <Item
@@ -43,12 +54,7 @@ export default function Profile() {
         )}
 
         <View className="px-4 pt-8">
-          <Button
-            label="Logout"
-            variant="outline"
-            onPress={signOut}
-            textClassName="text-white"
-          />
+          <Button label="Logout" variant="outline" onPress={signOut} />
         </View>
       </View>
     </Screen>

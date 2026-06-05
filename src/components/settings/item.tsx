@@ -1,14 +1,9 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import {
-  colors,
-  IconSymbol,
-  type IconSymbolName,
-  Pressable,
-  Text,
-  View,
-} from '../ui';
+import { useAppColors } from '@/theme/use-app-colors';
+
+import { IconSymbol, type IconSymbolName, Pressable, Text, View } from '../ui';
 
 type ItemProps = {
   text: string;
@@ -23,19 +18,25 @@ type ItemProps = {
 
 export const Item = ({ text, value, icon, onPress }: ItemProps) => {
   const isPressable = onPress !== undefined;
+  const colors = useAppColors();
+
+  const containerStyle = React.useMemo(
+    () => [styles.container, { backgroundColor: colors.surface }],
+    [colors.surface]
+  );
 
   return (
     <Pressable
       onPress={onPress}
       pointerEvents={isPressable ? 'auto' : 'none'}
-      style={styles.container}
+      style={containerStyle}
     >
       <View style={styles.leftSection}>
         {icon && (
           <IconSymbol
             size={24}
             name={icon.name}
-            color={icon.color ?? colors.white}
+            color={icon.color ?? colors.foreground}
             type={icon.type}
           />
         )}
@@ -45,7 +46,11 @@ export const Item = ({ text, value, icon, onPress }: ItemProps) => {
         <Text>{value}</Text>
         {isPressable && (
           <View style={styles.chevronContainer}>
-            <IconSymbol name="chevron.right" size={24} color={colors.white} />
+            <IconSymbol
+              name="chevron.right"
+              size={24}
+              color={colors.foreground}
+            />
           </View>
         )}
       </View>
@@ -58,7 +63,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: colors.charcoal[400],
     padding: 16,
   },
   leftSection: {

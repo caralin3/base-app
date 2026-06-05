@@ -10,31 +10,32 @@ import type { TextInputProps } from 'react-native';
 import { StyleSheet, TextInput as NTextInput, View } from 'react-native';
 import { tv } from 'tailwind-variants';
 
-import colors from './colors';
+import { useAppColors } from '@/theme/use-app-colors';
+
 import { Text } from './text';
 
 const inputTv = tv({
   slots: {
     container: 'mb-2 flex-1',
-    label: 'text-grey-100 mb-1 text-lg dark:text-neutral-100',
+    label: 'mb-1 text-lg text-foreground dark:text-foreground-dark',
     input:
-      'mt-0 rounded-xl border-[0.5px] border-neutral-300 px-4 py-3 font-inter text-base  font-medium leading-5 dark:border-neutral-700 dark:text-white',
+      'mt-0 rounded-xl border-[0.5px] border-border px-4 py-3 font-inter text-base font-medium leading-5 text-foreground dark:border-border-dark dark:text-foreground-dark',
   },
   variants: {
     focused: {
       true: {
-        input: 'border-primary-500 dark:border-neutral-400',
+        input: 'border-primary dark:border-primary-dark',
       },
     },
     error: {
       true: {
-        input: 'border-danger-600',
-        label: 'text-danger-600 dark:text-danger-600',
+        input: 'border-danger dark:border-danger-dark',
+        label: 'text-danger dark:text-danger-dark',
       },
     },
     disabled: {
       true: {
-        input: 'bg-neutral-100 opacity-50 dark:bg-neutral-700',
+        input: 'bg-surface opacity-50 dark:bg-surface-dark',
       },
     },
   },
@@ -94,6 +95,7 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
       }),
     [error, isFocussed, props.disabled]
   );
+  const colors = useAppColors();
 
   return (
     <View className={containerStyles ?? styles.container()}>
@@ -104,7 +106,7 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
         >
           {label}
           {required && (
-            <Text className="text-[16px] text-danger-600 dark:text-danger-600">
+            <Text className="text-[16px] text-danger dark:text-danger-dark">
               *
             </Text>
           )}
@@ -113,7 +115,7 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
       <NTextInput
         testID={testID}
         ref={ref}
-        placeholderTextColor={colors.neutral[400]}
+        placeholderTextColor={colors.muted}
         className={styles.input()}
         onBlur={onBlur}
         onFocus={onFocus}
@@ -123,13 +125,13 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
       {error ? (
         <Text
           testID={testID ? `${testID}-error` : undefined}
-          className="mt-1 text-sm text-danger-400  dark:text-danger-600"
+          className="mt-1 text-sm text-danger dark:text-danger-dark"
         >
           {error}
         </Text>
       ) : (
         !!helpText && (
-          <Text className="mt-1 text-sm text-neutral-500  dark:text-neutral-400">
+          <Text className="mt-1 text-sm text-muted dark:text-muted-dark">
             {helpText}
           </Text>
         )

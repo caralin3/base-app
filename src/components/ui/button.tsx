@@ -10,39 +10,39 @@ const button = tv({
     container:
       'my-2 flex flex-row items-center justify-center rounded-3xl px-4',
     label: 'font-inter text-base font-semibold',
-    indicator: 'h-6 text-white',
+    indicator: 'h-6 text-foreground dark:text-foreground-dark',
   },
   variants: {
     variant: {
       default: {
-        container: 'bg-primary-600',
-        label: 'text-black',
-        indicator: 'text-black',
+        container: 'bg-primary dark:bg-primary-dark',
+        label: 'text-background dark:text-background-dark',
+        indicator: 'text-background dark:text-background-dark',
       },
       secondary: {
-        container: 'bg-black dark:bg-white',
-        label: 'text-white dark:text-black',
-        indicator: 'text-white dark:text-black',
+        container: 'bg-foreground dark:bg-foreground-dark',
+        label: 'text-background dark:text-background-dark',
+        indicator: 'text-background dark:text-background-dark',
       },
       outline: {
-        container: 'border border-neutral-400',
-        label: 'text-black dark:text-neutral-100',
-        indicator: 'text-black dark:text-neutral-100',
+        container: 'border border-border dark:border-border-dark',
+        label: 'text-foreground dark:text-foreground-dark',
+        indicator: 'text-foreground dark:text-foreground-dark',
       },
       destructive: {
-        container: 'bg-red-600',
-        label: 'text-white',
-        indicator: 'text-white',
+        container: 'bg-danger dark:bg-danger-dark',
+        label: 'text-background dark:text-background-dark',
+        indicator: 'text-background dark:text-background-dark',
       },
       ghost: {
         container: 'bg-transparent',
-        label: 'text-white underline ',
-        indicator: 'text-white',
+        label: 'text-foreground underline dark:text-foreground-dark',
+        indicator: 'text-foreground dark:text-foreground-dark',
       },
       link: {
         container: 'bg-transparent',
-        label: 'text-black',
-        indicator: 'text-black',
+        label: 'text-primary dark:text-primary-dark',
+        indicator: 'text-primary dark:text-primary-dark',
       },
     },
     size: {

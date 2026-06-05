@@ -1,10 +1,18 @@
 import { Redirect, Tabs } from 'expo-router';
+import { Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { colors, HapticTab, IconSymbol } from '@/components';
+import { HapticTab, IconSymbol } from '@/components';
 import { useAuth } from '@/lib/hooks';
+import { useAppColors } from '@/theme/use-app-colors';
 
 export default function TabLayout() {
   const status = useAuth.use.status();
+  const colors = useAppColors();
+  const insets = useSafeAreaInsets();
+  const isIOS = Platform.OS === 'ios';
+  const tabBarPaddingBottom = isIOS ? Math.max(insets.bottom, 8) : 6;
+  const tabBarHeight = (isIOS ? 52 : 56) + tabBarPaddingBottom;
   // const [isFirstTime] = useIsFirstTime();
   // const hideSplash = useCallback(async () => {
   //   await SplashScreen.hideAsync();
@@ -29,7 +37,8 @@ export default function TabLayout() {
       backBehavior="history"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.primary[600],
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.muted,
         tabBarButton: HapticTab,
         tabBarShowLabel: false,
         tabBarIconStyle: {
@@ -37,9 +46,12 @@ export default function TabLayout() {
           width: '100%',
         },
         tabBarStyle: {
-          backgroundColor: colors.charcoal[400],
-          borderTopWidth: 0,
-          height: 60,
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
+          borderTopWidth: 1,
+          height: tabBarHeight,
+          paddingBottom: tabBarPaddingBottom,
+          paddingTop: 6,
         },
       }}
     >

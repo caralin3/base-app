@@ -18,7 +18,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { FocusAwareStatusBar, useThemeConfig } from '@/components';
 import { Env } from '@/lib';
 import { firebaseAuth, firebaseInitError } from '@/lib/firebase/config';
-import { useAuth } from '@/lib/hooks';
+import { loadSelectedTheme, useAuth } from '@/lib/hooks';
 
 export default function RootLayout() {
   return (
@@ -48,6 +48,10 @@ const asyncPersist = createAsyncStoragePersister({
 
 function Providers({ children }: { children: React.ReactNode }) {
   const theme = useThemeConfig();
+
+  useEffect(() => {
+    loadSelectedTheme();
+  }, []);
 
   useEffect(() => {
     return NetInfo.addEventListener((state) => {
@@ -128,7 +132,7 @@ function Providers({ children }: { children: React.ReactNode }) {
             <BottomSheetModalProvider>
               <SafeAreaProvider>
                 <FocusAwareStatusBar hidden={false} />
-                <SafeAreaView className="flex-1 bg-black">
+                <SafeAreaView className="flex-1 bg-background dark:bg-background-dark">
                   {children}
                 </SafeAreaView>
               </SafeAreaProvider>

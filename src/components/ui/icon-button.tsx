@@ -3,6 +3,8 @@ import React from 'react';
 import {
   type GestureResponderEvent,
   Pressable,
+  type StyleProp,
+  StyleSheet,
   type ViewStyle,
 } from 'react-native';
 
@@ -23,7 +25,7 @@ type IconButtonProps = {
   label?: string;
   onPress?: (event: GestureResponderEvent) => void;
   size?: number;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 };
 
 export const IconButton = ({
@@ -38,11 +40,15 @@ export const IconButton = ({
   style,
 }: IconButtonProps) => {
   const defaultColor = colors.white;
+  const pressableStyle = StyleSheet.flatten([
+    style,
+    disabled ? { opacity: 0.5 } : undefined,
+  ]);
 
   const PressableIcon = (
     <Pressable
       className="flex-row items-center justify-center"
-      style={[style, disabled ? { opacity: 0.5 } : undefined]}
+      style={pressableStyle}
       onPress={onPress}
       disabled={disabled}
     >
@@ -62,11 +68,7 @@ export const IconButton = ({
 
   if (href) {
     return (
-      <Link
-        href={href}
-        className="flex-row items-center justify-center"
-        asChild
-      >
+      <Link href={href} asChild>
         {PressableIcon}
       </Link>
     );

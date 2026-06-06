@@ -1,14 +1,26 @@
+import { Redirect } from 'expo-router';
 import React, { useState } from 'react';
 
 import { RegisterForm, type RegisterFormProps } from '@/components';
 import { useAuth } from '@/lib/hooks';
 
 export default function Register() {
+  type RegisterFormData = Parameters<
+    NonNullable<RegisterFormProps['onSubmit']>
+  >[0];
+
+  const status = useAuth.use.status();
   const register = useAuth.use.register();
   const [formError, setFormError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit: RegisterFormProps['onSubmit'] = async (data) => {
+  if (status === 'signIn') {
+    return <Redirect href="/(app)" />;
+  }
+
+  const onSubmit: RegisterFormProps['onSubmit'] = async (
+    data: RegisterFormData
+  ) => {
     try {
       setIsLoading(true);
       setFormError(null);

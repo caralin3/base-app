@@ -1,14 +1,22 @@
+import { Redirect } from 'expo-router';
 import React, { useState } from 'react';
 
 import { LoginForm, type LoginFormProps } from '@/components';
 import { useAuth } from '@/lib/hooks';
 
 export default function Login() {
+  type LoginFormData = Parameters<NonNullable<LoginFormProps['onSubmit']>>[0];
+
+  const status = useAuth.use.status();
   const signIn = useAuth.use.signIn();
   const [formError, setFormError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit: LoginFormProps['onSubmit'] = async (data) => {
+  if (status === 'signIn') {
+    return <Redirect href="/(app)" />;
+  }
+
+  const onSubmit: LoginFormProps['onSubmit'] = async (data: LoginFormData) => {
     try {
       setIsLoading(true);
       setFormError(null);

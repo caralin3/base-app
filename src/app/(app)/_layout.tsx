@@ -66,11 +66,39 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="search"
+        name="map-view"
         options={{
-          title: 'Search',
+          href: null,
+          title: 'Map View',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={32} name="magnifyingglass" color={color} />
+            <IconSymbol size={24} name="map" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="itinerary"
+        options={{
+          title: 'Itinerary',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={32} name="calendar" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="todos"
+        options={{
+          title: 'Todos',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={32} name="checklist" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="expenses"
+        options={{
+          title: 'Expenses',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={32} name="dollarsign" color={color} />
           ),
         }}
       />

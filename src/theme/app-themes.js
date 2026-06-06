@@ -43,6 +43,26 @@ const APP_THEMES = {
       danger: '#F87171',
     },
   },
+  'travel-buddy': {
+    light: {
+      primary: '#FF7B1A',
+      background: '#FFFFFF',
+      surface: '#FFF7ED',
+      foreground: '#1F2937',
+      muted: '#6B7280',
+      border: '#FDBA74',
+      danger: '#DC2626',
+    },
+    dark: {
+      primary: '#FB923C',
+      background: '#111827',
+      surface: '#1F2937',
+      foreground: '#F9FAFB',
+      muted: '#9CA3AF',
+      border: '#374151',
+      danger: '#F87171',
+    },
+  },
 };
 
 /**

@@ -2,7 +2,7 @@
 
 const { spawn } = require('child_process');
 
-const validProjects = new Set(['base-app', 'binge-buddy']);
+const validProjects = new Set(['base-app', 'binge-buddy', 'travel-buddy']);
 const validEnvs = new Set(['development', 'preview', 'production']);
 
 const args = process.argv.slice(2);

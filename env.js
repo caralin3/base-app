@@ -22,7 +22,7 @@ const APP_ENV = z
   .enum(['development', 'preview', 'production'])
   .parse(process.env.APP_ENV ?? process.env.EAS_BUILD_PROFILE ?? 'development');
 const APP_PROJECT = z
-  .enum(['base-app', 'binge-buddy'])
+  .enum(['base-app', 'binge-buddy', 'travel-buddy'])
   .parse(process.env.APP_PROJECT ?? packageJSON.name ?? 'base-app');
 const isEasBuild = Boolean(process.env.EAS_BUILD || process.env.CI);
 
@@ -70,7 +70,7 @@ const SCHEME = process.env.SCHEME; // app scheme
 
 const client = z.object({
   APP_ENV: z.enum(['development', 'preview', 'production']),
-  APP_PROJECT: z.enum(['base-app', 'binge-buddy']),
+  APP_PROJECT: z.enum(['base-app', 'binge-buddy', 'travel-buddy']),
   NAME: z.string(),
   SCHEME: z.string(),
   SLUG: z.string(),

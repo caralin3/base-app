@@ -106,9 +106,9 @@ export const Header = ({
       {children}
       <View style={{ backgroundColor }} className="flex-row items-center gap-4">
         {!!right?.length &&
-          right.map((rt) => (
+          right.map((rt, index) => (
             <TouchableOpacity
-              key={rt.icon.name}
+              key={index}
               onPress={rt.onPress}
               disabled={rt.disabled}
             >

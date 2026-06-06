@@ -1,0 +1,120 @@
+import { useState } from 'react';
+
+import { useAuth } from '@/lib/hooks/use-auth';
+
+import { FloatingActionButton } from '../ui/floating-action-button';
+import { ModalForm } from '../ui/modal-form';
+import BottomSheetKeyboardAwareScrollView from '../ui/modal-keyboard-aware-scroll-view';
+import { ActivityForm } from './activity-form';
+import { AddPlanMenu, type PlanType } from './add-plan-menu';
+import { EntertainmentForm } from './entertainment-form';
+import { FlightForm } from './flight-form';
+import { FoodForm } from './food-form';
+import { LodgingForm } from './lodging-form';
+import { ShoppingForm } from './shopping-form';
+import { TodoForm } from './todo-form';
+import { TransportForm } from './transport-form';
+import { TripForm } from './trip-form';
+import { useModal } from '../ui';
+
+type FloatingAddPlanModalProps = {
+  title?: string;
+};
+
+export const FloatingAddPlanModal = ({
+  title = 'Add a Plan',
+}: FloatingAddPlanModalProps) => {
+  const modal = useModal();
+  const [currentForm, setCurrentForm] = useState<PlanType | 'menu'>('menu');
+  const userId = useAuth((state) => state.user?.id || '');
+
+  const dismissForm = () => {
+    setCurrentForm('menu');
+    modal.dismiss();
+  };
+
+  const goBack = () => {
+    setCurrentForm('menu');
+  };
+
+  const currentView: Record<
+    PlanType | 'menu',
+    {
+      component: React.ReactNode;
+      leftAction?: () => void;
+      title: string;
+    }
+  > = {
+    menu: {
+      component: <AddPlanMenu onSelect={(value) => setCurrentForm(value)} />,
+      title,
+    },
+    activity: {
+      component: <ActivityForm onSuccess={dismissForm} userId={userId} />,
+      leftAction: goBack,
+      title: 'Activity',
+    },
+    entertainment: {
+      component: <EntertainmentForm onSuccess={dismissForm} userId={userId} />,
+      leftAction: goBack,
+      title: 'Entertainment',
+    },
+    flight: {
+      component: <FlightForm onSuccess={dismissForm} userId={userId} />,
+      leftAction: goBack,
+      title: 'Flight',
+    },
+    food: {
+      component: <FoodForm onSuccess={dismissForm} userId={userId} />,
+      leftAction: goBack,
+      title: 'Food',
+    },
+    lodging: {
+      component: <LodgingForm onSuccess={dismissForm} userId={userId} />,
+      leftAction: goBack,
+      title: 'Lodging',
+    },
+    shopping: {
+      component: <ShoppingForm onSuccess={dismissForm} userId={userId} />,
+      leftAction: goBack,
+      title: 'Shopping',
+    },
+    todo: {
+      component: <TodoForm onSuccess={dismissForm} userId={userId} />,
+      leftAction: goBack,
+      title: 'Todo',
+    },
+    transport: {
+      component: <TransportForm onSuccess={dismissForm} userId={userId} />,
+      leftAction: goBack,
+      title: 'Transport',
+    },
+    trip: {
+      component: <TripForm onSuccess={dismissForm} userId={userId} />,
+      leftAction: goBack,
+      title: 'Trip',
+    },
+  };
+
+  return (
+    <>
+      <FloatingActionButton name="plus" onPress={modal.present} />
+      <ModalForm
+        ref={modal.ref}
+        dismissible={currentForm === 'menu'}
+        onLeftActionPress={currentView[currentForm].leftAction}
+        snapPoints={currentForm !== 'menu' ? ['95%'] : ['70%', '95%']}
+        title={currentView[currentForm].title}
+      >
+        <BottomSheetKeyboardAwareScrollView
+          contentContainerStyle={{
+            gap: currentForm === 'menu' ? 16 : 8,
+          }}
+          showsHorizontalScrollIndicator={false}
+        >
+          {currentView[currentForm].component}
+        </BottomSheetKeyboardAwareScrollView>
+      </ModalForm>
+    </>
+  );
+};

@@ -5,6 +5,7 @@ export * from './button';
 export * from './checkbox';
 export * from './collapsible';
 export { default as colors } from './colors';
+export * from './floating-action-button';
 export * from './focus-aware-status-bar';
 export * from './icon-button';
 export * from './icon-popup-menu';

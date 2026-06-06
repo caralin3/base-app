@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import {
   BottomSheetFlatList,
   type BottomSheetModal,
@@ -20,7 +19,7 @@ import { Text } from './text';
 
 const selectTv = tv({
   slots: {
-    container: 'mb-4 flex-1',
+    container: 'mb-4',
     label: 'text-grey-100 mb-1 text-lg dark:text-neutral-100',
     input:
       'mt-0 flex-row items-center justify-center rounded-xl border-[0.5px] border-neutral-300  p-3 dark:border-neutral-700',
@@ -196,7 +195,7 @@ export const Select = (props: SelectProps) => {
           >
             {label}
             {required && (
-              <Text className="text-[16px] text-danger-600 dark:text-danger-600">
+              <Text className="text-danger-600 dark:text-danger-600 text-[16px]">
                 *
               </Text>
             )}
@@ -216,7 +215,7 @@ export const Select = (props: SelectProps) => {
         {error ? (
           <Text
             testID={`${testID}-error`}
-            className="mt-1 text-sm text-danger-300 dark:text-danger-600"
+            className="text-danger-300 dark:text-danger-600 mt-1 text-sm"
           >
             {error}
           </Text>

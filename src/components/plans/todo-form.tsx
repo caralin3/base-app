@@ -20,15 +20,16 @@ type TodoFormValues = z.infer<typeof todoFormSchema>;
 
 type TodoFormProps = {
   onSuccess?: () => void;
+  tripId?: string;
   userId: string;
 };
 
-export const TodoForm = ({ onSuccess, userId }: TodoFormProps) => {
+export const TodoForm = ({ onSuccess, tripId, userId }: TodoFormProps) => {
   const { control, handleSubmit, formState } = useForm<TodoFormValues>({
     defaultValues: {
       notes: '',
       title: '',
-      tripId: '',
+      tripId: tripId ?? '',
     },
     resolver: zodResolver(todoFormSchema),
   });
@@ -40,7 +41,7 @@ export const TodoForm = ({ onSuccess, userId }: TodoFormProps) => {
       isCompleted: false,
       notes: optionalText(values.notes),
       title: values.title,
-      tripId: optionalText(values.tripId),
+      tripId: tripId ?? optionalText(values.tripId),
       updatedAt: nowIso(),
       userId,
     };
@@ -66,12 +67,14 @@ export const TodoForm = ({ onSuccess, userId }: TodoFormProps) => {
         placeholder="What needs doing?"
         required
       />
-      <ControlledTripSelect
-        control={control}
-        label="Trip"
-        name="tripId"
-        userId={userId}
-      />
+      {tripId ? null : (
+        <ControlledTripSelect
+          control={control}
+          label="Trip"
+          name="tripId"
+          userId={userId}
+        />
+      )}
       <ControlledInput
         control={control}
         label="Notes"

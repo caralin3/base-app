@@ -9,6 +9,7 @@ export * from './lodging-form';
 export * from './place-form';
 export * from './shopping-form';
 export * from './trip-select';
+export * from './trip-todo-form';
 export * from './todo-form';
 export * from './transport-form';
 export * from './trip-form';

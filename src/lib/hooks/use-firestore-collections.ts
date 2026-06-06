@@ -25,32 +25,62 @@ export type CollectionMutationVariables<TDocument extends FirestoreDocument> = {
   id: string | number;
 };
 
+type CollectionMutationContext<TDocument extends FirestoreDocument> = {
+  previousDocuments: TDocument[];
+  queryKey: readonly unknown[];
+};
+
+export type CollectionQueryOptions<TDocument extends FirestoreDocument> = {
+  scopeKey?: string;
+  select?: (documents: TDocument[]) => TDocument[];
+};
+
 const createOptimisticId = () =>
   `optimistic-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
 export const createFirestoreCollectionHooks = <
   TDocument extends FirestoreDocument,
   TCreateInput,
->({
-  addDocument,
-  collectionName,
-  deleteDocument,
-  getDocuments,
-  updateDocument,
-}: CollectionActions<TDocument, TCreateInput>) => {
-  const queryKey = (userId?: string) =>
-    ['firestore', collectionName, userId] as const;
+>(
+  actions: CollectionActions<TDocument, TCreateInput>
+) => {
+  const { collectionName } = actions;
 
-  const useCollectionQuery = (userId?: string) => {
+  const queryKey = (userId?: string, scopeKey?: string) =>
+    scopeKey
+      ? (['firestore', collectionName, userId, scopeKey] as const)
+      : (['firestore', collectionName, userId] as const);
+  const mutationKey = (action: 'create' | 'delete' | 'update') =>
+    ['firestore', collectionName, action] as const;
+
+  const useCollectionQuery = (
+    userId?: string,
+    options?: CollectionQueryOptions<TDocument>
+  ) => {
     return useQuery({
       enabled: Boolean(userId),
       queryFn: async () => {
-        const documents = await getDocuments();
-        return userId
+        const documents = await actions.getDocuments();
+        const userDocuments = userId
           ? documents.filter((document) => document.userId === userId)
           : [];
+        return options?.select ? options.select(userDocuments) : userDocuments;
       },
-      queryKey: userId ? queryKey(userId) : ['firestore', collectionName],
+      queryKey: userId
+        ? queryKey(userId, options?.scopeKey)
+        : ['firestore', collectionName],
+      staleTime: Infinity,
+    });
+  };
+
+  const useGetByIdQuery = (id: string, userId?: string) => {
+    return useQuery({
+      enabled: Boolean(userId),
+      queryFn: async () => {
+        const document = await actions.getDocuments();
+        return document.find((doc) => doc.id === id && doc.userId === userId);
+      },
+      queryKey: ['firestore', collectionName, 'byId', id, userId],
       staleTime: Infinity,
     });
   };
@@ -59,8 +89,9 @@ export const createFirestoreCollectionHooks = <
     const queryClient = useQueryClient();
 
     return useMutation({
+      mutationKey: mutationKey('create'),
       networkMode: 'offlineFirst',
-      mutationFn: addDocument,
+      mutationFn: actions.addDocument,
       onMutate: async (newDocument) => {
         if (!userId) {
           return undefined;
@@ -104,9 +135,13 @@ export const createFirestoreCollectionHooks = <
   const useUpdateMutation = (userId?: string) => {
     const queryClient = useQueryClient();
 
-    return useMutation({
-      mutationFn: ({ data, id }: CollectionMutationVariables<TDocument>) =>
-        updateDocument(data, id),
+    return useMutation<
+      void,
+      Error,
+      CollectionMutationVariables<TDocument>,
+      CollectionMutationContext<TDocument> | undefined
+    >({
+      mutationKey: mutationKey('update'),
       onMutate: async ({ data, id }) => {
         if (!userId) {
           return undefined;
@@ -152,7 +187,8 @@ export const createFirestoreCollectionHooks = <
     const queryClient = useQueryClient();
 
     return useMutation({
-      mutationFn: deleteDocument,
+      mutationKey: mutationKey('delete'),
+      mutationFn: actions.deleteDocument,
       onMutate: async (id) => {
         if (!userId) {
           return undefined;
@@ -191,6 +227,7 @@ export const createFirestoreCollectionHooks = <
     useCollectionQuery,
     useCreateMutation,
     useDeleteMutation,
+    useGetByIdQuery,
     useUpdateMutation,
   };
 };

@@ -112,6 +112,12 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="trip/[id]"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }

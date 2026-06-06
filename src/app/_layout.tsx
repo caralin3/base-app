@@ -9,6 +9,7 @@ import { onlineManager, QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { Stack } from 'expo-router';
 import { onAuthStateChanged, type Unsubscribe } from 'firebase/auth';
+import { type UpdateData } from 'firebase/firestore';
 import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -18,7 +19,20 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { FocusAwareStatusBar, useThemeConfig } from '@/components';
 import { Env } from '@/lib';
 import { firebaseAuth, firebaseInitError } from '@/lib/firebase/config';
+import {
+  FIRESTORE_COLLECTIONS,
+  updateActivity,
+  updateEntertainment,
+  updateFlight,
+  updateFood,
+  updateLodging,
+  updateShopping,
+  updateTodo,
+  updateTransport,
+  updateTrip,
+} from '@/lib/firebase/firestore';
 import { loadSelectedTheme, useAuth } from '@/lib/hooks';
+import { type FirestoreDocument } from '@/lib/hooks/use-firestore-collections';
 
 export default function RootLayout() {
   return (
@@ -39,6 +53,36 @@ const queryClient = new QueryClient({
       // staleTime: Infinity, // Optional: if you never want to refetch data automatically
     },
   },
+});
+
+const updateMutationDefaults = [
+  [FIRESTORE_COLLECTIONS.ACTIVITIES, updateActivity],
+  [FIRESTORE_COLLECTIONS.ENTERTAINMENT, updateEntertainment],
+  [FIRESTORE_COLLECTIONS.FLIGHTS, updateFlight],
+  [FIRESTORE_COLLECTIONS.FOOD, updateFood],
+  [FIRESTORE_COLLECTIONS.LODGING, updateLodging],
+  [FIRESTORE_COLLECTIONS.SHOPPING, updateShopping],
+  [FIRESTORE_COLLECTIONS.TODOS, updateTodo],
+  [FIRESTORE_COLLECTIONS.TRANSPORTS, updateTransport],
+  [FIRESTORE_COLLECTIONS.TRIPS, updateTrip],
+] as Array<
+  readonly [
+    string,
+    (data: UpdateData<FirestoreDocument>, id: string | number) => Promise<void>,
+  ]
+>;
+
+updateMutationDefaults.forEach(([collectionName, updateDocument]) => {
+  queryClient.setMutationDefaults(['firestore', collectionName, 'update'], {
+    mutationFn: ({
+      data,
+      id,
+    }: {
+      data: UpdateData<FirestoreDocument>;
+      id: string | number;
+    }) =>
+      updateDocument(data, id),
+  });
 });
 
 const asyncPersist = createAsyncStoragePersister({
@@ -117,7 +161,11 @@ function Providers({ children }: { children: React.ReactNode }) {
   return (
     <PersistQueryClientProvider
       client={queryClient}
-      persistOptions={{ persister: asyncPersist, maxAge: Infinity }}
+      persistOptions={{
+        persister: asyncPersist,
+        maxAge: Infinity,
+        buster: 'firestore-mutation-keys-v1',
+      }}
       // onSuccess will be called when the initial restore is finished
       // resumePausedMutations will trigger any paused mutations
       // that was initially triggered when the device was offline

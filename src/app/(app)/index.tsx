@@ -9,6 +9,7 @@ export default function Home() {
   const userId = useAuth.use.user()?.id;
 
   const { refetchTrips, data: tripsData, isRefetching } = useTripsQuery(userId);
+
   const onRefresh = useCallback(() => {
     refetchTrips();
   }, [refetchTrips]);

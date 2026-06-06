@@ -165,6 +165,11 @@ const shoppingHooks = createFirestoreCollectionHooks<Shopping, NewShopping>({
 
 export const useTodosQuery = (userId?: string) =>
   todoHooks.useCollectionQuery(userId);
+export const useTodosByTripIdQuery = (userId?: string, tripId?: string) =>
+  todoHooks.useCollectionQuery(userId, {
+    scopeKey: tripId,
+    select: (todos) => todos.filter((todo) => todo.tripId === tripId),
+  });
 export const useAddTodoMutation = (userId?: string) =>
   todoHooks.useCreateMutation(userId);
 export const useDeleteTodoMutation = (userId?: string) =>
@@ -205,6 +210,8 @@ export const useDeleteTripMutation = (userId?: string) =>
   tripsHooks.useDeleteMutation(userId);
 export const useUpdateTripMutation = (userId?: string) =>
   tripsHooks.useUpdateMutation(userId);
+export const useGetTripByIdQuery = (tripId: string, userId?: string) =>
+  tripsHooks.useGetByIdQuery(tripId, userId);
 
 const tripsHooks = createFirestoreCollectionHooks<Trip, NewTrip>({
   addDocument: addTrip,

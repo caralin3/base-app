@@ -13,6 +13,7 @@ export * from './icon-symbol';
 export * from './image';
 export * from './input';
 export * from './modal';
+export * from './modal-form';
 export * from './parallax-scrollview';
 export * from './progress-bar';
 export * from './select';

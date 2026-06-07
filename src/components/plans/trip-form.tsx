@@ -21,7 +21,7 @@ const tripFormSchema = z.object({
 type TripFormValues = z.infer<typeof tripFormSchema>;
 
 type TripFormProps = {
-  onSuccess?: () => void;
+  onSuccess?: (tripId: string) => void;
   userId: string;
 };
 
@@ -52,8 +52,8 @@ export const TripForm = ({ onSuccess, userId }: TripFormProps) => {
       userId,
     };
 
-    await addTrip.mutateAsync(tripData);
-    onSuccess?.();
+    const id = await addTrip.mutateAsync(tripData);
+    onSuccess?.(id);
   };
 
   return (
@@ -72,6 +72,7 @@ export const TripForm = ({ onSuccess, userId }: TripFormProps) => {
         name="name"
         placeholder="e.g. Summer Vacation"
         required
+        autoCapitalize="words"
       />
       <ControlledInput
         control={control}
@@ -79,6 +80,7 @@ export const TripForm = ({ onSuccess, userId }: TripFormProps) => {
         label="Destination"
         name="destination"
         placeholder="e.g. Paris, France"
+        autoCapitalize="words"
       />
       <ControlledInput
         testID="startDate"

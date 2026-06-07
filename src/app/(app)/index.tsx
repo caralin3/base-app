@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 
 import { FloatingAddPlanModal, Screen, TripCard } from '@/components';
@@ -8,7 +9,11 @@ export default function Home() {
   const colors = useAppColors();
   const userId = useAuth.use.user()?.id;
 
-  const { refetchTrips, data: tripsData, isRefetching } = useTripsQuery(userId);
+  const {
+    refetch: refetchTrips,
+    data: tripsData,
+    isRefetching,
+  } = useTripsQuery(userId);
 
   const onRefresh = useCallback(() => {
     refetchTrips();

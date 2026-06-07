@@ -2,17 +2,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { useAddTodoMutation } from '@/lib/hooks/use-firestore-collection-hooks';
 import type { NewTodo } from '@/lib/firebase/firestore/todos';
+import { useAddTodoMutation } from '@/lib/hooks/use-firestore-collection-hooks';
 
 import { ControlledInput } from '../ui';
 import { PlanFormShell } from './form-shell';
-import { ControlledTripSelect } from './trip-select';
 import { nowIso, optionalText } from './form-utils';
+import { ControlledTripSelect } from './trip-select';
 
 const todoFormSchema = z.object({
   notes: z.string().optional(),
-  title: z.string().min(1, { message: 'Required' }),
+  name: z.string().min(1, { message: 'Required' }),
   tripId: z.string().optional(),
 });
 
@@ -28,7 +28,7 @@ export const TodoForm = ({ onSuccess, tripId, userId }: TodoFormProps) => {
   const { control, handleSubmit, formState } = useForm<TodoFormValues>({
     defaultValues: {
       notes: '',
-      title: '',
+      name: '',
       tripId: tripId ?? '',
     },
     resolver: zodResolver(todoFormSchema),
@@ -40,7 +40,7 @@ export const TodoForm = ({ onSuccess, tripId, userId }: TodoFormProps) => {
       createdAt: nowIso(),
       isCompleted: false,
       notes: optionalText(values.notes),
-      title: values.title,
+      name: values.name,
       tripId: tripId ?? optionalText(values.tripId),
       updatedAt: nowIso(),
       userId,
@@ -61,9 +61,9 @@ export const TodoForm = ({ onSuccess, tripId, userId }: TodoFormProps) => {
     >
       <ControlledInput
         control={control}
-        error={formState.errors.title?.message}
-        label="Title"
-        name="title"
+        error={formState.errors.name?.message}
+        label="Name"
+        name="name"
         placeholder="What needs doing?"
         required
       />

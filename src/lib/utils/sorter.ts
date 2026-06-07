@@ -5,3 +5,16 @@ export function sortByDate(d1: string, d2: string, dir: 'asc' | 'desc') {
   if (dir === 'desc') return date2.getTime() - date1.getTime();
   return date1.getTime() - date2.getTime();
 }
+
+export function groupByCategory<T extends { category?: string }>(items: T[]) {
+  return items.reduce(
+    (acc, item) => {
+      const category = item.category ?? '';
+      if (!acc[category]) acc[category] = [];
+      acc[category].push(item);
+
+      return acc;
+    },
+    {} as Record<string, T[]>
+  );
+}

@@ -6,11 +6,12 @@ import { FIRESTORE_COLLECTIONS } from './constants';
 import { createFirestoreCollection } from './shared';
 
 const Todo = z.object({
+  category: z.string().optional(),
   createdAt: z.string(),
   id: z.string(),
   isCompleted: z.boolean().default(false),
+  name: z.string(),
   notes: z.string().optional(),
-  title: z.string(),
   tripId: z.string().optional(),
   updatedAt: z.string(),
   userId: z.string(),

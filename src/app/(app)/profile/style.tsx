@@ -5,6 +5,7 @@ import {
   Colors,
   IconPopupMenu,
   Inputs,
+  ProgressBar,
   Screen,
   ScrollView,
   Skeleton,
@@ -23,6 +24,8 @@ export default function Style() {
         <Typography />
         <Colors />
         <Buttons />
+        <Title text="Progress bar" />
+        <ProgressBar initialProgress={50} />
         <Title text="Icon Popup Menu" />
         <View className="p-4">
           <View className="flex-row items-center justify-between rounded-lg border border-charcoal-400 bg-charcoal-500 p-4">

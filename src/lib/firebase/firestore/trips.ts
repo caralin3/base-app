@@ -12,4 +12,3 @@ export const addTrip = (data: NewTrip) => tripCollection.addDocument(data);
 export const updateTrip = tripCollection.updateDocument;
 export const deleteTrip = tripCollection.deleteDocument;
 export const getTrips = tripCollection.getDocuments;
-export const getTripById = tripCollection.getDocumentById;

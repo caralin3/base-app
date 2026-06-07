@@ -1,7 +1,11 @@
 import { useState } from 'react';
 
+import { type NewTodo } from '@/lib/firebase';
+import { useAddTodoMutation } from '@/lib/hooks';
 import { useAuth } from '@/lib/hooks/use-auth';
+import { defaultTodos } from '@/lib/static-data';
 
+import { useModal } from '../ui';
 import { FloatingActionButton } from '../ui/floating-action-button';
 import { ModalForm } from '../ui/modal-form';
 import BottomSheetKeyboardAwareScrollView from '../ui/modal-keyboard-aware-scroll-view';
@@ -10,12 +14,12 @@ import { AddPlanMenu, type PlanType } from './add-plan-menu';
 import { EntertainmentForm } from './entertainment-form';
 import { FlightForm } from './flight-form';
 import { FoodForm } from './food-form';
+import { nowIso } from './form-utils';
 import { LodgingForm } from './lodging-form';
 import { ShoppingForm } from './shopping-form';
 import { TodoForm } from './todo-form';
 import { TransportForm } from './transport-form';
 import { TripForm } from './trip-form';
-import { useModal } from '../ui';
 
 type FloatingAddPlanModalProps = {
   title?: string;
@@ -27,6 +31,7 @@ export const FloatingAddPlanModal = ({
   const modal = useModal();
   const [currentForm, setCurrentForm] = useState<PlanType | 'menu'>('menu');
   const userId = useAuth((state) => state.user?.id || '');
+  const addTodo = useAddTodoMutation(userId);
 
   const dismissForm = () => {
     setCurrentForm('menu');
@@ -35,6 +40,28 @@ export const FloatingAddPlanModal = ({
 
   const goBack = () => {
     setCurrentForm('menu');
+  };
+
+  const createDefaultDataForTrip = async (tripId: string) => {
+    defaultTodos.forEach(async (todo) => {
+      const todoData: NewTodo = {
+        category: todo.category ?? '',
+        createdAt: nowIso(),
+        isCompleted: false,
+        notes: '',
+        name: todo.name,
+        tripId: tripId,
+        updatedAt: nowIso(),
+        userId,
+      };
+
+      await addTodo.mutateAsync(todoData);
+    });
+  };
+
+  const onTripCreated = async (tripId: string) => {
+    await createDefaultDataForTrip(tripId);
+    dismissForm();
   };
 
   const currentView: Record<
@@ -90,7 +117,7 @@ export const FloatingAddPlanModal = ({
       title: 'Transport',
     },
     trip: {
-      component: <TripForm onSuccess={dismissForm} userId={userId} />,
+      component: <TripForm onSuccess={onTripCreated} userId={userId} />,
       leftAction: goBack,
       title: 'Trip',
     },

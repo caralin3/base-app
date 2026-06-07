@@ -5,8 +5,6 @@ import { useLocalSearchParams } from 'expo-router';
 import { StyleSheet } from 'react-native';
 
 import {
-  Button,
-  Checkbox,
   ModalForm,
   Screen,
   ScrollableHeader,
@@ -17,6 +15,7 @@ import {
   View,
 } from '@/components';
 import { TripTodoForm } from '@/components/plans';
+import { PackingList } from '@/components/todos/packing-list';
 import type { Todo } from '@/lib/firebase/firestore/todos';
 import {
   useAuth,
@@ -24,7 +23,7 @@ import {
   useTodosByTripIdQuery,
   useUpdateTodoMutation,
 } from '@/lib/hooks';
-import { getCountdownDays } from '@/lib/utils';
+import { getCountdownDays, groupByCategory } from '@/lib/utils';
 
 export type TripScreenParams = {
   id: string;
@@ -63,7 +62,7 @@ export default function TripScreen() {
           showBackButton: true,
         }}
       >
-        <Text>Sorry, we couldn't find the trip you're looking for.</Text>
+        <Text>Sorry, we could not find the trip you are looking for.</Text>
       </Screen>
     );
   }
@@ -76,7 +75,7 @@ export default function TripScreen() {
     differenceInCalendarDays(endDate, startDate) + 1,
     1
   );
-  const packingList = todosData ?? [];
+  const packingList = groupByCategory(todosData ?? []);
   const dateRange = `${format(startDate, 'MM/dd/yy')} - ${format(
     endDate,
     'MM/dd/yy'
@@ -186,56 +185,13 @@ export default function TripScreen() {
             name: 'Packing List',
             content: (
               <TabsScrollView contentContainerStyle={styles.tabContent}>
-                <View className="gap-4 py-4">
-                  <View className="rounded-lg bg-surface p-4 dark:bg-surface-dark">
-                    <View className="flex-1">
-                      <Text className="text-lg font-bold">Packing List</Text>
-                      <Text className="mt-2 text-muted dark:text-muted-dark">
-                        {isLoadingTodos
-                          ? 'Loading packing items...'
-                          : packingList.length
-                            ? `${packingList.length} item${packingList.length === 1 ? '' : 's'} for this trip`
-                            : 'No packing items are linked to this trip yet.'}
-                      </Text>
-                    </View>
-                    <Button
-                      label="Add Todo"
-                      size="sm"
-                      onPress={modal.present}
-                    />
-                  </View>
-                  {packingList.map((todo) => (
-                    <View
-                      key={todo.id}
-                      className="flex-row items-start gap-3 rounded-lg bg-surface p-4 dark:bg-surface-dark"
-                    >
-                      <Checkbox.Root
-                        accessibilityLabel={`Mark ${todo.title} as ${todo.isCompleted ? 'incomplete' : 'complete'}`}
-                        checked={todo.isCompleted}
-                        disabled={updateTodo.isPending}
-                        onChange={() => toggleTodo(todo)}
-                      >
-                        <Checkbox.Icon checked={todo.isCompleted} />
-                      </Checkbox.Root>
-                      <View className="flex-1">
-                        <Text
-                          className={
-                            todo.isCompleted
-                              ? 'text-base text-muted line-through dark:text-muted-dark'
-                              : 'text-base'
-                          }
-                        >
-                          {todo.title}
-                        </Text>
-                        {!!todo.notes && (
-                          <Text className="mt-1 text-sm text-muted dark:text-muted-dark">
-                            {todo.notes}
-                          </Text>
-                        )}
-                      </View>
-                    </View>
-                  ))}
-                </View>
+                <PackingList
+                  packingList={packingList}
+                  modal={modal}
+                  isLoadingTodos={isLoadingTodos}
+                  isUpdating={updateTodo.isPending}
+                  toggleTodo={toggleTodo}
+                />
               </TabsScrollView>
             ),
           },

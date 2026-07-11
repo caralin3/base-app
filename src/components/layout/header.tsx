@@ -1,13 +1,14 @@
 import { useRouter } from 'expo-router';
 import { type PropsWithChildren } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useAppColors } from '@/theme/use-app-colors';
 
-import { IconSymbol, type IconSymbolName, Text, View } from '../ui';
+import { IconSymbol, type IconSymbolName, Image, Text, View } from '../ui';
 
 interface HeaderProps extends PropsWithChildren {
   bgColor?: string;
+  backgroundImageUri?: string;
   brand?: boolean;
   containerClassName?: string;
   left?: {
@@ -33,8 +34,11 @@ interface HeaderProps extends PropsWithChildren {
   titleColor?: string;
 }
 
+const BG_IMAGE_HEIGHT = 300;
+
 export const Header = ({
   bgColor,
+  backgroundImageUri,
   brand,
   children,
   containerClassName,
@@ -48,16 +52,29 @@ export const Header = ({
   const colors = useAppColors();
   const backgroundColor = bgColor ?? colors.surface;
   const color = colors.foreground;
+  const resolvedHeight = backgroundImageUri ? BG_IMAGE_HEIGHT : undefined;
   const containerStyle = {
     backgroundColor,
+    height: resolvedHeight,
   };
 
   return (
     <View
       style={containerStyle}
-      className={`z-[1] flex-row items-center justify-between p-4 ${containerClassName ?? ''}`}
+      className={`relative z-[1] flex-row ${backgroundImageUri ? 'items-start' : 'items-center'} justify-between overflow-hidden p-4 ${containerClassName ?? ''}`}
     >
-      <View style={{ backgroundColor }} className="flex-row items-center gap-4">
+      {!!backgroundImageUri && (
+        <>
+          <Image
+            source={{ uri: backgroundImageUri }}
+            contentFit="cover"
+            style={styles.backgroundImage}
+          />
+          <View style={styles.overlay} pointerEvents="none" />
+        </>
+      )}
+
+      <View className="flex-row items-center gap-4">
         {left ? (
           <TouchableOpacity onPress={left.onPress} disabled={left.disabled}>
             <IconSymbol
@@ -76,7 +93,7 @@ export const Header = ({
             </TouchableOpacity>
           )
         )}
-        <View style={{ backgroundColor }} className="flex-row items-center">
+        <View className="flex-row items-center">
           {/* {brand && (
             <Image
               contentFit="cover"
@@ -99,7 +116,7 @@ export const Header = ({
         </View>
       </View>
       {children}
-      <View style={{ backgroundColor }} className="flex-row items-center gap-4">
+      <View className="flex-row items-center gap-4">
         {!!right?.length &&
           right.map((rt, index) => (
             <TouchableOpacity
@@ -119,3 +136,17 @@ export const Header = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  backgroundImage: {
+    height: BG_IMAGE_HEIGHT,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+  },
+});

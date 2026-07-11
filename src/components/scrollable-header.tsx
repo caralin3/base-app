@@ -1,7 +1,7 @@
 // https://github.com/PedroBern/react-native-collapsible-tab-view/issues/449#issuecomment-3685402512
 
-import React, { type ReactNode } from 'react';
-import { View, type ViewStyle } from 'react-native';
+import type { ReactNode } from 'react';
+import { type StyleProp, View, type ViewStyle } from 'react-native';
 import { useCurrentTabScrollY } from 'react-native-collapsible-tab-view';
 import {
   useScroller,
@@ -23,7 +23,11 @@ export interface ScrollableHeaderProps {
   /**
    * Container style
    */
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
+  /**
+   * NativeWind class names for the container
+   */
+  className?: string;
   /**
    * Minimum sliding distance, default is 5
    */
@@ -62,6 +66,7 @@ export interface ScrollableHeaderProps {
 export const ScrollableHeader = ({
   children,
   style,
+  className,
   minDistance = 5,
   minVelocity = 50,
   deceleration = 0.998,
@@ -164,7 +169,9 @@ export const ScrollableHeader = ({
 
   return (
     <GestureDetector gesture={headerPanGesture}>
-      <View style={style}>{children}</View>
+      <View className={className} style={style}>
+        {children}
+      </View>
     </GestureDetector>
   );
 };

@@ -50,7 +50,11 @@ export const TabsView = ({ header, tabs }: TabsViewProps) => {
   );
 
   return (
-    <Tabs.Container renderHeader={header} renderTabBar={TabBar}>
+    <Tabs.Container
+      headerContainerStyle={{ backgroundColor: colors.surface }}
+      renderHeader={header}
+      renderTabBar={TabBar}
+    >
       {tabs.map((tab) => (
         <Tabs.Tab key={tab.name} name={tab.name}>
           {tab.content}

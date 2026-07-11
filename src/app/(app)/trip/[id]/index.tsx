@@ -94,7 +94,10 @@ export default function TripScreen() {
   const closeTodoModal = () => modal.dismiss();
 
   const Header = () => (
-    <ScrollableHeader style={styles.header}>
+    <ScrollableHeader
+      style={styles.header}
+      className="rounded-t-2xl bg-background dark:bg-background-dark"
+    >
       <View className="flex-row items-center justify-between gap-4">
         <View className="flex-1">
           <Text className="text-2xl font-bold">{tripData.name}</Text>

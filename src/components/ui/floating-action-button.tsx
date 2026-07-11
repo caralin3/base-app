@@ -3,8 +3,10 @@ import {
   type GestureResponderEvent,
   Pressable,
   type PressableProps,
+  type StyleProp,
   StyleSheet,
   View,
+  type ViewStyle,
 } from 'react-native';
 
 import { useAppColors } from '@/theme/use-app-colors';
@@ -28,6 +30,11 @@ export const FloatingActionButton = ({
 }: FloatingActionButtonProps) => {
   const colors = useAppColors();
 
+  const resolvedStyle: StyleProp<ViewStyle> =
+    typeof style === 'function'
+      ? style({ pressed: false, hovered: false } as any)
+      : style;
+
   return (
     <Pressable
       accessibilityLabel="Add item"
@@ -35,7 +42,7 @@ export const FloatingActionButton = ({
       className="absolute bottom-6 right-6 z-50 size-14 items-center justify-center rounded-full"
       onPress={onPress}
       style={[
-        style,
+        resolvedStyle,
         {
           backgroundColor: colors.primary,
           ...styles.shadow,

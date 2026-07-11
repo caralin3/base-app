@@ -1,6 +1,4 @@
-import { EventType } from '../types/plans';
-
-export const events: EventType[] = [
+export const events = [
   {
     icon: 'airplane',
     id: 'flight',

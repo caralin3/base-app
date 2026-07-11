@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { type PropsWithChildren } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import { useAppColors } from '@/theme/use-app-colors';
 
@@ -48,14 +48,9 @@ export const Header = ({
   const colors = useAppColors();
   const backgroundColor = bgColor ?? colors.surface;
   const color = colors.foreground;
-  const containerStyle = StyleSheet.flatten([
-    styles.container,
-    {
-      backgroundColor,
-      borderBottomColor: colors.border,
-      shadowColor: colors.foreground,
-    },
-  ]);
+  const containerStyle = {
+    backgroundColor,
+  };
 
   return (
     <View
@@ -124,13 +119,3 @@ export const Header = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    borderBottomWidth: 1,
-    elevation: 2,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
-    shadowRadius: 3,
-  },
-});

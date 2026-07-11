@@ -65,12 +65,10 @@ const updateMutationDefaults = [
   [FIRESTORE_COLLECTIONS.TODOS, updateTodo],
   [FIRESTORE_COLLECTIONS.TRANSPORTS, updateTransport],
   [FIRESTORE_COLLECTIONS.TRIPS, updateTrip],
-] as Array<
-  readonly [
-    string,
-    (data: UpdateData<FirestoreDocument>, id: string | number) => Promise<void>,
-  ]
->;
+] as (readonly [
+  string,
+  (data: UpdateData<FirestoreDocument>, id: string | number) => Promise<void>,
+])[];
 
 updateMutationDefaults.forEach(([collectionName, updateDocument]) => {
   queryClient.setMutationDefaults(['firestore', collectionName, 'update'], {
@@ -80,8 +78,7 @@ updateMutationDefaults.forEach(([collectionName, updateDocument]) => {
     }: {
       data: UpdateData<FirestoreDocument>;
       id: string | number;
-    }) =>
-      updateDocument(data, id),
+    }) => updateDocument(data, id),
   });
 });
 
@@ -180,7 +177,7 @@ function Providers({ children }: { children: React.ReactNode }) {
             <BottomSheetModalProvider>
               <SafeAreaProvider>
                 <FocusAwareStatusBar hidden={false} />
-                <SafeAreaView className="flex-1 bg-background dark:bg-background-dark">
+                <SafeAreaView className="flex-1 bg-surface dark:bg-surface-dark">
                   {children}
                 </SafeAreaView>
               </SafeAreaProvider>

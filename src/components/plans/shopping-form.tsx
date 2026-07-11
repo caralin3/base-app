@@ -1,5 +1,5 @@
-import type { NewShopping } from '@/lib/types/plans';
 import { useAddShoppingMutation } from '@/lib/hooks/use-firestore-collection-hooks';
+import type { NewShopping } from '@/lib/types/plans';
 
 import { nowIso, optionalAddress, optionalText } from './form-utils';
 import { PlaceForm, type PlaceFormValues } from './place-form';

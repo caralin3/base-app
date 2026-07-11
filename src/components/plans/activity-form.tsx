@@ -1,5 +1,5 @@
-import type { NewActivity } from '@/lib/types/plans';
 import { useAddActivityMutation } from '@/lib/hooks/use-firestore-collection-hooks';
+import type { NewActivity } from '@/lib/types/plans';
 
 import { nowIso, optionalAddress, optionalText } from './form-utils';
 import { PlaceForm, type PlaceFormValues } from './place-form';

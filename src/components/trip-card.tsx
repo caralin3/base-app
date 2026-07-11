@@ -30,7 +30,10 @@ export const TripCard = ({ trip }: TripCardProps) => {
       asChild
     >
       <Pressable>
-        <View key={trip.id} className="mb-4 rounded-lg bg-surface p-4 shadow">
+        <View
+          key={trip.id}
+          className="mb-4 rounded-lg bg-surface p-4 shadow dark:bg-surface-dark"
+        >
           <View className="flex-row items-center justify-between">
             <View>
               <Text className="text-2xl">{trip.name}</Text>

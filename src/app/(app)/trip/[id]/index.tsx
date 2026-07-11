@@ -1,7 +1,7 @@
 import { differenceInCalendarDays } from 'date-fns/differenceInCalendarDays';
 import { format } from 'date-fns/format';
 import { parseISO } from 'date-fns/parseISO';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StyleSheet } from 'react-native';
 
 import {
@@ -32,6 +32,7 @@ export type TripScreenParams = {
 
 export default function TripScreen() {
   const local = useLocalSearchParams<TripScreenParams>();
+  const router = useRouter();
   const tripId = local.id;
   const userId = useAuth.use.user()?.id;
   const modal = useModal();
@@ -76,6 +77,7 @@ export default function TripScreen() {
     1
   );
   const packingList = groupByCategory(todosData ?? []);
+  const headerImageUri = 'https://picsum.photos/300/200';
   const dateRange = `${format(startDate, 'MM/dd/yy')} - ${format(
     endDate,
     'MM/dd/yy'
@@ -95,8 +97,11 @@ export default function TripScreen() {
 
   const Header = () => (
     <ScrollableHeader
+      backgroundImageUri={headerImageUri}
+      height={300}
+      onBackPress={() => router.back()}
       style={styles.header}
-      className="rounded-t-2xl bg-background dark:bg-background-dark"
+      className="rounded-t-3xl bg-background dark:bg-background-dark"
     >
       <View className="flex-row items-center justify-between gap-4">
         <View className="flex-1">
@@ -116,11 +121,7 @@ export default function TripScreen() {
   );
 
   return (
-    <Screen
-      headerProps={{
-        showBackButton: true,
-      }}
-    >
+    <Screen showHeader={false}>
       <TabsView
         header={Header}
         tabs={[

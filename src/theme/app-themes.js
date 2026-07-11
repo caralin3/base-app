@@ -46,10 +46,10 @@ const APP_THEMES = {
   'travel-buddy': {
     light: {
       primary: '#FF7B1A',
-      background: '#FFFFFF',
+      background: '#FEFEFE',
       surface: '#FFF7ED',
       foreground: '#1F2937',
-      muted: '#6B7280',
+      muted: '#4C5567',
       border: '#FDBA74',
       danger: '#DC2626',
     },

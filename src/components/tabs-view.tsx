@@ -26,6 +26,7 @@ export const TabsView = ({ header, tabs }: TabsViewProps) => {
     <MaterialTabBar
       {...props}
       scrollEnabled={false}
+      style={[styles.tabBar, { backgroundColor: colors.background }]}
       contentContainerStyle={{ backgroundColor: colors.background }}
       labelStyle={styles.labelStyle}
       indicatorStyle={{ backgroundColor: colors.primary }}
@@ -50,7 +51,14 @@ export const TabsView = ({ header, tabs }: TabsViewProps) => {
   );
 
   return (
-    <Tabs.Container renderHeader={header} renderTabBar={TabBar}>
+    <Tabs.Container
+      headerContainerStyle={[
+        styles.headerContainer,
+        { backgroundColor: 'transparent', overflow: 'visible' },
+      ]}
+      renderHeader={header}
+      renderTabBar={TabBar}
+    >
       {tabs.map((tab) => (
         <Tabs.Tab key={tab.name} name={tab.name}>
           {tab.content}
@@ -64,6 +72,13 @@ export const TabsScrollView = Tabs.ScrollView;
 export const TabsFlatList = Tabs.FlatList;
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    marginBottom: 0,
+    paddingBottom: 0,
+  },
+  tabBar: {
+    marginTop: -1,
+  },
   labelStyle: {
     fontSize: 16,
     fontWeight: 'bold',

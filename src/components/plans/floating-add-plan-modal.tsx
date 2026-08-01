@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, useCallback, useImperativeHandle, useState } from 'react';
 
 import { type NewTodo } from '@/lib/firebase';
 import { useAddTodoMutation } from '@/lib/hooks';
@@ -22,21 +22,28 @@ import { TransportForm } from './transport-form';
 import { TripForm } from './trip-form';
 
 type FloatingAddPlanModalProps = {
+  showFloatingButton?: boolean;
   title?: string;
 };
 
-export const FloatingAddPlanModal = ({
-  title = 'Add a Plan',
-}: FloatingAddPlanModalProps) => {
+export type FloatingAddPlanModalRef = {
+  dismiss: () => void;
+  present: () => void;
+};
+
+export const FloatingAddPlanModal = forwardRef<
+  FloatingAddPlanModalRef,
+  FloatingAddPlanModalProps
+>(({ showFloatingButton = true, title = 'Add a Plan' }, ref) => {
   const modal = useModal();
   const [currentForm, setCurrentForm] = useState<PlanType | 'menu'>('menu');
   const userId = useAuth((state) => state.user?.id || '');
   const addTodo = useAddTodoMutation(userId);
 
-  const dismissForm = () => {
+  const dismissForm = useCallback(() => {
     setCurrentForm('menu');
     modal.dismiss();
-  };
+  }, [modal]);
 
   const goBack = () => {
     setCurrentForm('menu');
@@ -63,6 +70,20 @@ export const FloatingAddPlanModal = ({
     await createDefaultDataForTrip(tripId);
     dismissForm();
   };
+
+  const presentForm = useCallback(() => {
+    setCurrentForm('menu');
+    modal.present();
+  }, [modal]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      dismiss: dismissForm,
+      present: presentForm,
+    }),
+    [dismissForm, presentForm]
+  );
 
   const currentView: Record<
     PlanType | 'menu',
@@ -125,7 +146,9 @@ export const FloatingAddPlanModal = ({
 
   return (
     <>
-      <FloatingActionButton name="plus" onPress={modal.present} />
+      {showFloatingButton ? (
+        <FloatingActionButton name="plus" onPress={presentForm} />
+      ) : null}
       <ModalForm
         ref={modal.ref}
         dismissible={currentForm === 'menu'}
@@ -144,4 +167,6 @@ export const FloatingAddPlanModal = ({
       </ModalForm>
     </>
   );
-};
+});
+
+FloatingAddPlanModal.displayName = 'FloatingAddPlanModal';

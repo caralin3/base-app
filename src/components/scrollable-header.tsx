@@ -77,6 +77,7 @@ export interface ScrollableHeaderProps {
   right?: {
     disabled?: boolean;
     icon: {
+      backgroundColor?: string;
       color?: string;
       name: IconSymbolName;
       type?: 'community' | 'material';
@@ -298,6 +299,18 @@ export const ScrollableHeader = ({
                     key={index}
                     onPress={rt.onPress}
                     disabled={rt.disabled}
+                    style={
+                      rt.icon.backgroundColor
+                        ? {
+                            alignItems: 'center',
+                            backgroundColor: rt.icon.backgroundColor,
+                            borderRadius: 999,
+                            height: 36,
+                            justifyContent: 'center',
+                            width: 36,
+                          }
+                        : undefined
+                    }
                   >
                     <IconSymbol
                       size={28}
@@ -365,6 +378,18 @@ export const ScrollableHeader = ({
               key={index}
               onPress={rt.onPress}
               disabled={rt.disabled}
+              style={
+                rt.icon.backgroundColor
+                  ? {
+                      alignItems: 'center',
+                      backgroundColor: rt.icon.backgroundColor,
+                      borderRadius: 999,
+                      height: 36,
+                      justifyContent: 'center',
+                      width: 36,
+                    }
+                  : undefined
+              }
             >
               <IconSymbol
                 size={28}

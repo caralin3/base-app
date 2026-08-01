@@ -44,10 +44,14 @@ export const TripCard = ({ trip }: TripCardProps) => {
               </Text>
             </View>
             <View className="items-center justify-center">
-              <Text className="text-2xl font-bold">{days > 0 ? days : 0}</Text>
-              <Text className="font-semibold">
-                day{days > 1 || days <= 0 ? 's' : ''} to go
-              </Text>
+              {days > 0 ? (
+                <>
+                  <Text className="text-2xl font-bold">{days}</Text>
+                  <Text className="font-semibold">
+                    day{days !== 1 ? 's' : ''} to go
+                  </Text>
+                </>
+              ) : null}
             </View>
           </View>
         </View>

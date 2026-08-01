@@ -19,7 +19,7 @@ const inputTv = tv({
     container: 'mb-2',
     label: 'mb-1 text-lg text-foreground dark:text-foreground-dark',
     input:
-      'mt-0 rounded-xl border-[0.5px] border-border px-4 py-3 font-inter text-base font-medium leading-5 text-foreground dark:border-border-dark dark:text-foreground-dark',
+      'mt-0 rounded-xl border-[0.5px] border-border bg-white p-4 font-inter text-base font-medium leading-5 text-foreground dark:border-border-dark dark:bg-surface-dark dark:text-foreground-dark',
   },
   variants: {
     focused: {

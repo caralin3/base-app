@@ -2,9 +2,11 @@ import { differenceInCalendarDays } from 'date-fns/differenceInCalendarDays';
 import { format } from 'date-fns/format';
 import { parseISO } from 'date-fns/parseISO';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useRef } from 'react';
 import { StyleSheet } from 'react-native';
 
 import {
+  colors,
   ModalForm,
   Screen,
   ScrollableHeader,
@@ -14,7 +16,11 @@ import {
   useModal,
   View,
 } from '@/components';
-import { TripTodoForm } from '@/components/plans';
+import {
+  FloatingAddPlanModal,
+  type FloatingAddPlanModalRef,
+  TripTodoForm,
+} from '@/components/plans';
 import { PackingList } from '@/components/todos/packing-list';
 import type { Todo } from '@/lib/firebase/firestore/todos';
 import {
@@ -36,6 +42,7 @@ export default function TripScreen() {
   const tripId = local.id;
   const userId = useAuth.use.user()?.id;
   const modal = useModal();
+  const addPlanModalRef = useRef<FloatingAddPlanModalRef>(null);
 
   const { data: tripData, isLoading } = useGetTripByIdQuery(tripId, userId);
   const { data: todosData, isLoading: isLoadingTodos } = useTodosByTripIdQuery(
@@ -102,6 +109,16 @@ export default function TripScreen() {
       onBackPress={() => router.back()}
       style={styles.header}
       className="rounded-t-3xl bg-background dark:bg-background-dark"
+      right={[
+        {
+          icon: {
+            name: 'plus',
+            color: colors.white,
+            backgroundColor: colors.primary[500],
+          },
+          onPress: () => addPlanModalRef.current?.present(),
+        },
+      ]}
     >
       <View className="flex-row items-center justify-between gap-4">
         <View className="flex-1">
@@ -208,6 +225,11 @@ export default function TripScreen() {
           userId={userId ?? ''}
         />
       </ModalForm>
+      <FloatingAddPlanModal
+        ref={addPlanModalRef}
+        title="Add Plan"
+        showFloatingButton={false}
+      />
     </Screen>
   );
 }

@@ -22,7 +22,7 @@ const selectTv = tv({
     container: 'mb-4',
     label: 'text-grey-100 mb-1 text-lg dark:text-neutral-100',
     input:
-      'mt-0 flex-row items-center justify-center rounded-xl border-[0.5px] border-neutral-300  p-3 dark:border-neutral-700',
+      'mt-0 flex-row items-center justify-center rounded-xl border-[0.5px] border-neutral-300 bg-white  p-3 dark:border-neutral-700 dark:bg-surface-dark',
     inputValue: 'dark:text-neutral-100',
   },
 

@@ -1,8 +1,8 @@
+import { LoginForm, type LoginFormProps, useAuth } from '@base-app/core';
 import { Redirect } from 'expo-router';
 import React, { useState } from 'react';
 
-import { LoginForm, type LoginFormProps } from '@/components';
-import { useAuth } from '@/lib/hooks';
+import { Env } from '@/lib';
 
 export default function Login() {
   type LoginFormData = Parameters<NonNullable<LoginFormProps['onSubmit']>>[0];
@@ -33,5 +33,7 @@ export default function Login() {
     }
   };
 
-  return <LoginForm onSubmit={onSubmit} authError={formError} />;
+  return (
+    <LoginForm appName={Env.NAME} onSubmit={onSubmit} authError={formError} />
+  );
 }

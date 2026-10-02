@@ -1,3 +1,4 @@
+import { useAuth } from '@base-app/core';
 import {
   colors,
   ModalForm,
@@ -25,7 +26,6 @@ import {
 import { PackingList } from '@/components/todos/packing-list';
 import type { Todo } from '@/lib/firebase/firestore/todos';
 import {
-  useAuth,
   useGetTripByIdQuery,
   useTodosByTripIdQuery,
   useUpdateTodoMutation,

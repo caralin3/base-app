@@ -1,6 +1,5 @@
+import { type Address } from '@base-app/core';
 import { formatISO } from 'date-fns';
-
-import type { Address } from '@/lib/firebase/types';
 
 export const nowIso = () => formatISO(new Date());
 

@@ -1,5 +1,6 @@
 import '../../global.css';
 
+import { loadSelectedTheme, useAuth } from '@base-app/core';
 import {
   AppThemeProvider,
   FocusAwareStatusBar,
@@ -35,7 +36,6 @@ import {
   updateTransport,
   updateTrip,
 } from '@/lib/firebase/firestore';
-import { loadSelectedTheme, useAuth } from '@/lib/hooks';
 import { type FirestoreDocument } from '@/lib/hooks/use-firestore-collections';
 import appTheme from '@/theme/app-theme';
 

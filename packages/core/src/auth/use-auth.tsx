@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
+import { createSelectors } from '../create-selectors';
 import { loginUser, logoutUser, registerUser } from '../firebase/auth';
 import { type User } from '../firebase/types';
-import { createSelectors } from '../store';
 
 interface AuthState {
   signIn: (email: string, password: string) => void;

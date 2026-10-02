@@ -1,6 +1,7 @@
+import { createSelectors } from '@base-app/core';
+
 import { type WatchProvider } from '../api/tmdb/types';
 import { createPersistedStore } from './helpers';
-import { createSelectors } from './selectors';
 
 interface SelectedProvidersState {
   addProvider: (provider: WatchProvider) => void;

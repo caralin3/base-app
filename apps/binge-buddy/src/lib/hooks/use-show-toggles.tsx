@@ -1,3 +1,4 @@
+import { useAuth } from '@base-app/core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
@@ -36,7 +37,6 @@ import {
 import { type Episode, type Show } from '@/lib/types';
 import { getTmdbUri } from '@/lib/utils';
 
-import { useAuth } from './use-auth';
 import { useCurrentlyWatching } from './use-currently-watching';
 import { useFavoriteEpisodes } from './use-favorite-episodes';
 import { useFavoriteShows } from './use-favorite-shows';

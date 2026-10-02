@@ -1,10 +1,11 @@
+import { useAuth } from '@base-app/core';
 import { Screen, Text, useAppColors } from '@base-app/ui';
 import { isFuture, isPast, parseISO } from 'date-fns';
 import { useCallback, useMemo } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 
 import { FloatingAddPlanModal, TripCard } from '@/components';
-import { useAuth, useTripsQuery } from '@/lib/hooks';
+import { useTripsQuery } from '@/lib/hooks';
 import { getCountdownDays } from '@/lib/utils/dates';
 
 export default function Home() {

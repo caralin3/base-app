@@ -1,8 +1,8 @@
+import { RegisterForm, type RegisterFormProps, useAuth } from '@base-app/core';
 import { Redirect } from 'expo-router';
 import React, { useState } from 'react';
 
-import { RegisterForm, type RegisterFormProps } from '@/components';
-import { useAuth } from '@/lib/hooks';
+import { Env } from '@/lib';
 
 export default function Register() {
   type RegisterFormData = Parameters<
@@ -37,5 +37,11 @@ export default function Register() {
     }
   };
 
-  return <RegisterForm onSubmit={onSubmit} authError={formError} />;
+  return (
+    <RegisterForm
+      appName={Env.NAME}
+      onSubmit={onSubmit}
+      authError={formError}
+    />
+  );
 }

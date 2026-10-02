@@ -1,9 +1,8 @@
+import { useAuth } from '@base-app/core';
 import { useQuery } from '@tanstack/react-query';
 
 import { FIRESTORE_COLLECTIONS, getFavoriteShows } from '@/lib/firebase';
 import { formatShowToPoster, sortByDate } from '@/lib/utils';
-
-import { useAuth } from '../use-auth';
 
 export function useFavoriteShowsQuery(
   sortDirection: 'asc' | 'desc' = 'desc',

@@ -1,8 +1,8 @@
+import { RegisterForm, type RegisterFormProps, useAuth } from '@base-app/core';
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
 
-import { RegisterForm, type RegisterFormProps } from '@/components';
-import { useAuth } from '@/lib/hooks';
+import { Env } from '@/lib';
 
 export default function Register() {
   const register = useAuth.use.register();
@@ -24,5 +24,11 @@ export default function Register() {
     }
   };
 
-  return <RegisterForm onSubmit={onSubmit} />;
+  return (
+    <RegisterForm
+      appName={Env.NAME}
+      logo={require('@/assets/images/splash-icon.png')}
+      onSubmit={onSubmit}
+    />
+  );
 }

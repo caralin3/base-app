@@ -3,7 +3,7 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 
-import { firebaseAuth, firebaseInitError } from './config';
+import { getFirebaseServices } from './config';
 
 const getErrorCode = (error: unknown) => {
   if (
@@ -19,12 +19,14 @@ const getErrorCode = (error: unknown) => {
 };
 
 const getAuthInstance = () => {
-  if (firebaseAuth) {
-    return firebaseAuth;
+  const services = getFirebaseServices();
+
+  if (services?.firebaseAuth) {
+    return services.firebaseAuth;
   }
 
-  if (firebaseInitError) {
-    throw firebaseInitError;
+  if (services?.firebaseInitError) {
+    throw services.firebaseInitError;
   }
 
   throw new Error('Firebase authentication is unavailable.');

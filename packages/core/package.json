@@ -1,0 +1,47 @@
+{
+  "name": "@base-app/core",
+  "version": "0.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tailwind": "./tailwind.js"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@base-app/ui": "workspace:*"
+  },
+  "peerDependencies": {
+    "@hookform/resolvers": "catalog:",
+    "@react-native-async-storage/async-storage": "catalog:",
+    "expo-router": "catalog:",
+    "firebase": "catalog:",
+    "nativewind": "catalog:",
+    "react": "catalog:",
+    "react-hook-form": "catalog:",
+    "react-native": "catalog:",
+    "react-native-keyboard-controller": "catalog:",
+    "zod": "catalog:",
+    "zustand": "catalog:"
+  },
+  "devDependencies": {
+    "@base-app/tsconfig": "workspace:*",
+    "@hookform/resolvers": "catalog:",
+    "@react-native-async-storage/async-storage": "catalog:",
+    "@types/react": "catalog:",
+    "expo": "catalog:",
+    "expo-router": "catalog:",
+    "firebase": "catalog:",
+    "nativewind": "catalog:",
+    "react": "catalog:",
+    "react-hook-form": "catalog:",
+    "react-native": "catalog:",
+    "react-native-keyboard-controller": "catalog:",
+    "typescript": "catalog:",
+    "zod": "catalog:",
+    "zustand": "catalog:"
+  }
+}

@@ -1,5 +1,6 @@
 import '../../global.css';
 
+import { loadSelectedTheme, useAuth } from '@base-app/core';
 import {
   AppThemeProvider,
   FocusAwareStatusBar,
@@ -22,7 +23,6 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import { Env } from '@/lib';
 import { firebaseAuth, firebaseInitError } from '@/lib/firebase/config';
-import { loadSelectedTheme, useAuth } from '@/lib/hooks';
 import appTheme from '@/theme/app-theme';
 
 export default function RootLayout() {

@@ -1,9 +1,8 @@
+import { useAuth } from '@base-app/core';
 import { useQuery } from 'node_modules/@tanstack/react-query/build/modern/useQuery';
 
 import { FIRESTORE_COLLECTIONS, getFavoriteEpisodes } from '@/lib/firebase';
 import { sortByDate } from '@/lib/utils';
-
-import { useAuth } from '../use-auth';
 
 export function useFavoriteEpisodesQuery(
   showId: string,

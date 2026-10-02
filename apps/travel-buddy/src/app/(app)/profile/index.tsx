@@ -1,9 +1,7 @@
+import { ThemeItem, useAuth } from '@base-app/core';
 import { Button, Item, ItemsContainer, Screen, View } from '@base-app/ui';
 import { Env } from '@env';
 import { useRouter } from 'expo-router';
-
-import { ThemeItem } from '@/components';
-import { useAuth } from '@/lib/hooks';
 
 export default function Profile() {
   const router = useRouter();

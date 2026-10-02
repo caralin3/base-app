@@ -1,7 +1,7 @@
+import { createSelectors } from '@base-app/core';
 import uuid from 'react-native-uuid';
 
 import { createPersistedStore } from './helpers';
-import { createSelectors } from './selectors';
 import { type RecentSearch } from './types';
 
 interface RecentSearchesState {

@@ -1,3 +1,4 @@
+import { useAuth } from '@base-app/core';
 import {
   colors,
   IconPopupMenu,
@@ -25,7 +26,6 @@ import {
   updateProductionOrder,
 } from '@/lib/firebase';
 import {
-  useAuth,
   useProductionOrderByShowIdQuery,
   useSeasonEpisodesQuery,
   useShowDetailsQuery,

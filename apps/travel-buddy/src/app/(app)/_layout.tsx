@@ -1,9 +1,8 @@
+import { useAuth } from '@base-app/core';
 import { HapticTab, IconSymbol, useAppColors } from '@base-app/ui';
 import { Redirect, Tabs } from 'expo-router';
 import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-import { useAuth } from '@/lib/hooks';
 
 export default function TabLayout() {
   const status = useAuth.use.status();

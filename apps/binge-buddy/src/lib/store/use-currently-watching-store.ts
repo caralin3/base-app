@@ -1,6 +1,7 @@
+import { createSelectors } from '@base-app/core';
+
 import { type CurrentlyWatchingShowDocument } from '../firebase/types';
 import { createPersistedStore } from './helpers';
-import { createSelectors } from './selectors';
 
 export type CurrentlyWatchingShow = CurrentlyWatchingShowDocument & {
   href: `/show/${number}`;

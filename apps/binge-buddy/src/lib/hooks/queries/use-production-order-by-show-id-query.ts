@@ -1,11 +1,10 @@
+import { useAuth } from '@base-app/core';
 import { useQuery } from '@tanstack/react-query';
 
 import {
   FIRESTORE_COLLECTIONS,
   getProductionOrderByShowId,
 } from '@/lib/firebase';
-
-import { useAuth } from '../use-auth';
 
 export function useProductionOrderByShowIdQuery(showId: string) {
   const userId = useAuth().user?.id ?? '';

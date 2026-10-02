@@ -26,11 +26,12 @@
     "type-check": "tsc  --noemit"
   },
   "dependencies": {
+    "@base-app/core": "workspace:*",
     "@base-app/ui": "workspace:*",
     "@expo/vector-icons": "catalog:",
     "@gorhom/bottom-sheet": "catalog:",
-    "@hookform/resolvers": "^5.2.2",
-    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@hookform/resolvers": "catalog:",
+    "@react-native-async-storage/async-storage": "catalog:",
     "@react-native-community/netinfo": "^11.5.2",
     "@react-navigation/bottom-tabs": "catalog:",
     "@react-navigation/elements": "catalog:",
@@ -52,7 +53,7 @@
     "expo-symbols": "catalog:",
     "expo-system-ui": "~55.0.18",
     "expo-web-browser": "~55.0.16",
-    "firebase": "^12.7.0",
+    "firebase": "catalog:",
     "lodash.debounce": "^4.0.8",
     "moti": "catalog:",
     "nativewind": "catalog:",
@@ -76,8 +77,8 @@
     "react-native-worklets": "catalog:",
     "tailwind-merge": "catalog:",
     "tailwind-variants": "catalog:",
-    "zod": "^4.3.5",
-    "zustand": "^5.0.10"
+    "zod": "catalog:",
+    "zustand": "catalog:"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

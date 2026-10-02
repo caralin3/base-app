@@ -1,8 +1,8 @@
+import { LoginForm, type LoginFormProps, useAuth } from '@base-app/core';
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
 
-import { LoginForm, type LoginFormProps } from '@/components';
-import { useAuth } from '@/lib/hooks';
+import { Env } from '@/lib';
 
 export default function Login() {
   const signIn = useAuth.use.signIn();
@@ -24,5 +24,11 @@ export default function Login() {
     }
   };
 
-  return <LoginForm onSubmit={onSubmit} />;
+  return (
+    <LoginForm
+      appName={Env.NAME}
+      logo={require('@/assets/images/splash-icon.png')}
+      onSubmit={onSubmit}
+    />
+  );
 }

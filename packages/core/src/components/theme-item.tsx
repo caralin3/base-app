@@ -1,8 +1,10 @@
-import { Options, type OptionType, useModal } from '@base-app/ui';
-import { Item } from '@base-app/ui';
+import { Item, Options, type OptionType, useModal } from '@base-app/ui';
 import React, { useCallback, useMemo } from 'react';
 
-import { type ColorSchemeType, useSelectedTheme } from '@/lib/hooks';
+import {
+  type ColorSchemeType,
+  useSelectedTheme,
+} from '../theme/use-selected-theme';
 
 export const ThemeItem = () => {
   const { selectedTheme, setSelectedTheme } = useSelectedTheme();

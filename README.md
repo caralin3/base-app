@@ -10,9 +10,8 @@ apps/
 packages/
   tsconfig/        # shared TypeScript compiler options (@base-app/tsconfig)
   ui/              # shared components, theme provider, Tailwind preset (@base-app/ui)
+  core/            # Firebase setup, auth store and forms, storage, theme selection (@base-app/core)
 ```
-
-Firebase and env packages will follow in `packages/`.
 
 ## Theming an app
 
@@ -21,6 +20,7 @@ it to `@base-app/ui` in two places, so Tailwind classes and runtime colors match
 
 ```js
 // tailwind.config.js
+const { content: coreContent } = require('@base-app/core/tailwind');
 const {
   content: uiContent,
   createTailwindPreset,
@@ -28,10 +28,20 @@ const {
 const appTheme = require('./src/theme/app-theme');
 
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx}', uiContent], // uiContent is required
+  // The package globs are required: Tailwind replaces a preset's content
+  // instead of merging it, so classes used only in packages would be dropped.
+  content: ['./src/**/*.{js,jsx,ts,tsx}', uiContent, coreContent],
   presets: [createTailwindPreset(appTheme)],
 };
 ```
+
+## Firebase
+
+Each app's `src/lib/firebase/config.ts` calls `initFirebase` from
+`@base-app/core` with its env values and re-exports `firebaseAuth`,
+`firebaseDB` and `firebaseInitError` for its own Firestore code. When the env is
+incomplete, auth is `null` and `firebaseInitError` says why, instead of the app
+crashing on import.
 
 ```tsx
 // src/app/_layout.tsx

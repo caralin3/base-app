@@ -1,5 +1,6 @@
 import '../../global.css';
 
+import { useAuth } from '@base-app/core';
 import {
   AppThemeProvider,
   FocusAwareStatusBar,
@@ -20,8 +21,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-import { firebaseAuth } from '@/lib/firebase/config';
-import { useAuth } from '@/lib/hooks';
+import { firebaseAuth, firebaseInitError } from '@/lib/firebase/config';
 import appTheme from '@/theme/app-theme';
 
 export default function RootLayout() {
@@ -67,6 +67,13 @@ function Providers({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let authListener: Unsubscribe;
+
+    if (!firebaseAuth) {
+      console.warn('Firebase auth unavailable:', firebaseInitError?.message);
+      useAuth.setState({ status: 'signOut', user: null });
+      router.replace('/login');
+      return;
+    }
 
     authListener = onAuthStateChanged(firebaseAuth, (user) => {
       if (user) {

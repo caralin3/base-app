@@ -1,8 +1,6 @@
+import { Address } from '@base-app/core';
 /* eslint-disable @typescript-eslint/no-redeclare */
-
 import { z } from 'zod';
-
-import { Address } from '@/lib/firebase/types';
 
 const createPlaceSchema = () =>
   z.object({

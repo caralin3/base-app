@@ -1,4 +1,11 @@
-import { Button, ControlledInput, Text, View } from '@base-app/ui';
+import {
+  Button,
+  ControlledInput,
+  Image,
+  type ImgProps,
+  Text,
+  View,
+} from '@base-app/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import React from 'react';
@@ -6,8 +13,6 @@ import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import * as z from 'zod';
-
-import { Env } from '../lib';
 
 const schema = z.object({
   email: z.email('Invalid email format'),
@@ -17,13 +22,19 @@ const schema = z.object({
 type FormType = z.infer<typeof schema>;
 
 export type LoginFormProps = {
+  /** Shown as the form heading */
+  appName: string;
   authError?: string | null;
+  /** Optional logo above the heading, e.g. require('@/assets/images/logo.png') */
+  logo?: ImgProps['source'];
   onSubmit?: SubmitHandler<FormType>;
 };
 
 export const LoginForm = ({
+  appName,
   onSubmit = () => {},
   authError = null,
+  logo,
 }: LoginFormProps) => {
   const router = useRouter();
 
@@ -39,12 +50,11 @@ export const LoginForm = ({
     >
       <View className="flex-1 justify-center gap-4 bg-background p-8 dark:bg-background-dark">
         <View className="items-center justify-center">
-          {/* <Image
-            source={require('../assets/images/splash-icon.png')}
-            style={{ width: 200, height: 100 }}
-          /> */}
+          {!!logo && (
+            <Image source={logo} style={{ width: 200, height: 100 }} />
+          )}
           <Text className="pb-8 text-center text-5xl/tight font-bold">
-            {Env.NAME}
+            {appName}
           </Text>
         </View>
         <Text

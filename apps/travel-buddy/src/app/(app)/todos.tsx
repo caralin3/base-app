@@ -1,7 +1,7 @@
+import { useAuth } from '@base-app/core';
 import { Screen, Text, View } from '@base-app/ui';
 
 import { TodoForm } from '@/components';
-import { useAuth } from '@/lib/hooks/use-auth';
 
 export default function Todos() {
   const userId = useAuth((state) => state.user?.id ?? '');

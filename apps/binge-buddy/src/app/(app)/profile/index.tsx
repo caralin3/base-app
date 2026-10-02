@@ -1,8 +1,8 @@
+import { useAuth } from '@base-app/core';
 import { Button, Item, ItemsContainer, Screen, View } from '@base-app/ui';
 import { useRouter } from 'expo-router';
 
 import { Env } from '@/lib';
-import { useAuth } from '@/lib/hooks';
 
 export default function Profile() {
   const router = useRouter();

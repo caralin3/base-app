@@ -1,3 +1,4 @@
+import { useAuth } from '@base-app/core';
 import {
   Image,
   Screen,
@@ -20,7 +21,6 @@ import {
   WatchProviders,
 } from '@/components';
 import {
-  useAuth,
   useProductionOrderByShowIdQuery,
   useSeasonEpisodesQuery,
   useShowDetailsQuery,

@@ -1,9 +1,8 @@
+import { useAuth } from '@base-app/core';
 import { useQuery } from '@tanstack/react-query';
 
 import { FIRESTORE_COLLECTIONS, getWatchlistShows } from '@/lib/firebase';
 import { formatShowToPoster, sortByDate } from '@/lib/utils';
-
-import { useAuth } from '../use-auth';
 
 export function useWatchlistShowsQuery(
   sortDirection: 'asc' | 'desc' = 'desc',

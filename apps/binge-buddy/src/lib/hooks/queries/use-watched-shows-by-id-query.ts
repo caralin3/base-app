@@ -1,8 +1,7 @@
+import { useAuth } from '@base-app/core';
 import { useQuery } from '@tanstack/react-query';
 
 import { FIRESTORE_COLLECTIONS, getWatchedShowById } from '@/lib/firebase';
-
-import { useAuth } from '../use-auth';
 
 export function useWatchedShowsByIdQuery(showId: string) {
   const userId = useAuth().user?.id ?? '';

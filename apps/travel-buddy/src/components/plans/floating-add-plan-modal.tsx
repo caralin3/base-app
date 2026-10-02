@@ -1,3 +1,4 @@
+import { useAuth } from '@base-app/core';
 import {
   BottomSheetKeyboardAwareScrollView,
   FloatingActionButton,
@@ -8,7 +9,6 @@ import { forwardRef, useCallback, useImperativeHandle, useState } from 'react';
 
 import { type NewTodo } from '@/lib/firebase';
 import { useAddTodoMutation } from '@/lib/hooks';
-import { useAuth } from '@/lib/hooks/use-auth';
 import { defaultTodos } from '@/lib/static-data';
 
 import { ActivityForm } from './activity-form';

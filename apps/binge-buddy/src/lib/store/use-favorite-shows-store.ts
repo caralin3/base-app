@@ -1,6 +1,7 @@
+import { createSelectors } from '@base-app/core';
+
 import { type FavoriteShowDocument } from '../firebase/types';
 import { createPersistedStore } from './helpers';
-import { createSelectors } from './selectors';
 
 export type FavoriteShow = FavoriteShowDocument & {
   href: `/show/${number}`;

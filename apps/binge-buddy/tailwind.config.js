@@ -1,3 +1,4 @@
+const { content: coreContent } = require('@base-app/core/tailwind');
 const {
   content: uiContent,
   createTailwindPreset,
@@ -7,7 +8,7 @@ const appTheme = require('./src/theme/app-theme');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx}', uiContent],
+  content: ['./src/**/*.{js,jsx,ts,tsx}', uiContent, coreContent],
   presets: [createTailwindPreset(appTheme)],
   plugins: [],
 };

@@ -1,3 +1,4 @@
+import { useAuth } from '@base-app/core';
 import { useQuery } from '@tanstack/react-query';
 
 import {
@@ -5,8 +6,6 @@ import {
   getCurrentlyWatchingShows,
 } from '@/lib/firebase';
 import { formatShowToPoster, sortByDate } from '@/lib/utils';
-
-import { useAuth } from '../use-auth';
 
 export function useCurrentlyWatchingQuery(
   sortDirection: 'asc' | 'desc' = 'desc',

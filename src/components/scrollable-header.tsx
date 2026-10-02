@@ -1,7 +1,12 @@
 // https://github.com/PedroBern/react-native-collapsible-tab-view/issues/449#issuecomment-3685402512
 
 import type { ReactNode } from 'react';
-import { TouchableOpacity, View, type ViewStyle } from 'react-native';
+import {
+  type StyleProp,
+  TouchableOpacity,
+  View,
+  type ViewStyle,
+} from 'react-native';
 import { useCurrentTabScrollY } from 'react-native-collapsible-tab-view';
 import {
   useScroller,
@@ -29,7 +34,7 @@ export interface ScrollableHeaderProps {
   /**
    * Container style
    */
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   /**
    * NativeWind class names for the container
    */
@@ -72,6 +77,7 @@ export interface ScrollableHeaderProps {
   right?: {
     disabled?: boolean;
     icon: {
+      backgroundColor?: string;
       color?: string;
       name: IconSymbolName;
       type?: 'community' | 'material';
@@ -116,8 +122,8 @@ export interface ScrollableHeaderProps {
  */
 export const ScrollableHeader = ({
   children,
-  className,
   style,
+  className,
   minDistance = 5,
   minVelocity = 50,
   deceleration = 0.998,
@@ -293,6 +299,18 @@ export const ScrollableHeader = ({
                     key={index}
                     onPress={rt.onPress}
                     disabled={rt.disabled}
+                    style={
+                      rt.icon.backgroundColor
+                        ? {
+                            alignItems: 'center',
+                            backgroundColor: rt.icon.backgroundColor,
+                            borderRadius: 999,
+                            height: 36,
+                            justifyContent: 'center',
+                            width: 36,
+                          }
+                        : undefined
+                    }
                   >
                     <IconSymbol
                       size={28}
@@ -360,6 +378,18 @@ export const ScrollableHeader = ({
               key={index}
               onPress={rt.onPress}
               disabled={rt.disabled}
+              style={
+                rt.icon.backgroundColor
+                  ? {
+                      alignItems: 'center',
+                      backgroundColor: rt.icon.backgroundColor,
+                      borderRadius: 999,
+                      height: 36,
+                      justifyContent: 'center',
+                      width: 36,
+                    }
+                  : undefined
+              }
             >
               <IconSymbol
                 size={28}

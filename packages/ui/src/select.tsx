@@ -7,12 +7,10 @@ import React from 'react';
 import type { FieldValues } from 'react-hook-form';
 import { useController } from 'react-hook-form';
 import { Pressable, type PressableProps, View } from 'react-native';
-import type { SvgProps } from 'react-native-svg';
-import Svg, { Path } from 'react-native-svg';
 import { tv } from 'tailwind-variants';
 
 import colors from './colors';
-import { CaretDown } from './icons';
+import { CaretDown, Check } from './icons';
 import type { InputControllerType } from './input';
 import { Modal, useModal } from './modal';
 import { Text } from './text';
@@ -232,6 +230,7 @@ export const Select = (props: SelectProps) => {
         ref={modal.ref}
         options={options}
         onSelect={onSelectOption}
+        value={value}
         title={optionsTitle}
       />
     </>
@@ -261,21 +260,3 @@ export function ControlledSelect<T extends FieldValues>(
     />
   );
 }
-
-const Check = ({ ...props }: SvgProps) => (
-  <Svg
-    width={25}
-    height={24}
-    fill="none"
-    viewBox="0 0 25 24"
-    {...props}
-    className="stroke-black dark:stroke-white"
-  >
-    <Path
-      d="m20.256 6.75-10.5 10.5L4.506 12"
-      strokeWidth={2.438}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </Svg>
-);

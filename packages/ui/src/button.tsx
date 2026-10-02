@@ -1,6 +1,7 @@
 import React from 'react';
 import type { PressableProps, View } from 'react-native';
 import { ActivityIndicator, Pressable } from 'react-native';
+import type { VariantProps } from 'tailwind-variants';
 import { tv } from 'tailwind-variants';
 
 import { Text } from './text';
@@ -85,10 +86,7 @@ const button = tv({
   },
 });
 
-type ButtonVariants = Omit<
-  NonNullable<Parameters<typeof button>[0]>,
-  'class' | 'className'
->;
+type ButtonVariants = VariantProps<typeof button>;
 interface Props extends ButtonVariants, Omit<PressableProps, 'disabled'> {
   label?: string;
   loading?: boolean;

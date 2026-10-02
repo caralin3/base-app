@@ -3,6 +3,7 @@ import React from 'react';
 import {
   type GestureResponderEvent,
   Pressable,
+  type StyleProp,
   type ViewStyle,
 } from 'react-native';
 
@@ -23,7 +24,7 @@ type IconButtonProps = {
   label?: string;
   onPress?: (event: GestureResponderEvent) => void;
   size?: number;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 };
 
 export const IconButton = ({

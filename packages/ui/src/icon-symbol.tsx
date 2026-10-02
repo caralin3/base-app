@@ -26,6 +26,8 @@ const MAPPING = {
   airplane: 'flight',
   'arrow.backward': 'arrow-back',
   'bag.fill': 'shopping-bag',
+  bookmark: 'bookmark-outline',
+  'bookmark.fill': 'bookmark',
   calendar: 'calendar-today',
   'car.fill': 'directions-car',
   checklist: 'checklist',

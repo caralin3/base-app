@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import type { TextProps, TextStyle } from 'react-native';
 import { StyleSheet, Text as RNText, View } from 'react-native';
+import type { VariantProps } from 'tailwind-variants';
 import { tv } from 'tailwind-variants';
 
 const text = tv({
@@ -48,10 +49,7 @@ const text = tv({
   },
 });
 
-type TextVariants = Omit<
-  NonNullable<Parameters<typeof text>[0]>,
-  'class' | 'className'
->;
+type TextVariants = VariantProps<typeof text>;
 const MAX_NUMBER_OF_LINES = 3;
 
 interface Props extends TextVariants, TextProps {

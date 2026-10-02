@@ -11,6 +11,7 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+import type { VariantProps } from 'tailwind-variants';
 import { tv } from 'tailwind-variants';
 
 const skeleton = tv({
@@ -28,10 +29,7 @@ const skeleton = tv({
   },
 });
 
-type SkeletonVariants = Omit<
-  NonNullable<Parameters<typeof skeleton>[0]>,
-  'class' | 'className'
->;
+type SkeletonVariants = VariantProps<typeof skeleton>;
 
 interface SkeletonProps extends SkeletonVariants {
   height?: DimensionValue;

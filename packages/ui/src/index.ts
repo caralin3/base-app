@@ -14,6 +14,7 @@ export * from './image';
 export * from './input';
 export * from './modal';
 export * from './modal-form';
+export { default as BottomSheetKeyboardAwareScrollView } from './modal-keyboard-aware-scroll-view';
 export * from './parallax-scrollview';
 export * from './progress-bar';
 export * from './select';

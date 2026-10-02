@@ -1,3 +1,4 @@
+import { Pressable, Text, View } from '@base-app/ui';
 import { format } from 'date-fns/format';
 import { parseISO } from 'date-fns/parseISO';
 import { Link } from 'expo-router';
@@ -5,8 +6,6 @@ import { useMemo } from 'react';
 
 import { type Trip } from '@/lib/types/trips';
 import { getCountdownDays } from '@/lib/utils';
-
-import { Pressable, Text, View } from './ui';
 
 interface TripCardProps {
   trip: Trip;

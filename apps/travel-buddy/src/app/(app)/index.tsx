@@ -1,11 +1,11 @@
+import { Text, useAppColors } from '@base-app/ui';
 import { isFuture, isPast, parseISO } from 'date-fns';
 import { useCallback, useMemo } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 
-import { FloatingAddPlanModal, Screen, Text, TripCard } from '@/components';
+import { FloatingAddPlanModal, Screen, TripCard } from '@/components';
 import { useAuth, useTripsQuery } from '@/lib/hooks';
 import { getCountdownDays } from '@/lib/utils/dates';
-import { useAppColors } from '@/theme/use-app-colors';
 
 export default function Home() {
   const colors = useAppColors();

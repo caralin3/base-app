@@ -1,7 +1,3 @@
-import { useMemo } from 'react';
-
-import { type Todo } from '@/lib/firebase';
-
 import {
   Button,
   Checkbox,
@@ -9,7 +5,10 @@ import {
   Text,
   type useModal,
   View,
-} from '../ui';
+} from '@base-app/ui';
+import { useMemo } from 'react';
+
+import { type Todo } from '@/lib/firebase';
 
 interface PackingListProps {
   isLoadingTodos: boolean;

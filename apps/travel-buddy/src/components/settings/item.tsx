@@ -1,9 +1,13 @@
+import { useAppColors } from '@base-app/ui';
+import {
+  IconSymbol,
+  type IconSymbolName,
+  Pressable,
+  Text,
+  View,
+} from '@base-app/ui';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-
-import { useAppColors } from '@/theme/use-app-colors';
-
-import { IconSymbol, type IconSymbolName, Pressable, Text, View } from '../ui';
 
 type ItemProps = {
   text: string;

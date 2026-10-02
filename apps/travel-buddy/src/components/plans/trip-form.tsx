@@ -1,3 +1,4 @@
+import { ControlledInput } from '@base-app/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -5,7 +6,6 @@ import { z } from 'zod';
 import { useAddTripMutation } from '@/lib/hooks/use-firestore-collection-hooks';
 import type { NewTrip } from '@/lib/types/trips';
 
-import { ControlledInput } from '../ui';
 import { PlanFormShell } from './form-shell';
 import { nowIso, optionalText } from './form-utils';
 

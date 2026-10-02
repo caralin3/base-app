@@ -1,6 +1,5 @@
+import { Text, View } from '@base-app/ui';
 import React from 'react';
-
-import { Text, View } from '../ui';
 
 type Props = {
   children: React.ReactNode;

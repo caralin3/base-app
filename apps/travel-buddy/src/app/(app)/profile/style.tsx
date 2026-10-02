@@ -1,18 +1,20 @@
+import {
+  IconPopupMenu,
+  ProgressBar,
+  ScrollView,
+  Skeleton,
+  Text,
+  View,
+} from '@base-app/ui';
 import { useState } from 'react';
 
 import {
   Buttons,
   Colors,
-  IconPopupMenu,
   Inputs,
-  ProgressBar,
   Screen,
-  ScrollView,
-  Skeleton,
-  Text,
   Title,
   Typography,
-  View,
 } from '@/components';
 
 export default function Style() {

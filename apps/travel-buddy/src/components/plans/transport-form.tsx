@@ -1,3 +1,4 @@
+import { ControlledInput, Separator, Text, View } from '@base-app/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -5,7 +6,6 @@ import { z } from 'zod';
 import { useAddTransportMutation } from '@/lib/hooks/use-firestore-collection-hooks';
 import type { NewTransport } from '@/lib/types/plans';
 
-import { ControlledInput, Separator, Text, View } from '../ui';
 import { PlanFormShell } from './form-shell';
 import { nowIso, optionalAddress, optionalText } from './form-utils';
 import { ControlledTripSelect } from './trip-select';

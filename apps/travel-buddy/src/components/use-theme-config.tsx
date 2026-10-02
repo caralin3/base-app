@@ -5,10 +5,7 @@ import {
 } from '@react-navigation/native';
 import { useColorScheme } from 'nativewind';
 
-import { Env } from '@/lib';
-import { getAppTheme } from '@/theme/app-themes';
-
-const appTheme = getAppTheme(Env.APP_PROJECT);
+import appTheme from '@/theme/app-theme';
 
 const DarkTheme: Theme = {
   ..._DarkTheme,

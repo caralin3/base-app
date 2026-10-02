@@ -1,9 +1,8 @@
+import { ControlledSelect } from '@base-app/ui';
 import { useMemo } from 'react';
 import type { FieldValues, Path } from 'react-hook-form';
 
 import { useTripsQuery } from '@/lib/hooks/use-firestore-collection-hooks';
-
-import { ControlledSelect } from '../ui';
 
 type TripSelectProps<T extends FieldValues> = {
   control: import('react-hook-form').Control<T>;

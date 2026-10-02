@@ -1,5 +1,4 @@
 export * from './use-auth';
-export * from './use-bottom-sheet-back';
 export * from './use-firestore-collection-hooks';
 export * from './use-firestore-collections';
 export * from './use-is-first-time';

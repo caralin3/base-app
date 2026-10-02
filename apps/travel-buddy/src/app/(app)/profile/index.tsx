@@ -1,14 +1,8 @@
+import { Button, View } from '@base-app/ui';
 import { Env } from '@env';
 import { useRouter } from 'expo-router';
 
-import {
-  Button,
-  Item,
-  ItemsContainer,
-  Screen,
-  ThemeItem,
-  View,
-} from '@/components';
+import { Item, ItemsContainer, Screen, ThemeItem } from '@/components';
 import { useAuth } from '@/lib/hooks';
 
 export default function Profile() {

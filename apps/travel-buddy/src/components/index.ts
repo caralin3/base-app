@@ -14,5 +14,4 @@ export * from './tabs-view';
 export * from './title';
 export * from './trip-card';
 export * from './typography';
-export * from './ui';
 export * from './use-theme-config';

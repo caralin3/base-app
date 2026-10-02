@@ -1,3 +1,4 @@
+import { useAppColors } from '@base-app/ui';
 import React from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 import {
@@ -6,8 +7,6 @@ import {
   type TabBarProps,
   Tabs,
 } from 'react-native-collapsible-tab-view';
-
-import { useAppColors } from '@/theme/use-app-colors';
 
 interface Tab {
   name: string;

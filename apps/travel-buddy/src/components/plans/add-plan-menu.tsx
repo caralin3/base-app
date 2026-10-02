@@ -1,6 +1,5 @@
+import { colors, IconSymbol, Text, View } from '@base-app/ui';
 import { Pressable } from 'react-native';
-
-import { colors, IconSymbol, Text, View } from '../ui';
 
 export type PlanType =
   | 'activity'

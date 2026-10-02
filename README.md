@@ -5,13 +5,14 @@ A pnpm workspace for Expo apps that share one foundation.
 ```
 apps/
   base-app/        # starter app — copy this to begin a new app
+  travel-buddy/    # Travel Buddy
 packages/
   tsconfig/        # shared TypeScript compiler options (@base-app/tsconfig)
   ui/              # shared components, theme provider, Tailwind preset (@base-app/ui)
 ```
 
-Firebase and env packages will move into `packages/` as the apps are migrated
-off their long-lived branches.
+Binge Buddy still lives on the `binge-buddy-app` branch and will move to
+`apps/binge-buddy`. Firebase and env packages will follow in `packages/`.
 
 ## Theming an app
 
@@ -65,7 +66,8 @@ Run from the repo root:
 | `pnpm lint`                       | Lint every app and package       |
 
 `pnpm base-app <script>` is shorthand for `pnpm --filter base-app <script>`, so
-any script in `apps/base-app/package.json` works. You can also `cd` into the app
+any script in `apps/base-app/package.json` works. `pnpm travel-buddy <script>`
+does the same for Travel Buddy. You can also `cd` into the app
 and run `pnpm <script>` directly.
 
 ## Dependency versions

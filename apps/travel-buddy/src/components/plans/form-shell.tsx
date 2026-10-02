@@ -1,6 +1,5 @@
+import { Button, Text, View } from '@base-app/ui';
 import type { ReactNode } from 'react';
-
-import { Button, Text, View } from '../ui';
 
 type PlanFormShellProps = {
   children: ReactNode;

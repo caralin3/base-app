@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "base-app": "pnpm --filter base-app",
+    "travel-buddy": "pnpm --filter travel-buddy",
     "lint": "eslint .",
     "type-check": "pnpm -r --parallel type-check",
     "pretty": "prettier --write \"{apps,packages}/*/src/**/*.{js,ts,tsx}\""

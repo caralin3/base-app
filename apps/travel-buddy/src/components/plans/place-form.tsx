@@ -1,8 +1,8 @@
+import { ControlledInput, Separator, Text, View } from '@base-app/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { ControlledInput, Separator, Text, View } from '../ui';
 import { PlanFormShell } from './form-shell';
 import { ControlledTripSelect } from './trip-select';
 

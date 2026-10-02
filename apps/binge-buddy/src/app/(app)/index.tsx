@@ -1,4 +1,4 @@
-import { colors, ScrollView } from '@base-app/ui';
+import { ScrollView, useAppColors } from '@base-app/ui';
 import { useCallback } from 'react';
 import { RefreshControl } from 'react-native-gesture-handler';
 
@@ -11,6 +11,7 @@ import {
 } from '@/lib/hooks';
 
 export default function Home() {
+  const appColors = useAppColors();
   const {
     favoriteShows,
     refetch: refetchFavoriteShows,
@@ -53,7 +54,7 @@ export default function Home() {
         brand: true,
         title: 'Binge Buddy',
         showBackButton: false,
-        titleColor: colors.primary[600],
+        titleColor: appColors.primary,
       }}
     >
       <ScrollView

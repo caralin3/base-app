@@ -25,8 +25,7 @@ function createTailwindPreset(appTheme) {
         },
         colors: {
           ...colors,
-          // DEFAULT keeps the numeric scale (primary-300) next to the brand token (primary)
-          primary: { ...colors.primary, DEFAULT: appTheme.light.primary },
+          primary: appTheme.light.primary,
           'primary-dark': appTheme.dark.primary,
           background: appTheme.light.background,
           'background-dark': appTheme.dark.background,
@@ -38,6 +37,7 @@ function createTailwindPreset(appTheme) {
           'muted-dark': appTheme.dark.muted,
           border: appTheme.light.border,
           'border-dark': appTheme.dark.border,
+          // DEFAULT keeps the numeric scale (danger-600) next to the brand token (danger)
           danger: { ...colors.danger, DEFAULT: appTheme.light.danger },
           'danger-dark': appTheme.dark.danger,
         },

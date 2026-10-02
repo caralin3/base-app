@@ -10,6 +10,7 @@ import Svg, { Path } from 'react-native-svg';
 
 import colors from './colors';
 import { Text } from './text';
+import { useAppColors } from './theme';
 
 const SIZE = 28;
 const WIDTH = 50;
@@ -154,7 +155,8 @@ export const Checkbox = Object.assign(CheckboxBase, {
 });
 
 export const RadioIcon = ({ checked = false }: IconProps) => {
-  const color = checked ? colors.primary[300] : colors.charcoal[400];
+  const appColors = useAppColors();
+  const color = checked ? appColors.primary : colors.charcoal[400];
   return (
     <MotiView
       style={{
@@ -170,7 +172,7 @@ export const RadioIcon = ({ checked = false }: IconProps) => {
       transition={{ borderColor: { duration: 100, type: 'timing' } }}
     >
       <MotiView
-        className={`size-[10px] rounded-[10px] ${checked && 'bg-primary-300'} `}
+        className={`size-[10px] rounded-[10px] ${checked && 'bg-primary dark:bg-primary-dark'} `}
         from={{ opacity: 0 }}
         animate={{ opacity: checked ? 1 : 0 }}
         transition={{ opacity: { duration: 50, type: 'timing' } }}
@@ -210,11 +212,12 @@ export const Radio = Object.assign(RadioBase, {
 });
 
 export const SwitchIcon = ({ checked = false }: IconProps) => {
+  const appColors = useAppColors();
   const translateX = checked
     ? THUMB_OFFSET
     : WIDTH - THUMB_WIDTH - THUMB_OFFSET;
 
-  const backgroundColor = checked ? colors.primary[300] : colors.charcoal[400];
+  const backgroundColor = checked ? appColors.primary : colors.charcoal[400];
 
   return (
     <View className="w-[50px] justify-center">

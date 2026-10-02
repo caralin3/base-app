@@ -84,7 +84,7 @@ export const WatchProvidersList = forwardRef<
             bg-black
             size="xl"
             weight="bold"
-            className="bg-black p-4 text-primary-600"
+            className="bg-black p-4 text-primary dark:text-primary-dark"
           >
             {item.label}
           </Text>

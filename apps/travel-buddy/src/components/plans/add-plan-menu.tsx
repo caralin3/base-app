@@ -1,4 +1,4 @@
-import { colors, IconSymbol, Text, View } from '@base-app/ui';
+import { IconSymbol, Text, useAppColors, View } from '@base-app/ui';
 import { Pressable } from 'react-native';
 
 export type PlanType =
@@ -81,6 +81,7 @@ type AddPlanMenuProps = {
 };
 
 export const AddPlanMenu = ({ onSelect }: AddPlanMenuProps) => {
+  const appColors = useAppColors();
   return (
     <View className="gap-4">
       {menuItems.map((item) => (
@@ -89,7 +90,7 @@ export const AddPlanMenu = ({ onSelect }: AddPlanMenuProps) => {
           className="flex-row items-center gap-4 rounded-2xl border border-border bg-background p-4 dark:border-border-dark dark:bg-surface-dark"
           onPress={() => onSelect(item.value)}
         >
-          <IconSymbol color={colors.primary[500]} name={item.icon} size={24} />
+          <IconSymbol color={appColors.primary} name={item.icon} size={24} />
           <View className="flex-1 gap-1">
             <Text className="text-base font-semibold text-foreground dark:text-foreground-dark">
               {item.label}

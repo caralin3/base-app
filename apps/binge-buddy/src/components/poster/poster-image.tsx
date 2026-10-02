@@ -1,4 +1,4 @@
-import { colors, IconSymbol, Text, View } from '@base-app/ui';
+import { colors, IconSymbol, Text, useAppColors, View } from '@base-app/ui';
 import { Image, type ImageProps, type ImageStyle } from 'expo-image';
 import { type StyleProp, StyleSheet } from 'react-native';
 
@@ -17,8 +17,9 @@ export const PosterImage = ({
   style,
   uri,
 }: PosterImageProps) => {
+  const appColors = useAppColors();
   const backgroundColor = colors.charcoal[400];
-  const iconColor = colors.primary[600];
+  const iconColor = appColors.primary;
 
   if (uri === null) {
     if (backdrop) {

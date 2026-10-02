@@ -1,11 +1,11 @@
 import {
   CheckboxIcon,
-  colors,
   IconPopupMenu,
   IconSymbol,
   Image,
   Pressable,
   Text,
+  useAppColors,
   View,
 } from '@base-app/ui';
 import { useMemo, useState } from 'react';
@@ -17,6 +17,7 @@ import { toggleSelectedProvider, useSelectedProvidersStore } from '@/lib/store';
 import { getTmdbUri } from '@/lib/utils/helper';
 
 export default function Providers() {
+  const appColors = useAppColors();
   const { data: tvProviders } = useTvProvidersQuery();
   const { selectedProviders } = useSelectedProvidersStore();
   const [searchTerm, setSearchTerm] = useState('');
@@ -133,7 +134,7 @@ export default function Providers() {
               iconName="line.3.horizontal.decrease.circle"
               iconType="community"
               triggerSize={28}
-              triggerColor={showSelectedOnly ? colors.primary[600] : undefined}
+              triggerColor={showSelectedOnly ? appColors.primary : undefined}
               menuWidth={175}
               items={[
                 {

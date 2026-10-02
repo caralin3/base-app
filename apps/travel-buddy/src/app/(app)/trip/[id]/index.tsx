@@ -1,4 +1,11 @@
-import { colors, ModalForm, Text, useModal, View } from '@base-app/ui';
+import {
+  colors,
+  ModalForm,
+  Text,
+  useAppColors,
+  useModal,
+  View,
+} from '@base-app/ui';
 import { differenceInCalendarDays } from 'date-fns/differenceInCalendarDays';
 import { format } from 'date-fns/format';
 import { parseISO } from 'date-fns/parseISO';
@@ -33,6 +40,7 @@ export type TripScreenParams = {
 };
 
 export default function TripScreen() {
+  const appColors = useAppColors();
   const local = useLocalSearchParams<TripScreenParams>();
   const router = useRouter();
   const tripId = local.id;
@@ -110,7 +118,7 @@ export default function TripScreen() {
           icon: {
             name: 'plus',
             color: colors.white,
-            backgroundColor: colors.primary[500],
+            backgroundColor: appColors.primary,
           },
           onPress: () => addPlanModalRef.current?.present(),
         },

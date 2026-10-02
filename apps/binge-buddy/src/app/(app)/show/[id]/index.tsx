@@ -1,4 +1,4 @@
-import { colors, Image, Text, View } from '@base-app/ui';
+import { Image, Text, useAppColors, View } from '@base-app/ui';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
@@ -27,6 +27,7 @@ import { type Episode, type ShowRouteParams } from '@/lib/types';
 import { getTmdbUri } from '@/lib/utils';
 
 export default function Show() {
+  const appColors = useAppColors();
   const local = useLocalSearchParams<ShowRouteParams>();
   const showId = local.id;
   const [seasonNumber, setSeasonNumber] = useState(1);
@@ -145,7 +146,7 @@ export default function Show() {
           {
             onPress: () => toggleCurrentlyWatchingShow(showDetails),
             icon: {
-              color: colors.primary[600],
+              color: appColors.primary,
               name:
                 currentlyWatchingShow?.id.toString() === showId
                   ? 'eye.fill'
@@ -156,7 +157,7 @@ export default function Show() {
           {
             onPress: () => toggleWatchlistShow(showDetails),
             icon: {
-              color: colors.primary[600],
+              color: appColors.primary,
               name:
                 watchlistShow?.id.toString() === showId
                   ? 'bookmark.fill'
@@ -166,7 +167,7 @@ export default function Show() {
           {
             onPress: () => toggleFavoriteShow(showDetails),
             icon: {
-              color: colors.primary[600],
+              color: appColors.primary,
               name:
                 favoriteShow?.id.toString() === showId ? 'heart.fill' : 'heart',
             },

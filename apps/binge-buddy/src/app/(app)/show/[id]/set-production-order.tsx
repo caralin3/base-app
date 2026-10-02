@@ -4,6 +4,7 @@ import {
   IconSymbol,
   Skeleton,
   TouchableOpacity,
+  useAppColors,
   View,
 } from '@base-app/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -36,6 +37,7 @@ import {
 import { type Episode, type ShowRouteParams } from '@/lib/types';
 
 export default function SetProductionOrder() {
+  const appColors = useAppColors();
   const local = useLocalSearchParams<ShowRouteParams>();
   const showId = local.id;
   const [editMode, setEditMode] = useState(true);
@@ -342,7 +344,7 @@ export default function SetProductionOrder() {
                 icon: {
                   name: isPending ? 'slowmo' : 'checkmark',
                   type: isPending ? 'community' : 'material',
-                  color: isPending ? colors.charcoal[500] : colors.primary[600],
+                  color: isPending ? colors.charcoal[500] : appColors.primary,
                 },
                 onPress: handleSave,
               },
@@ -352,7 +354,7 @@ export default function SetProductionOrder() {
                 disabled: isPending,
                 icon: {
                   name: 'pencil',
-                  color: colors.primary[600],
+                  color: appColors.primary,
                 },
                 onPress: () => setEditMode(true),
               },

@@ -1,4 +1,4 @@
-import { colors, IconButton, Text, View } from '@base-app/ui';
+import { colors, IconButton, Text, useAppColors, View } from '@base-app/ui';
 import { format } from 'date-fns';
 import { Link, type LinkProps } from 'expo-router';
 import { useMemo } from 'react';
@@ -43,6 +43,7 @@ export const Poster = ({
   onSaveToWatchlist,
   uri,
 }: PosterProps) => {
+  const appColors = useAppColors();
   const startYear = useMemo(
     () => (firstAirDate ? format(new Date(firstAirDate), 'yyyy') : null),
     [firstAirDate]
@@ -96,7 +97,7 @@ export const Poster = ({
                 <IconButton
                   iconName={isCurrentlyWatching ? 'eye.fill' : 'eye'}
                   iconType="community"
-                  color={colors.primary[600]}
+                  color={appColors.primary}
                   onPress={onCurrentlyWatching}
                   size={28}
                 />
@@ -104,7 +105,7 @@ export const Poster = ({
               {!!onSaveToWatchlist && (
                 <IconButton
                   iconName={isInWatchlist ? 'bookmark.fill' : 'bookmark'}
-                  color={colors.primary[600]}
+                  color={appColors.primary}
                   onPress={onSaveToWatchlist}
                   size={28}
                 />
@@ -112,7 +113,7 @@ export const Poster = ({
               {!!onFavorite && (
                 <IconButton
                   iconName={isFavorite ? 'heart.fill' : 'heart'}
-                  color={colors.primary[600]}
+                  color={appColors.primary}
                   onPress={onFavorite}
                   size={28}
                 />

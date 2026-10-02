@@ -1,4 +1,4 @@
-import { colors, IconSymbol, Pressable, Text, View } from '@base-app/ui';
+import { IconSymbol, Pressable, Text, useAppColors, View } from '@base-app/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -20,6 +20,7 @@ export const WatchedToggle = ({
   userId,
   watchedShow,
 }: WatchedToggleProps) => {
+  const appColors = useAppColors();
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
 
@@ -48,10 +49,10 @@ export const WatchedToggle = ({
       <View className="flex-row items-center gap-2 rounded-md bg-charcoal-400 p-4">
         <IconSymbol
           name={!!watchedShow ? 'checkmark.circle.fill' : 'checkmark.circle'}
-          color={colors.primary[600]}
+          color={appColors.primary}
         />
         <Text
-          className="leading-7 text-primary-600"
+          className="leading-7 text-primary dark:text-primary-dark"
           transform={!!watchedShow ? undefined : 'uppercase'}
         >
           {!!watchedShow ? 'Watched' : 'Mark as watched'}

@@ -4,6 +4,7 @@ import {
   IconButton,
   Image,
   Text,
+  useAppColors,
   View,
 } from '@base-app/ui';
 import { formatDate, parseISO } from 'date-fns';
@@ -30,6 +31,7 @@ export const EpisodeItem = ({
   onFavorite,
   type = 'expanded',
 }: EpisodeItemProps) => {
+  const appColors = useAppColors();
   const [isExpanded, setIsExpanded] = useState(false);
   if (type === 'simple') {
     return (
@@ -40,7 +42,7 @@ export const EpisodeItem = ({
             !!onFavorite ? (
               <IconButton
                 iconName={episode.isFavorite ? 'heart.fill' : 'heart'}
-                color={colors.primary[600]}
+                color={appColors.primary}
                 size={28}
                 onPress={() => {
                   onFavorite(episode);
@@ -100,7 +102,7 @@ export const EpisodeItem = ({
           <View>
             <IconButton
               iconName={episode.isFavorite ? 'heart.fill' : 'heart'}
-              color={colors.primary[600]}
+              color={appColors.primary}
               size={28}
               onPress={() => {
                 console.log('Favorite button pressed for episode');
@@ -114,7 +116,7 @@ export const EpisodeItem = ({
         (draggable ? (
           <>
             <Text
-              style={{ color: colors.primary[600] }}
+              style={{ color: appColors.primary }}
               onPress={() => setIsExpanded(!isExpanded)}
             >
               {isExpanded ? 'Hide info' : 'Show info'}

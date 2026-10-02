@@ -105,7 +105,7 @@ export const WatchProviders = ({ providers }: WatchProvidersProps) => {
             ))
           : null}
         <Text
-          className="text-sm leading-8 color-primary-600"
+          className="text-sm leading-8 text-primary dark:text-primary-dark"
           transform="uppercase"
           onPress={modal.present}
         >

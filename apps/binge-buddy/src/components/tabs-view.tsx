@@ -1,4 +1,4 @@
-import { colors } from '@base-app/ui';
+import { colors, useAppColors } from '@base-app/ui';
 import React from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 import {
@@ -19,13 +19,14 @@ interface TabsViewProps {
 }
 
 export const TabsView = ({ header, tabs }: TabsViewProps) => {
+  const appColors = useAppColors();
   const TabBar = (props: TabBarProps) => (
     <MaterialTabBar
       {...props}
       scrollEnabled={false}
       contentContainerStyle={{ backgroundColor: colors.black }}
       labelStyle={styles.labelStyle}
-      indicatorStyle={{ backgroundColor: colors.primary[600] }}
+      indicatorStyle={{ backgroundColor: appColors.primary }}
       activeColor={colors.white}
       inactiveColor={colors.neutral[500]}
       // remove auto uppercase

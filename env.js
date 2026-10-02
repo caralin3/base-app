@@ -86,8 +86,8 @@ const client = z.object({
 });
 
 const buildTime = z.object({
-  EXPO_ACCOUNT_OWNER: z.string().optional(),
-  EAS_PROJECT_ID: z.string().optional(),
+  EXPO_ACCOUNT_OWNER: z.string().min(1),
+  EAS_PROJECT_ID: z.string().min(1),
   // ADD YOUR BUILD TIME ENV VARS HERE
   GOOGLE_SERVICES_FILE: z.string().optional(),
 });

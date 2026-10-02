@@ -7,29 +7,21 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      "environment": "development",
       "android": {
         "buildType": "apk"
       }
     },
     "preview": {
       "distribution": "internal",
-      "env": {
-        "APP_PROJECT": "base-app",
-        "APP_ENV": "preview",
-        "NAME": "Base App",
-        "SCHEME": "baseapp",
-        "SLUG": "base-app",
-        "BUNDLE_ID": "com.appname.baseapp.preview",
-        "PACKAGE": "com.appname.baseapp.preview",
-        "EXPO_ACCOUNT_OWNER": "caralin3",
-        "EAS_PROJECT_ID": ""
-      },
+      "environment": "preview",
       "android": {
         "buildType": "apk"
       }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "environment": "production"
     }
   },
   "submit": {

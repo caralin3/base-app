@@ -1,7 +1,7 @@
 // https://github.com/PedroBern/react-native-collapsible-tab-view/issues/449#issuecomment-3685402512
 
 import React, { type ReactNode } from 'react';
-import { View, type ViewStyle } from 'react-native';
+import { type StyleProp, View, type ViewStyle } from 'react-native';
 import { useCurrentTabScrollY } from 'react-native-collapsible-tab-view';
 import {
   useScroller,
@@ -23,7 +23,7 @@ export interface ScrollableHeaderProps {
   /**
    * Container style
    */
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   /**
    * Minimum sliding distance, default is 5
    */

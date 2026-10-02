@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { type PropsWithChildren } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import {
   colors,
@@ -13,6 +13,7 @@ import {
 
 interface HeaderProps extends PropsWithChildren {
   bgColor?: string;
+  backgroundImageUri?: string;
   brand?: boolean;
   containerClassName?: string;
   left?: {
@@ -38,8 +39,11 @@ interface HeaderProps extends PropsWithChildren {
   titleColor?: string;
 }
 
+const BG_IMAGE_HEIGHT = 300;
+
 export const Header = ({
   bgColor,
+  backgroundImageUri,
   brand,
   children,
   containerClassName,
@@ -52,13 +56,27 @@ export const Header = ({
   const router = useRouter();
   const backgroundColor = bgColor ?? colors.charcoal[400];
   const color = colors.white;
+  const resolvedHeight = backgroundImageUri ? BG_IMAGE_HEIGHT : undefined;
+  // Inner views only need the bg color when there's no background image
+  const innerBgStyle = backgroundImageUri ? undefined : { backgroundColor };
 
   return (
     <View
-      style={{ backgroundColor }}
-      className={`z-[1] flex-row items-center justify-between py-4 shadow-md ${containerClassName ?? 'px-4'}`}
+      style={{ backgroundColor, height: resolvedHeight }}
+      className={`relative z-[1] flex-row ${backgroundImageUri ? 'items-start overflow-hidden' : 'items-center'} justify-between py-4 shadow-md ${containerClassName ?? 'px-4'}`}
     >
-      <View style={{ backgroundColor }} className="flex-row items-center gap-4">
+      {!!backgroundImageUri && (
+        <>
+          <Image
+            source={{ uri: backgroundImageUri }}
+            contentFit="cover"
+            style={styles.backgroundImage}
+          />
+          <View style={styles.overlay} pointerEvents="none" />
+        </>
+      )}
+
+      <View style={innerBgStyle} className="flex-row items-center gap-4">
         {left ? (
           <TouchableOpacity onPress={left.onPress} disabled={left.disabled}>
             <IconSymbol
@@ -77,7 +95,7 @@ export const Header = ({
             </TouchableOpacity>
           )
         )}
-        <View style={{ backgroundColor }} className="flex-row items-center">
+        <View style={innerBgStyle} className="flex-row items-center">
           {brand && (
             <Image
               contentFit="cover"
@@ -100,11 +118,11 @@ export const Header = ({
         </View>
       </View>
       {children}
-      <View style={{ backgroundColor }} className="flex-row items-center gap-4">
+      <View style={innerBgStyle} className="flex-row items-center gap-4">
         {!!right?.length &&
-          right.map((rt) => (
+          right.map((rt, index) => (
             <TouchableOpacity
-              key={rt.icon.name}
+              key={index}
               onPress={rt.onPress}
               disabled={rt.disabled}
             >
@@ -120,3 +138,17 @@ export const Header = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  backgroundImage: {
+    height: BG_IMAGE_HEIGHT,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+  },
+});

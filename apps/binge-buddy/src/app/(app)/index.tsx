@@ -1,8 +1,8 @@
-import { ScrollView, useAppColors } from '@base-app/ui';
+import { Screen, ScrollView, useAppColors } from '@base-app/ui';
 import { useCallback } from 'react';
 import { RefreshControl } from 'react-native-gesture-handler';
 
-import { PosterSection, Screen } from '@/components';
+import { PosterSection } from '@/components';
 import {
   useCurrentlyWatching,
   useFavoriteShows,
@@ -51,7 +51,7 @@ export default function Home() {
   return (
     <Screen
       headerProps={{
-        brand: true,
+        brand: require('@/assets/images/splash-icon.png'),
         title: 'Binge Buddy',
         showBackButton: false,
         titleColor: appColors.primary,

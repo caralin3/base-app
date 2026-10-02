@@ -1,9 +1,9 @@
-import { Text, useAppColors } from '@base-app/ui';
+import { Screen, Text, useAppColors } from '@base-app/ui';
 import { isFuture, isPast, parseISO } from 'date-fns';
 import { useCallback, useMemo } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 
-import { FloatingAddPlanModal, Screen, TripCard } from '@/components';
+import { FloatingAddPlanModal, TripCard } from '@/components';
 import { useAuth, useTripsQuery } from '@/lib/hooks';
 import { getCountdownDays } from '@/lib/utils/dates';
 
@@ -44,7 +44,6 @@ export default function Home() {
   return (
     <Screen
       headerProps={{
-        brand: true,
         title: 'App Home',
         showBackButton: false,
         titleColor: colors.primary,

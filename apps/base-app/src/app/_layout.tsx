@@ -1,6 +1,10 @@
 import '../../global.css';
 
-import { AppThemeProvider, FocusAwareStatusBar } from '@base-app/ui';
+import {
+  AppThemeProvider,
+  FocusAwareStatusBar,
+  useThemeConfig,
+} from '@base-app/ui';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
@@ -16,7 +20,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-import { useThemeConfig } from '@/components';
 import { Env } from '@/lib';
 import { firebaseAuth, firebaseInitError } from '@/lib/firebase/config';
 import { loadSelectedTheme, useAuth } from '@/lib/hooks';
@@ -49,7 +52,7 @@ const asyncPersist = createAsyncStoragePersister({
 });
 
 function Providers({ children }: { children: React.ReactNode }) {
-  const theme = useThemeConfig();
+  const theme = useThemeConfig(appTheme);
 
   useEffect(() => {
     loadSelectedTheme();

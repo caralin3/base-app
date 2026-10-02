@@ -1,6 +1,4 @@
-import { Text } from '@base-app/ui';
-
-import { Screen } from '@/components';
+import { Screen, Text } from '@base-app/ui';
 
 export default function Expenses() {
   return (

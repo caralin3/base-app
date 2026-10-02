@@ -1,9 +1,8 @@
-import { Text, View } from '@base-app/ui';
+import { TabsFlatList, Text, View } from '@base-app/ui';
 import { FlatList, type RefreshControlProps } from 'react-native';
 
 import { type Episode } from '@/lib/types';
 
-import { TabsFlatList } from '../tabs-view';
 import { EpisodeItem } from './episode-item';
 import { EpisodeListSkeleton } from './episode-list-skeleton';
 

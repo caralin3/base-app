@@ -1,4 +1,12 @@
-import { Image, Text, useAppColors, View } from '@base-app/ui';
+import {
+  Image,
+  Screen,
+  ScrollableHeader,
+  TabsView,
+  Text,
+  useAppColors,
+  View,
+} from '@base-app/ui';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
@@ -8,9 +16,6 @@ import {
   EpisodesTabContent,
   MyEpisodesTabContent,
   RecommendedTabContent,
-  Screen,
-  ScrollableHeader,
-  TabsView,
   WatchedToggle,
   WatchProviders,
 } from '@/components';
@@ -176,6 +181,7 @@ export default function Show() {
       }}
     >
       <TabsView
+        lazy
         header={Header}
         tabs={[
           {

@@ -1,8 +1,7 @@
-import { colors, Text, View } from '@base-app/ui';
+import { colors, Screen, Text, View } from '@base-app/ui';
 import { useCallback, useState } from 'react';
 import { RefreshControl } from 'react-native-gesture-handler';
 
-import { Screen } from '@/components';
 import { PosterList } from '@/components/poster/poster-list';
 import { useCurrentlyWatching } from '@/lib/hooks';
 

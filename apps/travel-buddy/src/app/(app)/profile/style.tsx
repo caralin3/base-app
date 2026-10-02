@@ -1,21 +1,18 @@
 import {
+  Buttons,
+  Colors,
   IconPopupMenu,
+  Inputs,
   ProgressBar,
+  Screen,
   ScrollView,
   Skeleton,
   Text,
+  Title,
+  Typography,
   View,
 } from '@base-app/ui';
 import { useState } from 'react';
-
-import {
-  Buttons,
-  Colors,
-  Inputs,
-  Screen,
-  Title,
-  Typography,
-} from '@/components';
 
 export default function Style() {
   const [menuAction, setMenuAction] = useState('No action selected');

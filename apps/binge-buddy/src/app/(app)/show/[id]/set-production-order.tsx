@@ -2,6 +2,7 @@ import {
   colors,
   IconPopupMenu,
   IconSymbol,
+  Screen,
   Skeleton,
   TouchableOpacity,
   useAppColors,
@@ -15,7 +16,7 @@ import DraggableFlatList, {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist';
 
-import { EpisodeItem, Screen } from '@/components';
+import { EpisodeItem } from '@/components';
 import { SeasonSelect } from '@/components/show-details/season-select';
 import {
   addProductionOrder,

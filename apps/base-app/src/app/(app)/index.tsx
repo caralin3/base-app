@@ -1,6 +1,4 @@
-import { Text, useAppColors } from '@base-app/ui';
-
-import { Screen } from '@/components';
+import { Screen, Text, useAppColors } from '@base-app/ui';
 
 export default function Home() {
   const colors = useAppColors();
@@ -8,7 +6,6 @@ export default function Home() {
   return (
     <Screen
       headerProps={{
-        brand: true,
         title: 'App Home',
         showBackButton: false,
         titleColor: colors.primary,

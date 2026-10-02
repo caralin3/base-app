@@ -1,7 +1,6 @@
-import { Button, View } from '@base-app/ui';
+import { Button, Item, ItemsContainer, Screen, View } from '@base-app/ui';
 import { useRouter } from 'expo-router';
 
-import { Item, ItemsContainer, Screen } from '@/components';
 import { Env } from '@/lib';
 import { useAuth } from '@/lib/hooks';
 

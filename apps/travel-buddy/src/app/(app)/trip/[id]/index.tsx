@@ -1,6 +1,10 @@
 import {
   colors,
   ModalForm,
+  Screen,
+  ScrollableHeader,
+  TabsScrollView,
+  TabsView,
   Text,
   useAppColors,
   useModal,
@@ -13,12 +17,6 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useRef } from 'react';
 import { StyleSheet } from 'react-native';
 
-import {
-  Screen,
-  ScrollableHeader,
-  TabsScrollView,
-  TabsView,
-} from '@/components';
 import {
   FloatingAddPlanModal,
   type FloatingAddPlanModalRef,

@@ -1,6 +1,4 @@
-import { Button, Text } from '@base-app/ui';
-
-import { Screen } from '@/components';
+import { Button, Screen, Text } from '@base-app/ui';
 
 export default function Search() {
   return (

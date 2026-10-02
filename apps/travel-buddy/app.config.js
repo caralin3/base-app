@@ -36,8 +36,8 @@ module.exports = ({ config }) => ({
     },
     package: Env.PACKAGE,
     predictiveBackGestureEnabled: false,
-    googleServicesFile:
-      process.env.GOOGLE_SERVICES_FILE ?? './google-services.json',
+    // Empty means the app has no native Firebase config (e.g. base-app)
+    googleServicesFile: Env.GOOGLE_SERVICES_FILE || undefined,
   },
   web: {
     output: 'static',

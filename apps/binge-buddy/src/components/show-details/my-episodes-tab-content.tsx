@@ -62,7 +62,12 @@ export const MyEpisodesTabContent = ({
         )
       }
       ListHeaderComponent={
-        <EpisodeTabHeader {...props} showAll showEpisodeCount={false} />
+        <EpisodeTabHeader
+          {...props}
+          show={show}
+          showAll
+          showEpisodeCount={false}
+        />
       }
       onFavorite={onFavoriteEpisode}
       backdropPath={show.backdropPath}

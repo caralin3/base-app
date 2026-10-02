@@ -12,19 +12,19 @@ import { configs, parser } from 'typescript-eslint';
 
 export default defineConfig([
   globalIgnores([
-    'dist/*',
-    'node_modules',
-    '__tests__/',
-    'coverage',
-    '.expo',
-    'app-example/',
-    '.expo-shared',
-    'android',
-    'ios',
-    '.vscode',
-    'docs/',
-    'cli/',
-    'expo-env.d.ts',
+    '**/dist/',
+    '**/node_modules/',
+    '**/__tests__/',
+    '**/coverage/',
+    '**/.expo/',
+    '**/app-example/',
+    '**/.expo-shared/',
+    '**/android/',
+    '**/ios/',
+    '.vscode/',
+    '**/docs/',
+    '**/cli/',
+    '**/expo-env.d.ts',
   ]),
   expoConfig,
   eslintPluginPrettierRecommended,
@@ -76,8 +76,13 @@ export default defineConfig([
     settings: {
       'import/resolver': {
         typescript: {
-          project: './tsconfig.json',
+          project: ['apps/*/tsconfig.json', 'packages/*/tsconfig.json'],
+          noWarnOnMultipleProjects: true,
         },
+      },
+      // Class ordering only needs a Tailwind config; every app shares the same preset.
+      tailwindcss: {
+        config: 'apps/base-app/tailwind.config.js',
       },
     },
   },
@@ -86,7 +91,8 @@ export default defineConfig([
     languageOptions: {
       parser: parser,
       parserOptions: {
-        project: './tsconfig.json',
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
         sourceType: 'module',
       },
     },
@@ -101,6 +107,17 @@ export default defineConfig([
           disallowTypeAnnotations: true,
         },
       ],
+    },
+  },
+  {
+    // Node-only build helpers shipped by workspace packages
+    files: ['packages/*/tailwind.js'],
+    languageOptions: {
+      globals: {
+        __dirname: 'readonly',
+        module: 'writable',
+        require: 'readonly',
+      },
     },
   },
   {

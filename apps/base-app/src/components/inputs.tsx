@@ -1,8 +1,8 @@
+import type { OptionType } from '@base-app/ui';
+import { Checkbox, Input, Radio, Select, Switch, View } from '@base-app/ui';
 import React from 'react';
 
 import { Title } from './title';
-import type { OptionType } from './ui';
-import { Checkbox, Input, Radio, Select, Switch, View } from './ui';
 
 const options: OptionType[] = [
   { value: 'chocolate', label: 'Chocolate' },

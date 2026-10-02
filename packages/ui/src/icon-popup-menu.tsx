@@ -1,14 +1,13 @@
 import React from 'react';
 import { Dimensions, Modal, Pressable, StyleSheet, View } from 'react-native';
 
-import { useAppColors } from '@/theme/use-app-colors';
-
 import {
   IconSymbol,
   type IconSymbolName,
   type IconSymbolType,
 } from './icon-symbol';
 import { Text } from './text';
+import { useAppColors } from './theme';
 
 export interface IconPopupMenuItem {
   destructive?: boolean;

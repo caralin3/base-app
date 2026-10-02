@@ -1,13 +1,10 @@
 import { useColorScheme } from 'nativewind';
-import React from 'react';
 
-import { Env } from '@/lib';
-
-import { getAppTheme } from './app-themes';
+import { useAppTheme } from './app-theme-provider';
 
 export function useAppColors() {
   const { colorScheme } = useColorScheme();
-  const appTheme = React.useMemo(() => getAppTheme(Env.APP_PROJECT), []);
+  const appTheme = useAppTheme();
 
   return colorScheme === 'dark' ? appTheme.dark : appTheme.light;
 }

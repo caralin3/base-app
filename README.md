@@ -7,10 +7,38 @@ apps/
   base-app/        # starter app — copy this to begin a new app
 packages/
   tsconfig/        # shared TypeScript compiler options (@base-app/tsconfig)
+  ui/              # shared components, theme provider, Tailwind preset (@base-app/ui)
 ```
 
-Shared UI, theme, Firebase and env packages will move into `packages/` as the
-apps are migrated off their long-lived branches.
+Firebase and env packages will move into `packages/` as the apps are migrated
+off their long-lived branches.
+
+## Theming an app
+
+Each app owns its brand palette (`apps/<app>/src/theme/app-theme.js`) and passes
+it to `@base-app/ui` in two places, so Tailwind classes and runtime colors match:
+
+```js
+// tailwind.config.js
+const {
+  content: uiContent,
+  createTailwindPreset,
+} = require('@base-app/ui/tailwind');
+const appTheme = require('./src/theme/app-theme');
+
+module.exports = {
+  content: ['./src/**/*.{js,jsx,ts,tsx}', uiContent], // uiContent is required
+  presets: [createTailwindPreset(appTheme)],
+};
+```
+
+```tsx
+// src/app/_layout.tsx
+<AppThemeProvider theme={appTheme}>{/* app */}</AppThemeProvider>
+```
+
+Native libraries the UI package uses are `peerDependencies` pinned through the
+catalog, so the app and the package always share one copy.
 
 ## Setup
 

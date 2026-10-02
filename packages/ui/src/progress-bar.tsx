@@ -1,5 +1,4 @@
-import { useColorScheme } from 'nativewind';
-import React, { forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
 import { View } from 'react-native';
 import Animated, {
   Easing,
@@ -9,8 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { twMerge } from 'tailwind-merge';
 
-import { Env } from '@/lib';
-import { getAppTheme } from '@/theme/app-themes';
+import { useAppColors } from './theme';
 
 type Props = {
   initialProgress?: number;
@@ -23,9 +21,7 @@ export type ProgressBarRef = {
 
 export const ProgressBar = forwardRef<ProgressBarRef, Props>(
   ({ initialProgress = 0, className = '' }, ref) => {
-    const { colorScheme } = useColorScheme();
-    const appTheme = React.useMemo(() => getAppTheme(Env.APP_PROJECT), []);
-    const activeTheme = colorScheme === 'dark' ? appTheme.dark : appTheme.light;
+    const activeTheme = useAppColors();
     const progress = useSharedValue<number>(initialProgress ?? 0);
     useImperativeHandle(ref, () => {
       return {

@@ -1,3 +1,4 @@
+import { Button, ControlledInput, Text, View } from '@base-app/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import React from 'react';
@@ -7,7 +8,6 @@ import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import * as z from 'zod';
 
 import { Env } from '../lib';
-import { Button, ControlledInput, Text, View } from './ui';
 
 const schema = z.object({
   email: z.email('Invalid email format'),

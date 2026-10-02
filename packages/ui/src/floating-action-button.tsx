@@ -9,9 +9,8 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-import { useAppColors } from '@/theme/use-app-colors';
-
 import { IconSymbol, type IconSymbolName } from './icon-symbol';
+import { useAppColors } from './theme';
 
 type FloatingActionButtonProps = Omit<PressableProps, 'children'> & {
   iconColor?: string;

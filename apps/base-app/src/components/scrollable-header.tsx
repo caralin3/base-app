@@ -1,5 +1,7 @@
 // https://github.com/PedroBern/react-native-collapsible-tab-view/issues/449#issuecomment-3685402512
 
+import type { IconSymbolName } from '@base-app/ui';
+import { IconSymbol, Image, useAppColors } from '@base-app/ui';
 import type { ReactNode } from 'react';
 import {
   type StyleProp,
@@ -20,11 +22,6 @@ import Animated, {
   useSharedValue,
   withDecay,
 } from 'react-native-reanimated';
-
-import { useAppColors } from '@/theme/use-app-colors';
-
-import type { IconSymbolName } from './ui';
-import { IconSymbol, Image } from './ui';
 
 export interface ScrollableHeaderProps {
   /**

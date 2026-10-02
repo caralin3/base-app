@@ -1,5 +1,6 @@
-import { Screen, Text } from '@/components';
-import { useAppColors } from '@/theme/use-app-colors';
+import { Text, useAppColors } from '@base-app/ui';
+
+import { Screen } from '@/components';
 
 export default function Home() {
   const colors = useAppColors();

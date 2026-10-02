@@ -40,7 +40,7 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Path, Svg } from 'react-native-svg';
 
-import { useBottomSheetBackHandler } from '../../lib/hooks/use-bottom-sheet-back';
+import { useBottomSheetBackHandler } from './hooks/use-bottom-sheet-back';
 import { IconButton } from './icon-button';
 import { Text } from './text';
 

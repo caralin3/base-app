@@ -6,14 +6,13 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-import { useAppColors } from '@/theme/use-app-colors';
-
 import {
   IconSymbol,
   type IconSymbolName,
   type IconSymbolType,
 } from './icon-symbol';
 import { Text } from './text';
+import { useAppColors } from './theme';
 
 type IconButtonProps = {
   color?: string;

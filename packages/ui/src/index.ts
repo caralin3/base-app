@@ -20,6 +20,7 @@ export * from './select';
 export * from './separator';
 export * from './skeleton';
 export * from './text';
+export * from './theme';
 
 // export base components from react-native
 export {

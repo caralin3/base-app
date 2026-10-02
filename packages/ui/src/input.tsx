@@ -10,9 +10,8 @@ import type { TextInputProps } from 'react-native';
 import { StyleSheet, TextInput as NTextInput, View } from 'react-native';
 import { tv } from 'tailwind-variants';
 
-import { useAppColors } from '@/theme/use-app-colors';
-
 import { Text } from './text';
+import { useAppColors } from './theme';
 
 const inputTv = tv({
   slots: {

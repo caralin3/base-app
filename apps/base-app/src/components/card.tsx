@@ -1,7 +1,6 @@
+import { Pressable, Text, View } from '@base-app/ui';
 import { Link, type LinkProps } from 'expo-router';
 import React from 'react';
-
-import { Pressable, Text, View } from './ui';
 
 interface CardProps {
   children: React.ReactNode;

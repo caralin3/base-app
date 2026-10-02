@@ -1,10 +1,14 @@
+import { useAppColors } from '@base-app/ui';
+import {
+  IconSymbol,
+  type IconSymbolName,
+  Image,
+  Text,
+  View,
+} from '@base-app/ui';
 import { useRouter } from 'expo-router';
 import { type PropsWithChildren } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-
-import { useAppColors } from '@/theme/use-app-colors';
-
-import { IconSymbol, type IconSymbolName, Image, Text, View } from '../ui';
 
 interface HeaderProps extends PropsWithChildren {
   bgColor?: string;

@@ -3,12 +3,26 @@
   "private": true,
   "scripts": {
     "base-app": "pnpm --filter base-app",
-    "lint": "pnpm -r --parallel lint",
+    "lint": "eslint .",
     "type-check": "pnpm -r --parallel type-check",
-    "pretty": "prettier --write \"{apps,packages}/*/src/**/*.{ts,tsx}\""
+    "pretty": "prettier --write \"{apps,packages}/*/src/**/*.{js,ts,tsx}\""
   },
   "devDependencies": {
-    "prettier": "^3.7.4"
+    "eslint": "^9.25.0",
+    "eslint-config-expo": "~55.0.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react-compiler": "19.1.0-rc.2",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-tailwindcss": "^3.18.2",
+    "eslint-plugin-testing-library": "^7.15.4",
+    "eslint-plugin-unicorn": "^62.0.0",
+    "eslint-plugin-unused-imports": "^4.3.0",
+    "prettier": "^3.7.4",
+    "typescript": "catalog:",
+    "typescript-eslint": "^8.52.0"
   },
   "packageManager": "pnpm@10.12.3+sha512.467df2c586056165580ad6dfb54ceaad94c5a30f80893ebdec5a44c5aa73c205ae4a5bb9d5ed6bb84ea7c249ece786642bbb49d06a307df218d03da41c317417"
 }

@@ -195,7 +195,7 @@ export const Select = (props: SelectProps) => {
           >
             {label}
             {required && (
-              <Text className="text-danger-600 dark:text-danger-600 text-[16px]">
+              <Text className="text-[16px] text-danger-600 dark:text-danger-600">
                 *
               </Text>
             )}
@@ -215,7 +215,7 @@ export const Select = (props: SelectProps) => {
         {error ? (
           <Text
             testID={`${testID}-error`}
-            className="text-danger-300 dark:text-danger-600 mt-1 text-sm"
+            className="mt-1 text-sm text-danger-300 dark:text-danger-600"
           >
             {error}
           </Text>

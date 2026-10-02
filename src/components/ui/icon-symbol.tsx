@@ -2,7 +2,7 @@
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { type SymbolViewProps, type SymbolWeight } from 'expo-symbols';
+import { type SFSymbol, type SymbolWeight } from 'expo-symbols';
 import { type ComponentProps } from 'react';
 import {
   type OpaqueColorValue,
@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 type IconMapping = Record<
-  SymbolViewProps['name'],
+  SFSymbol,
   ComponentProps<typeof MaterialIcons>['name']
 >;
 export type IconSymbolName = keyof typeof MAPPING;
@@ -75,11 +75,7 @@ const COMMUNITY_MAPPING = {
   tv: 'television-classic',
   'xmark.circle': 'close-circle-outline',
 } as Partial<
-  Record<
-    // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-    import('expo-symbols').SymbolViewProps['name'],
-    React.ComponentProps<typeof MaterialCommunityIcons>['name']
-  >
+  Record<SFSymbol, React.ComponentProps<typeof MaterialCommunityIcons>['name']>
 >;
 
 /**

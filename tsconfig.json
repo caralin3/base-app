@@ -6,7 +6,10 @@
     "allowArbitraryExtensions": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@env": ["./src/lib/env"]
+      "@env": ["./src/lib/env"],
+      "react-native-collapsible-tab-view/src/hooks": [
+        "./node_modules/react-native-collapsible-tab-view/lib/typescript/src/hooks.d.ts"
+      ]
     },
     "esModuleInterop": true,
     "checkJs": true

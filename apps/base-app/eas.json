@@ -14,7 +14,6 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "APP_PROJECT": "base-app",
         "APP_ENV": "preview",
         "NAME": "Base App",
         "SCHEME": "baseapp",

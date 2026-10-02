@@ -47,10 +47,11 @@ catalog, so the app and the package always share one copy.
 pnpm install
 ```
 
-Each app reads its env from scoped, git-ignored files in its own folder:
-`apps/<app>/.env.<project>.<development|preview|production>.local`. The
-committed `.env.development`, `.env.preview` and `.env.production` files list
-the required keys.
+Each app reads its env from git-ignored files in its own folder:
+`apps/<app>/.env.<development|preview|production>.local`, picked by `APP_ENV`
+(default `development`). The committed `.env.development`, `.env.preview` and
+`.env.production` files list the required keys. On EAS, the same variables come
+from the build profile's environment instead.
 
 ## Common commands
 
@@ -69,6 +70,11 @@ Run from the repo root:
 any script in `apps/base-app/package.json` works. `pnpm travel-buddy <script>`
 does the same for Travel Buddy. You can also `cd` into the app
 and run `pnpm <script>` directly.
+
+## CI
+
+`.github/workflows/ci.yml` runs `pnpm lint` and `pnpm type-check` on every pull
+request and on pushes to `main`.
 
 ## Dependency versions
 

@@ -1,12 +1,11 @@
+import { colors, Modal, Text, useModal, View } from '@base-app/ui';
+import { CaretDown, Check } from '@base-app/ui/icons';
 import {
   BottomSheetFlatList,
   type BottomSheetModal,
 } from '@gorhom/bottom-sheet';
 import React, { forwardRef, memo, useCallback, useMemo } from 'react';
 import { Pressable, type PressableProps, StyleSheet } from 'react-native';
-
-import { colors, Modal, Text, useModal, View } from '../ui';
-import { CaretDown, Check } from '../ui/icons';
 
 export type OptionType = {
   label: string;

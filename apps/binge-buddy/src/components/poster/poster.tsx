@@ -1,9 +1,9 @@
+import { colors, IconButton, Text, View } from '@base-app/ui';
 import { format } from 'date-fns';
 import { Link, type LinkProps } from 'expo-router';
 import { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { colors, IconButton, Text, View } from '../ui';
 import { PosterImage } from './poster-image';
 
 export interface PosterProps {

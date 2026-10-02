@@ -1,7 +1,7 @@
+import { Text, View } from '@base-app/ui';
 import { type RefreshControlProps } from 'react-native';
 
 import { PosterList, type PosterProps } from '../poster';
-import { Text, View } from '../ui';
 
 interface RecommendedTabContentProps {
   refreshControl?:

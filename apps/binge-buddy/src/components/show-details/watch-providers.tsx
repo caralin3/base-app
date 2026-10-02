@@ -1,3 +1,4 @@
+import { Image, Text, useModal, View } from '@base-app/ui';
 import { useCallback, useMemo } from 'react';
 
 import {
@@ -7,7 +8,6 @@ import {
 import { useSelectedProvidersStore } from '@/lib/store';
 import { getTmdbUri } from '@/lib/utils/helper';
 
-import { Image, Text, useModal, View } from '../ui';
 import { WatchProvidersList } from './watch-providers-list';
 
 interface WatchProvidersProps {

@@ -1,13 +1,14 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": ["expo/tsconfig.base", "@base-app/tsconfig/base.json"],
   "compilerOptions": {
-    "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    },
-    "esModuleInterop": true,
-    "checkJs": true
+      "@/*": ["./src/*"],
+      "@env": ["./src/lib/env"],
+      "react-native-collapsible-tab-view/src/hooks": [
+        "./node_modules/react-native-collapsible-tab-view/lib/typescript/src/hooks.d.ts"
+      ]
+    }
   },
   "exclude": [
     "node_modules",

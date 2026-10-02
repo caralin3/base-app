@@ -1,7 +1,6 @@
+import { colors, IconButton, IconSymbol, Input, View } from '@base-app/ui';
 import { useEffect, useState } from 'react';
 import { StyleSheet, type TextInputProps } from 'react-native';
-
-import { colors, IconButton, IconSymbol, Input, View } from '../ui';
 
 interface SearchInputProps {
   autoFocus?: boolean;

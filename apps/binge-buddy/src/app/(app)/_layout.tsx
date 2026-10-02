@@ -1,6 +1,7 @@
+import { colors, IconSymbol } from '@base-app/ui';
 import { Redirect, Tabs } from 'expo-router';
 
-import { colors, HapticTab, IconSymbol } from '@/components';
+import { HapticTab } from '@/components';
 import { useAuth } from '@/lib/hooks';
 
 export default function TabLayout() {

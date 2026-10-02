@@ -1,10 +1,10 @@
+import { IconPopupMenu, View } from '@base-app/ui';
 import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
 
 import { type ProductionOrderDocument } from '@/lib/firebase/types';
 import { type Show, type ShowSeason } from '@/lib/types';
 
-import { IconPopupMenu, View } from '../ui';
 import { SeasonSelect } from './season-select';
 
 interface EpisodeTabHeaderProps {

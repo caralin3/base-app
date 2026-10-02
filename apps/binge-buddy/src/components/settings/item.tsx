@@ -1,6 +1,3 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
-
 import {
   colors,
   IconSymbol,
@@ -8,7 +5,9 @@ import {
   Pressable,
   Text,
   View,
-} from '../ui';
+} from '@base-app/ui';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 
 type ItemProps = {
   text: string;

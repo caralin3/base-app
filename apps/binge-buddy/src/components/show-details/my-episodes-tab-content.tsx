@@ -1,10 +1,10 @@
+import { Text, View } from '@base-app/ui';
 import { useState } from 'react';
 import { type RefreshControlProps } from 'react-native';
 
 import { type Episode, type Show, type ShowSeason } from '@/lib/types';
 
 import { EpisodesBySeasonList } from '../episodes';
-import { Text, View } from '../ui';
 import { EpisodeTabHeader } from './episode-tab-header';
 
 interface MyEpisodesTabContentProps {

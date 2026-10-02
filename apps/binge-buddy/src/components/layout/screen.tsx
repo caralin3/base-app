@@ -1,6 +1,6 @@
+import { colors, View } from '@base-app/ui';
 import { type PropsWithChildren } from 'react';
 
-import { colors, View } from '../ui';
 import { Header } from './header';
 
 interface ScreenProps extends PropsWithChildren {

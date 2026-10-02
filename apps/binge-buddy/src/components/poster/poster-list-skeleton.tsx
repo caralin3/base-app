@@ -1,4 +1,4 @@
-import { Skeleton, View } from '../ui';
+import { Skeleton, View } from '@base-app/ui';
 
 interface PosterListSkeletonProps {
   horizontal?: boolean;

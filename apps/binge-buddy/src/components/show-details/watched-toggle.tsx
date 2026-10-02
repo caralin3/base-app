@@ -1,3 +1,4 @@
+import { colors, IconSymbol, Pressable, Text, View } from '@base-app/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -7,8 +8,6 @@ import {
   FIRESTORE_COLLECTIONS,
   type WatchedShowDocument,
 } from '@/lib/firebase';
-
-import { colors, IconSymbol, Pressable, Text, View } from '../ui';
 
 interface WatchedToggleProps {
   showId: number;

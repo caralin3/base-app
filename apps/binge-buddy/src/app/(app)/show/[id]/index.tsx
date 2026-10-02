@@ -1,19 +1,16 @@
+import { colors, Image, Text, View } from '@base-app/ui';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { RefreshControl } from 'react-native-gesture-handler';
 
 import {
-  colors,
   EpisodesTabContent,
-  Image,
   MyEpisodesTabContent,
   RecommendedTabContent,
   Screen,
   ScrollableHeader,
   TabsView,
-  Text,
-  View,
   WatchedToggle,
   WatchProviders,
 } from '@/components';

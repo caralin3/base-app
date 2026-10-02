@@ -18,7 +18,6 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "APP_PROJECT": "binge-buddy",
         "APP_ENV": "preview",
         "NAME": "Binge Buddy",
         "SCHEME": "bingebuddy",

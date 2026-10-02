@@ -1,6 +1,3 @@
-import { useMemo, useState } from 'react';
-import { FlatList } from 'react-native-gesture-handler';
-
 import {
   CheckboxIcon,
   colors,
@@ -8,11 +5,13 @@ import {
   IconSymbol,
   Image,
   Pressable,
-  Screen,
-  SearchInput,
   Text,
   View,
-} from '@/components';
+} from '@base-app/ui';
+import { useMemo, useState } from 'react';
+import { FlatList } from 'react-native-gesture-handler';
+
+import { Screen, SearchInput } from '@/components';
 import { useTvProvidersQuery } from '@/lib/hooks';
 import { toggleSelectedProvider, useSelectedProvidersStore } from '@/lib/store';
 import { getTmdbUri } from '@/lib/utils/helper';

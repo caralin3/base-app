@@ -1,7 +1,7 @@
+import { IconButton, Text, View } from '@base-app/ui';
 import { type LinkProps } from 'expo-router';
 import { Platform } from 'react-native';
 
-import { IconButton, Text, View } from '../ui';
 import { type PosterProps } from './poster';
 import { PosterList } from './poster-list';
 

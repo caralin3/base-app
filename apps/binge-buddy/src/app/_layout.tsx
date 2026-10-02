@@ -1,5 +1,6 @@
 import '../../global.css';
 
+import { AppThemeProvider, FocusAwareStatusBar } from '@base-app/ui';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
@@ -15,9 +16,10 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-import { FocusAwareStatusBar, useThemeConfig } from '@/components';
+import { useThemeConfig } from '@/components';
 import { firebaseAuth } from '@/lib/firebase/config';
 import { useAuth } from '@/lib/hooks';
+import appTheme from '@/theme/app-theme';
 
 export default function RootLayout() {
   return (
@@ -104,16 +106,18 @@ function Providers({ children }: { children: React.ReactNode }) {
         className={theme.dark ? `dark` : undefined}
       >
         <KeyboardProvider>
-          <ThemeProvider value={theme}>
-            <BottomSheetModalProvider>
-              <SafeAreaProvider>
-                <FocusAwareStatusBar hidden={false} />
-                <SafeAreaView className="flex-1 bg-black">
-                  {children}
-                </SafeAreaView>
-              </SafeAreaProvider>
-            </BottomSheetModalProvider>
-          </ThemeProvider>
+          <AppThemeProvider theme={appTheme}>
+            <ThemeProvider value={theme}>
+              <BottomSheetModalProvider>
+                <SafeAreaProvider>
+                  <FocusAwareStatusBar hidden={false} />
+                  <SafeAreaView className="flex-1 bg-black">
+                    {children}
+                  </SafeAreaView>
+                </SafeAreaProvider>
+              </BottomSheetModalProvider>
+            </ThemeProvider>
+          </AppThemeProvider>
         </KeyboardProvider>
       </GestureHandlerRootView>
     </PersistQueryClientProvider>

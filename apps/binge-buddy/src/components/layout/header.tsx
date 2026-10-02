@@ -1,7 +1,3 @@
-import { useRouter } from 'expo-router';
-import { type PropsWithChildren } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-
 import {
   colors,
   IconSymbol,
@@ -9,7 +5,10 @@ import {
   Image,
   Text,
   View,
-} from '../ui';
+} from '@base-app/ui';
+import { useRouter } from 'expo-router';
+import { type PropsWithChildren } from 'react';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 interface HeaderProps extends PropsWithChildren {
   bgColor?: string;

@@ -10,8 +10,8 @@
  */
 /**
  * 1st part: Import packages and Load your env variables
- * we use dotenv to load the correct variables from scoped .env files based on APP_PROJECT and APP_ENV
- * APP_PROJECT/APP_ENV can be passed inline, for example: APP_PROJECT=binge-buddy APP_ENV=preview pnpm build:android
+ * we use dotenv to load the correct variables from .env.<APP_ENV>.local in this app's folder
+ * APP_ENV can be passed inline, for example: APP_ENV=preview pnpm build:android
  */
 const fs = require('fs');
 const path = require('path');
@@ -21,21 +21,21 @@ const packageJSON = require('./package.json');
 const APP_ENV = z
   .enum(['development', 'preview', 'production'])
   .parse(process.env.APP_ENV ?? process.env.EAS_BUILD_PROFILE ?? 'development');
-const APP_PROJECT = z
-  .enum(['base-app', 'binge-buddy'])
-  .parse(process.env.APP_PROJECT ?? 'binge-buddy');
 const isEasBuild = Boolean(process.env.EAS_BUILD || process.env.CI);
 
-const envFileName = `.env.${APP_PROJECT}.${APP_ENV}.local`;
+const envFileName = `.env.${APP_ENV}.local`;
 const envPath = path.resolve(process.cwd(), envFileName);
 
 if (fs.existsSync(envPath)) {
   require('dotenv').config({
     path: envPath,
+    // Expo CLI auto-loads .env.development.local / .env.production.local when
+    // EXPO_NO_DOTENV is unset; the file APP_ENV selects must win over those.
+    override: true,
   });
 } else if (!isEasBuild) {
   throw new Error(
-    `Missing env file: ${envFileName}. Set APP_PROJECT and APP_ENV to match an existing scoped env file.`
+    `Missing env file: ${envFileName}. Set APP_ENV to match an existing env file in this app's folder.`
   );
 }
 
@@ -70,7 +70,6 @@ const SCHEME = process.env.SCHEME; // app scheme
 
 const client = z.object({
   APP_ENV: z.enum(['development', 'preview', 'production']),
-  APP_PROJECT: z.enum(['base-app', 'binge-buddy']),
   NAME: z.string(),
   SCHEME: z.string(),
   SLUG: z.string(),
@@ -101,7 +100,6 @@ const buildTime = z.object({
  */
 const _clientEnv = {
   APP_ENV,
-  APP_PROJECT,
   NAME: NAME,
   SCHEME: SCHEME,
   SLUG: SLUG,

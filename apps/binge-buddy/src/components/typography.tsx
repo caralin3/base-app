@@ -1,7 +1,7 @@
+import { Text, View } from '@base-app/ui';
 import React from 'react';
 
 import { Title } from './title';
-import { Text, View } from './ui';
 
 export const Typography = () => {
   return (

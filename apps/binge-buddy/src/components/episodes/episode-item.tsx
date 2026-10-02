@@ -1,11 +1,17 @@
+import {
+  Collapsible,
+  colors,
+  IconButton,
+  Image,
+  Text,
+  View,
+} from '@base-app/ui';
 import { formatDate, parseISO } from 'date-fns';
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { getTmdbImageUrl } from '@/lib/api/tmdb/endpoints';
 import { type Episode } from '@/lib/types';
-
-import { Collapsible, colors, IconButton, Image, Text, View } from '../ui';
 
 interface EpisodeItemProps {
   backdropPath?: string | null;

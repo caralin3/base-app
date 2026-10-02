@@ -1,7 +1,7 @@
+import { Button, colors, IconButton, View } from '@base-app/ui';
 import React from 'react';
 
 import { Title } from './title';
-import { Button, colors, IconButton, View } from './ui';
 
 export const Buttons = () => {
   return (

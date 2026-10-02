@@ -1,7 +1,7 @@
+import { View } from '@base-app/ui';
 import { FlatList, type RefreshControlProps } from 'react-native';
 
 import { TabsFlatList } from '../tabs-view';
-import { View } from '../ui';
 import { type PosterProps } from './poster';
 import { PosterListItem } from './poster-list-item';
 import { PosterListSkeleton } from './poster-list-skeleton';

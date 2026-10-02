@@ -1,3 +1,11 @@
+import {
+  colors,
+  IconPopupMenu,
+  IconSymbol,
+  Skeleton,
+  TouchableOpacity,
+  View,
+} from '@base-app/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -6,16 +14,7 @@ import DraggableFlatList, {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist';
 
-import {
-  colors,
-  EpisodeItem,
-  IconPopupMenu,
-  IconSymbol,
-  Screen,
-  Skeleton,
-  TouchableOpacity,
-  View,
-} from '@/components';
+import { EpisodeItem, Screen } from '@/components';
 import { SeasonSelect } from '@/components/show-details/season-select';
 import {
   addProductionOrder,

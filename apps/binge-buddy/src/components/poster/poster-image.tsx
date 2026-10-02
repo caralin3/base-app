@@ -1,7 +1,6 @@
+import { colors, IconSymbol, Text, View } from '@base-app/ui';
 import { Image, type ImageProps, type ImageStyle } from 'expo-image';
 import { type StyleProp, StyleSheet } from 'react-native';
-
-import { colors, IconSymbol, Text, View } from '../ui';
 
 type PosterImageProps = Omit<ImageProps, 'source'> & {
   alt?: string;

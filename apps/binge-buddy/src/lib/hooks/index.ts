@@ -1,6 +1,5 @@
 export * from './queries';
 export * from './use-auth';
-export * from './use-bottom-sheet-back';
 export * from './use-currently-watching';
 export * from './use-favorite-episodes';
 export * from './use-favorite-shows';

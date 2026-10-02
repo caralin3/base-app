@@ -1,3 +1,4 @@
+import { Text, View } from '@base-app/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import debounce from 'lodash.debounce';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -10,8 +11,6 @@ import {
   PosterSection,
   Screen,
   SearchInput,
-  Text,
-  View,
 } from '@/components';
 import { SEARCH_TV_QUERY_KEY, searchTv } from '@/lib/api';
 import { useTrendingShowsQuery } from '@/lib/hooks';

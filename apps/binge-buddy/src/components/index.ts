@@ -15,6 +15,4 @@ export * from './show-details';
 export * from './tabs-view';
 export * from './title';
 export * from './typography';
-export * from './ui';
-export * from './ui/icons';
 export * from './use-theme-config';

@@ -1,7 +1,8 @@
+import { colors, ScrollView } from '@base-app/ui';
 import { useCallback } from 'react';
 import { RefreshControl } from 'react-native-gesture-handler';
 
-import { colors, PosterSection, Screen, ScrollView } from '@/components';
+import { PosterSection, Screen } from '@/components';
 import {
   useCurrentlyWatching,
   useFavoriteShows,

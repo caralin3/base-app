@@ -1,3 +1,4 @@
+import { colors, Modal, Pressable, Text, View } from '@base-app/ui';
 import {
   BottomSheetFlatList,
   type BottomSheetModal,
@@ -8,8 +9,6 @@ import {
   type WatchProvider,
   type WatchProvidersByShowResponse,
 } from '@/lib/api/tmdb/types';
-
-import { colors, Modal, Pressable, Text, View } from '../ui';
 
 interface WatchProvidersListProps {
   onSelect: (option: WatchProvider) => void;

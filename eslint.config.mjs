@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
 import { defineConfig, globalIgnores } from 'eslint/config';
 import expoConfig from 'eslint-config-expo/flat.js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
@@ -9,6 +12,22 @@ import testingLibrary from 'eslint-plugin-testing-library';
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import unusedImports from 'eslint-plugin-unused-imports';
 import { configs, parser } from 'typescript-eslint';
+
+// eslint-plugin-react's settings.react.version: 'detect' (set by
+// eslint-config-expo) requires('react') relative to the directory ESLint
+// runs from. With pnpm's non-hoisted node_modules, that's this workspace
+// root, which has no react of its own — every app/package does. Pin the
+// version so detection doesn't silently fall back to "latest".
+const reactVersion = JSON.parse(
+  readFileSync(
+    fileURLToPath(
+      new URL(
+        './apps/base-app/node_modules/react/package.json',
+        import.meta.url
+      )
+    )
+  )
+).version;
 
 export default defineConfig([
   globalIgnores([
@@ -83,6 +102,9 @@ export default defineConfig([
       // Class ordering only needs a Tailwind config; every app shares the same preset.
       tailwindcss: {
         config: 'apps/base-app/tailwind.config.js',
+      },
+      react: {
+        version: reactVersion,
       },
     },
   },

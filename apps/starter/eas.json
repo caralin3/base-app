@@ -15,13 +15,12 @@
       "distribution": "internal",
       "env": {
         "APP_ENV": "preview",
-        "NAME": "Base App",
-        "SCHEME": "baseapp",
-        "SLUG": "base-app",
-        "BUNDLE_ID": "com.appname.baseapp.preview",
-        "PACKAGE": "com.appname.baseapp.preview",
-        "EXPO_ACCOUNT_OWNER": "caralin3",
-        "EAS_PROJECT_ID": ""
+        "NAME": "Starter",
+        "SCHEME": "starter",
+        "SLUG": "starter",
+        "BUNDLE_ID": "com.caralin3.starter.preview",
+        "PACKAGE": "com.caralin3.starter.preview",
+        "EXPO_ACCOUNT_OWNER": "caralin3"
       },
       "android": {
         "buildType": "apk"

@@ -21,10 +21,7 @@ import { configs, parser } from 'typescript-eslint';
 const reactVersion = JSON.parse(
   readFileSync(
     fileURLToPath(
-      new URL(
-        './apps/base-app/node_modules/react/package.json',
-        import.meta.url
-      )
+      new URL('./apps/starter/node_modules/react/package.json', import.meta.url)
     )
   )
 ).version;
@@ -107,7 +104,7 @@ export default defineConfig([
       },
       // Class ordering only needs a Tailwind config; every app shares the same preset.
       tailwindcss: {
-        config: 'apps/base-app/tailwind.config.js',
+        config: 'apps/starter/tailwind.config.js',
       },
       react: {
         version: reactVersion,

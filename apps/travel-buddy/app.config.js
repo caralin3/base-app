@@ -36,7 +36,7 @@ module.exports = ({ config }) => ({
     },
     package: Env.PACKAGE,
     predictiveBackGestureEnabled: false,
-    // Empty means the app has no native Firebase config (e.g. base-app)
+    // Empty means the app has no native Firebase config (e.g. starter)
     googleServicesFile: Env.GOOGLE_SERVICES_FILE || undefined,
   },
   web: {

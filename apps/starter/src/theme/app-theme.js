@@ -1,5 +1,5 @@
 /**
- * Base App brand palette.
+ * Starter brand palette.
  * Shared by tailwind.config.js and the AppThemeProvider, so the Tailwind
  * classes and the runtime colors always match.
  * @type {import('@base-app/ui').AppTheme}

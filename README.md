@@ -4,7 +4,7 @@ A pnpm workspace for Expo apps that share one foundation.
 
 ```
 apps/
-  base-app/        # starter app — copy this to begin a new app
+  starter/         # starter app — copy this to begin a new app
   binge-buddy/     # Binge Buddy
   travel-buddy/    # Travel Buddy
 packages/
@@ -67,17 +67,17 @@ from the build profile's environment instead.
 
 Run from the repo root:
 
-| Command                           | What it does                     |
-| --------------------------------- | -------------------------------- |
-| `pnpm base-app start`             | Start the Metro dev server       |
-| `pnpm base-app ios`               | Build and run on iOS             |
-| `pnpm base-app android`           | Build and run on Android         |
-| `pnpm base-app build:preview:ios` | EAS preview build                |
-| `pnpm type-check`                 | Type-check every app and package |
-| `pnpm lint`                       | Lint every app and package       |
+| Command                          | What it does                     |
+| -------------------------------- | -------------------------------- |
+| `pnpm starter start`             | Start the Metro dev server       |
+| `pnpm starter ios`               | Build and run on iOS             |
+| `pnpm starter android`           | Build and run on Android         |
+| `pnpm starter build:preview:ios` | EAS preview build                |
+| `pnpm type-check`                | Type-check every app and package |
+| `pnpm lint`                      | Lint every app and package       |
 
-`pnpm base-app <script>` is shorthand for `pnpm --filter base-app <script>`, so
-any script in `apps/base-app/package.json` works. `pnpm binge-buddy <script>`
+`pnpm starter <script>` is shorthand for `pnpm --filter starter <script>`, so
+any script in `apps/starter/package.json` works. `pnpm binge-buddy <script>`
 and `pnpm travel-buddy <script>` do the same for the other apps. You can also `cd` into the app
 and run `pnpm <script>` directly.
 

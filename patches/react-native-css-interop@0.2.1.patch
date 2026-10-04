@@ -1,0 +1,26 @@
+diff --git a/dist/runtime/native/appearance-observables.js b/dist/runtime/native/appearance-observables.js
+index b8603202ea3e43e3a35e940a5bbbc25b50a25869..ffafc5d3ed04dab88b5b0f9a62a71a5c7e2730ea 100644
+--- a/dist/runtime/native/appearance-observables.js
++++ b/dist/runtime/native/appearance-observables.js	
+@@ -10,7 +10,7 @@ const colorSchemeObservable = (0, observable_1.observable)(undefined);
+ exports.colorScheme = {
+     set(value) {
+         if (value === "system") {
+-            appearance.setColorScheme(null);
++            appearance.setColorScheme("unspecified");
+         }
+         else {
+             appearance.setColorScheme(value);
+diff --git a/src/runtime/native/appearance-observables.ts b/src/runtime/native/appearance-observables.ts
+index c235c2da28266a7dbde1458973c46db664f544f1..3fe9afa463304e9e69520b92fdccb276dfd9dfdb 100644
+--- a/src/runtime/native/appearance-observables.ts
++++ b/src/runtime/native/appearance-observables.ts	
+@@ -22,7 +22,7 @@ const colorSchemeObservable = observable<"light" | "dark" | undefined>(
+ export const colorScheme = {
+   set(value: "light" | "dark" | "system") {
+     if (value === "system") {
+-      appearance.setColorScheme(null);
++      appearance.setColorScheme("unspecified");
+     } else {
+       appearance.setColorScheme(value);
+     }

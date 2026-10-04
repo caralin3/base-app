@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "eslint": "^9.25.0",
-    "eslint-config-expo": "~55.0.1",
+    "eslint-config-expo": "~57.0.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
@@ -24,7 +24,7 @@
     "eslint-plugin-unused-imports": "^4.3.0",
     "prettier": "^3.7.4",
     "typescript": "catalog:",
-    "typescript-eslint": "^8.52.0"
+    "typescript-eslint": "^8.71.0"
   },
   "packageManager": "pnpm@10.12.3+sha512.467df2c586056165580ad6dfb54ceaad94c5a30f80893ebdec5a44c5aa73c205ae4a5bb9d5ed6bb84ea7c249ece786642bbb49d06a307df218d03da41c317417"
 }

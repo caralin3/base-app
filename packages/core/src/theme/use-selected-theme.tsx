@@ -38,7 +38,7 @@ export const useSelectedTheme = () => {
 // to be used in the root file to load the selected theme from storage
 export const loadSelectedTheme = async () => {
   const theme = await getItem<ColorSchemeType>(SELECTED_THEME);
-  if (theme !== undefined) {
-    colorScheme.set(theme as ColorSchemeType);
+  if (theme) {
+    colorScheme.set(theme);
   }
 };

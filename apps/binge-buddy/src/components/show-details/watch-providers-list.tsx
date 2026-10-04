@@ -131,7 +131,6 @@ export const WatchProvidersList = forwardRef<
         data={data}
         keyExtractor={(item: OptionType) => `select-item-${item.label}`}
         renderItem={renderSelectItem}
-        estimatedItemSize={52}
       />
     </Modal>
   );

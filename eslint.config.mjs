@@ -91,6 +91,12 @@ export default defineConfig([
       'import/no-cycle': ['error', { maxDepth: '∞' }],
       'prettier/prettier': ['error', { ignores: ['expo-env.d.ts'] }],
       'import/order': 'off',
+      // React Compiler rules added by eslint-plugin-react-hooks 7 (via
+      // eslint-config-expo 57). Existing code predates them; warn until the
+      // flagged components are refactored.
+      'react-hooks/refs': 'warn',
+      'react-hooks/set-state-in-effect': 'warn',
+      'react-hooks/use-memo': 'warn',
     },
     settings: {
       'import/resolver': {

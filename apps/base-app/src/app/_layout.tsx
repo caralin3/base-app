@@ -9,11 +9,11 @@ import {
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
-import { ThemeProvider } from '@react-navigation/native';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { onlineManager, QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { Stack } from 'expo-router';
+import { ThemeProvider } from 'expo-router/react-navigation';
 import { onAuthStateChanged, type Unsubscribe } from 'firebase/auth';
 import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
@@ -138,7 +138,12 @@ function Providers({ children }: { children: React.ReactNode }) {
               <BottomSheetModalProvider>
                 <SafeAreaProvider>
                   <FocusAwareStatusBar hidden={false} />
-                  <SafeAreaView className="flex-1 bg-background dark:bg-background-dark">
+                  <SafeAreaView
+                    style={[
+                      styles.container,
+                      { backgroundColor: theme.colors.background },
+                    ]}
+                  >
                     {children}
                   </SafeAreaView>
                 </SafeAreaProvider>

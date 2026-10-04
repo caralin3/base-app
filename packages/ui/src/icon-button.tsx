@@ -4,6 +4,7 @@ import {
   type GestureResponderEvent,
   Pressable,
   type StyleProp,
+  StyleSheet,
   type ViewStyle,
 } from 'react-native';
 
@@ -44,7 +45,7 @@ export const IconButton = ({
   const PressableIcon = (
     <Pressable
       className="flex-row items-center justify-center"
-      style={[style, disabled ? { opacity: 0.5 } : undefined]}
+      style={StyleSheet.flatten([style, disabled && { opacity: 0.5 }])}
       onPress={onPress}
       disabled={disabled}
     >

@@ -59,7 +59,6 @@ module.exports = ({ config }) => ({
         backgroundColor: '#000000',
       },
     ],
-    ['react-native-edge-to-edge'],
   ],
   extra: {
     ...ClientEnv,

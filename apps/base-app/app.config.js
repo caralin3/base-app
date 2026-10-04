@@ -59,7 +59,6 @@ module.exports = ({ config }) => ({
         },
       },
     ],
-    ['react-native-edge-to-edge'],
   ],
   extra: {
     ...ClientEnv,

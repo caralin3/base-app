@@ -1,33 +1,27 @@
 {
   "cli": {
-    "version": "18.3.0",
+    "version": ">= 18.3.0",
     "appVersionSource": "remote"
   },
   "build": {
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      "environment": "development",
       "android": {
         "buildType": "apk"
       }
     },
     "preview": {
       "distribution": "internal",
-      "env": {
-        "APP_ENV": "preview",
-        "NAME": "Starter",
-        "SCHEME": "starter",
-        "SLUG": "starter",
-        "BUNDLE_ID": "com.caralin3.starter.preview",
-        "PACKAGE": "com.caralin3.starter.preview",
-        "EXPO_ACCOUNT_OWNER": "caralin3"
-      },
+      "environment": "preview",
       "android": {
         "buildType": "apk"
       }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "environment": "production"
     }
   },
   "submit": {

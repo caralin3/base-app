@@ -52,10 +52,12 @@ export const Skeleton = ({
   }));
 
   useEffect(() => {
-    opacity.value = withRepeat(
-      withTiming(0.3, { duration: 1000, easing: Easing.inOut(Easing.ease) }),
-      -1,
-      true
+    opacity.set(
+      withRepeat(
+        withTiming(0.3, { duration: 1000, easing: Easing.inOut(Easing.ease) }),
+        -1,
+        true
+      )
     );
   }, [opacity]);
 

@@ -169,9 +169,9 @@ export const ScrollableHeader = ({
       // Record the scroll position when the gesture starts
       const currentScrollY =
         typeof scrollY?.value === 'number' ? scrollY.value : 0;
-      initialScrollY.value = currentScrollY;
-      targetScrollY.value = currentScrollY;
-      isGestureActive.value = true;
+      initialScrollY.set(currentScrollY);
+      targetScrollY.set(currentScrollY);
+      isGestureActive.set(true);
     })
     .onUpdate((e) => {
       'worklet';
@@ -190,7 +190,7 @@ export const ScrollableHeader = ({
           // Sliding up (translationY < 0) should decrease scrollY (content scrolls up)
           const delta = -e.translationY; // Reverse the direction because sliding down should scroll the content down
           const newTargetScrollY = Math.max(0, initialScrollY.value + delta);
-          targetScrollY.value = newTargetScrollY;
+          targetScrollY.set(newTargetScrollY);
 
           // Synchronously scroll the FlatList
           scrollTo(ref, 0, newTargetScrollY, false, 'headerGesture');
@@ -199,7 +199,7 @@ export const ScrollableHeader = ({
     })
     .onEnd((e) => {
       'worklet';
-      isGestureActive.value = false;
+      isGestureActive.set(false);
 
       // Add inertial scrolling if the velocity is high enough
       if (Math.abs(e.velocityY) > minVelocity) {
@@ -208,21 +208,23 @@ export const ScrollableHeader = ({
         const velocity = -e.velocityY; // Reverse the velocity direction
 
         // Use withDecay to implement inertial scrolling
-        targetScrollY.value = withDecay(
-          {
-            velocity: velocity,
-            deceleration: deceleration,
-            clamp: [0, Infinity], // Limit minimum value, no limit on maximum value (determined by content)
-          },
-          (finished) => {
-            'worklet';
-            // Callback after animation completion
-            if (finished) {
-              // Ensure the final position is correct
-              const finalY = Math.max(0, targetScrollY.value);
-              targetScrollY.value = finalY;
+        targetScrollY.set(
+          withDecay(
+            {
+              velocity: velocity,
+              deceleration: deceleration,
+              clamp: [0, Infinity], // Limit minimum value, no limit on maximum value (determined by content)
+            },
+            (finished) => {
+              'worklet';
+              // Callback after animation completion
+              if (finished) {
+                // Ensure the final position is correct
+                const finalY = Math.max(0, targetScrollY.value);
+                targetScrollY.set(finalY);
+              }
             }
-          }
+          )
         );
       } else {
         // Velocity is not high enough, stop directly
@@ -230,12 +232,12 @@ export const ScrollableHeader = ({
           typeof scrollY?.value === 'number'
             ? scrollY.value
             : targetScrollY.value;
-        targetScrollY.value = Math.max(0, currentScrollY);
+        targetScrollY.set(Math.max(0, currentScrollY));
       }
     })
     .onFinalize(() => {
       'worklet';
-      isGestureActive.value = false;
+      isGestureActive.set(false);
     });
 
   // Parallax effect for background image

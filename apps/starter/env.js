@@ -78,10 +78,12 @@ const client = z.object({
   VERSION: z.string(),
 
   // ADD YOUR CLIENT ENV VARS HERE
-  FIREBASE_API_KEY: z.string(),
-  FIREBASE_ANDROID_APP_ID: z.string(),
+  // Firebase is optional in the starter: without it, auth is null and the
+  // app signs in a local dev user (see src/app/_layout.tsx)
+  FIREBASE_API_KEY: z.string().optional(),
+  FIREBASE_ANDROID_APP_ID: z.string().optional(),
   FIREBASE_IOS_APP_ID: z.string().optional(),
-  FIREBASE_PROJECT_ID: z.string(),
+  FIREBASE_PROJECT_ID: z.string().optional(),
 });
 
 const buildTime = z.object({

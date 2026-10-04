@@ -1,5 +1,5 @@
 import { useAuth } from '@base-app/core';
-import { useQuery } from 'node_modules/@tanstack/react-query/build/modern/useQuery';
+import { useQuery } from '@tanstack/react-query';
 
 import { FIRESTORE_COLLECTIONS, getFavoriteEpisodes } from '@/lib/firebase';
 import { sortByDate } from '@/lib/utils';

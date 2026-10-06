@@ -9,7 +9,7 @@ module.exports = ({ config }) => ({
   slug: Env.SLUG,
   version: Env.VERSION.toString(),
   orientation: 'portrait',
-  icon: './assets/images/icon.png',
+  icon: './assets/icons/icon.png',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
   updates: {
@@ -30,9 +30,9 @@ module.exports = ({ config }) => ({
   android: {
     adaptiveIcon: {
       backgroundColor: '#E6F4FE',
-      foregroundImage: './assets/images/android-icon-foreground.png',
-      backgroundImage: './assets/images/android-icon-background.png',
-      monochromeImage: './assets/images/android-icon-monochrome.png',
+      foregroundImage: './assets/icons/android-icon-foreground.png',
+      backgroundImage: './assets/icons/android-icon-background.png',
+      monochromeImage: './assets/icons/android-icon-monochrome.png',
     },
     package: Env.PACKAGE,
     predictiveBackGestureEnabled: false,
@@ -41,7 +41,7 @@ module.exports = ({ config }) => ({
   },
   web: {
     output: 'static',
-    favicon: './assets/images/favicon.png',
+    favicon: './assets/icons/favicon.png',
   },
   plugins: [
     'expo-router',
@@ -51,7 +51,7 @@ module.exports = ({ config }) => ({
     [
       'expo-splash-screen',
       {
-        image: './assets/images/splash-icon.png',
+        image: './assets/icons/splash-icon.png',
         imageWidth: 200,
         resizeMode: 'contain',
         backgroundColor: '#ffffff',

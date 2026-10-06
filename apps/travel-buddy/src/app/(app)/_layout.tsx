@@ -38,11 +38,6 @@ export default function TabLayout() {
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.muted,
         tabBarButton: HapticTab,
-        tabBarShowLabel: false,
-        tabBarIconStyle: {
-          height: 50,
-          width: '100%',
-        },
         tabBarStyle: {
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
@@ -57,9 +52,9 @@ export default function TabLayout() {
         name="index"
         options={{
           // headerShown: false,
-          title: 'App Name',
+          title: 'Trips',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={32} name="house.fill" color={color} />
+            <IconSymbol size={26} name="suitcase" color={color} />
           ),
         }}
       />
@@ -78,7 +73,7 @@ export default function TabLayout() {
         options={{
           title: 'Itinerary',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={32} name="calendar" color={color} />
+            <IconSymbol size={26} name="calendar" color={color} />
           ),
         }}
       />
@@ -87,7 +82,7 @@ export default function TabLayout() {
         options={{
           title: 'Todos',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={32} name="checklist" color={color} />
+            <IconSymbol size={26} name="checkmark.square" color={color} />
           ),
         }}
       />
@@ -96,7 +91,7 @@ export default function TabLayout() {
         options={{
           title: 'Expenses',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={32} name="dollarsign" color={color} />
+            <IconSymbol size={26} name="dollarsign" color={color} />
           ),
         }}
       />
@@ -106,7 +101,7 @@ export default function TabLayout() {
           headerShown: false,
           title: 'Profile',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={32} name="person.fill" color={color} />
+            <IconSymbol size={26} name="person" color={color} />
           ),
         }}
       />

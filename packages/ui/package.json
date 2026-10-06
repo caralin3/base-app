@@ -20,6 +20,7 @@
   "peerDependencies": {
     "@expo/vector-icons": "catalog:",
     "@gorhom/bottom-sheet": "catalog:",
+    "@react-native-community/datetimepicker": "catalog:",
     "expo-haptics": "catalog:",
     "expo-image": "catalog:",
     "expo-router": "catalog:",
@@ -42,6 +43,7 @@
     "@base-app/tsconfig": "workspace:*",
     "@expo/vector-icons": "catalog:",
     "@gorhom/bottom-sheet": "catalog:",
+    "@react-native-community/datetimepicker": "catalog:",
     "@types/react": "catalog:",
     "expo": "catalog:",
     "expo-haptics": "catalog:",

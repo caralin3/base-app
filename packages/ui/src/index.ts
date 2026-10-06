@@ -5,6 +5,7 @@ export * from './button';
 export * from './checkbox';
 export * from './collapsible';
 export { default as colors } from './colors';
+export * from './date-time-input';
 export * from './floating-action-button';
 export * from './focus-aware-status-bar';
 export * from './haptic-tab';

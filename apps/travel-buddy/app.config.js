@@ -47,6 +47,7 @@ module.exports = ({ config }) => ({
     'expo-router',
     'expo-font',
     'expo-web-browser',
+    '@react-native-community/datetimepicker',
     [
       'expo-splash-screen',
       {

@@ -93,7 +93,7 @@ const LinkRow = ({
       onPress={onPress}
     >
       <IconSymbol color={appColors.primary} name={icon} size={18} />
-      <Text className="flex-1 text-base text-primary dark:text-primary-dark">
+      <Text className="flex-1 text-base text-primary-strong dark:text-primary-strong-dark">
         {label}
       </Text>
     </Pressable>

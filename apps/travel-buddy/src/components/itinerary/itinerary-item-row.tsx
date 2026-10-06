@@ -25,7 +25,7 @@ export const ItineraryItemRow = ({ item, onPress }: ItineraryItemRowProps) => {
     <Pressable
       accessibilityHint={onPress ? 'Edit this plan' : undefined}
       accessibilityRole="button"
-      className="flex-row overflow-hidden rounded-xl bg-background dark:bg-background-dark"
+      className="flex-row overflow-hidden rounded-lg bg-background dark:bg-background-dark"
       disabled={!onPress}
       onPress={() => onPress?.(item)}
     >
@@ -65,7 +65,7 @@ export const ItineraryItemRow = ({ item, onPress }: ItineraryItemRowProps) => {
               size={14}
             />
             <Text
-              className="text-sm text-primary dark:text-primary-dark"
+              className="text-sm text-primary-strong dark:text-primary-strong-dark"
               numberOfLines={1}
             >
               {address}

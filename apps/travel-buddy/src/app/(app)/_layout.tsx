@@ -1,12 +1,14 @@
 import { useAuth } from '@base-app/core';
-import { HapticTab, IconSymbol, useAppColors } from '@base-app/ui';
+import { HapticTab, IconSymbol } from '@base-app/ui';
 import { Redirect, Tabs } from 'expo-router';
 import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useTravelBuddyColors } from '@/theme/use-travel-buddy-colors';
+
 export default function TabLayout() {
   const status = useAuth.use.status();
-  const colors = useAppColors();
+  const colors = useTravelBuddyColors();
   const insets = useSafeAreaInsets();
   const isIOS = Platform.OS === 'ios';
   const tabBarPaddingBottom = isIOS ? Math.max(insets.bottom, 8) : 6;
@@ -35,12 +37,12 @@ export default function TabLayout() {
       backBehavior="history"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.primary,
+        tabBarActiveTintColor: colors.primaryStrong,
         tabBarInactiveTintColor: colors.muted,
         tabBarButton: HapticTab,
         tabBarStyle: {
           backgroundColor: colors.surface,
-          borderTopColor: colors.border,
+          borderTopColor: colors.borderSubtle,
           borderTopWidth: 1,
           height: tabBarHeight,
           paddingBottom: tabBarPaddingBottom,

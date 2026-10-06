@@ -2,14 +2,12 @@ import { useAuth } from '@base-app/core';
 import {
   BottomSheetKeyboardAwareScrollView,
   Button,
-  colors,
   ModalForm,
   Screen,
   ScrollableHeader,
   TabsScrollView,
   TabsView,
   Text,
-  useAppColors,
   useModal,
   View,
 } from '@base-app/ui';
@@ -40,6 +38,7 @@ import {
   useUpdateTodoMutation,
 } from '@/lib/hooks';
 import { getCountdownDays, groupByCategory } from '@/lib/utils';
+import { useTravelBuddyColors } from '@/theme/use-travel-buddy-colors';
 
 export type TripScreenParams = {
   id: string;
@@ -47,7 +46,7 @@ export type TripScreenParams = {
 };
 
 export default function TripScreen() {
-  const appColors = useAppColors();
+  const appColors = useTravelBuddyColors();
   const local = useLocalSearchParams<TripScreenParams>();
   const router = useRouter();
   const tripId = local.id;
@@ -141,13 +140,13 @@ export default function TripScreen() {
       height={300}
       onBackPress={() => router.back()}
       style={styles.header}
-      className="rounded-t-3xl bg-background dark:bg-background-dark"
+      className="rounded-t-sheet bg-background dark:bg-background-dark"
       right={[
         {
           icon: {
             name: 'plus',
-            color: colors.white,
-            backgroundColor: appColors.primary,
+            color: appColors.onPrimary,
+            backgroundColor: appColors.primaryStrong,
           },
           onPress: () => addPlanModalRef.current?.present(),
         },
@@ -155,13 +154,13 @@ export default function TripScreen() {
     >
       <View className="flex-row items-center justify-between gap-4">
         <View className="flex-1">
-          <Text className="text-2xl font-bold">{tripData.name}</Text>
+          <Text className="text-title">{tripData.name}</Text>
           <Text className="text-md mt-2 text-muted dark:text-muted-dark">
             {dateRange}
           </Text>
         </View>
-        <View className="min-w-20 items-center justify-center rounded-lg bg-background px-3 py-2 dark:bg-background-dark">
-          <Text className="text-2xl font-bold">{daysToGo}</Text>
+        <View className="min-w-20 items-center justify-center rounded-sm bg-background px-3 py-2 dark:bg-background-dark">
+          <Text className="text-title">{daysToGo}</Text>
           <Text className="text-center text-sm font-semibold">
             day{daysToGo === 1 ? '' : 's'} to go
           </Text>

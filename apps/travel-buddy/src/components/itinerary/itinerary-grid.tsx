@@ -56,22 +56,26 @@ export const ItineraryGrid = ({ days, onPressItem }: ItineraryGridProps) => {
               key={d.date}
               accessibilityRole="button"
               accessibilityState={{ selected }}
-              className={`min-w-14 items-center rounded-xl px-3 py-2 ${
+              className={`min-w-14 items-center rounded-sm px-3 py-2 ${
                 selected
-                  ? 'bg-primary dark:bg-primary-dark'
+                  ? 'bg-primary-strong dark:bg-primary-strong-dark'
                   : 'bg-background dark:bg-background-dark'
               }`}
               onPress={() => setSelectedDate(d.date)}
             >
               <Text
                 className={`text-xs font-semibold ${
-                  selected ? 'text-white' : 'text-muted dark:text-muted-dark'
+                  selected
+                    ? 'text-on-primary dark:text-on-primary-dark'
+                    : 'text-muted dark:text-muted-dark'
                 }`}
               >
                 {date ? format(date, 'EEE') : ''}
               </Text>
               <Text
-                className={`text-lg font-bold ${selected ? 'text-white' : ''}`}
+                className={`text-lg font-bold ${
+                  selected ? 'text-on-primary dark:text-on-primary-dark' : ''
+                }`}
               >
                 {date ? format(date, 'd') : ''}
               </Text>
@@ -113,7 +117,7 @@ export const ItineraryGrid = ({ days, onPressItem }: ItineraryGridProps) => {
               accessibilityHint={onPressItem ? 'Edit this plan' : undefined}
               accessibilityRole="button"
               accessibilityLabel={`${block.item.title}, ${formatTimeRange(block.item)}`}
-              className="absolute overflow-hidden rounded-lg px-2 py-1"
+              className="absolute overflow-hidden rounded-sm px-2 py-1"
               disabled={!onPressItem}
               onPress={() => onPressItem?.(block.item)}
               style={{

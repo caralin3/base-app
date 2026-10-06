@@ -1,11 +1,12 @@
 import { getItem, setItem } from '@base-app/core';
-import { IconSymbol, Text, useAppColors, View } from '@base-app/ui';
+import { IconSymbol, Text, View } from '@base-app/ui';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable } from 'react-native';
 
 import { itineraryCategories, type ItineraryCategory } from '@/lib/static-data';
 import type { Trip } from '@/lib/types/trips';
 import { groupItineraryByDay, type ItineraryItem } from '@/lib/utils';
+import { useTravelBuddyColors } from '@/theme/use-travel-buddy-colors';
 
 import { ItineraryAgenda } from './itinerary-agenda';
 import { ItineraryGrid } from './itinerary-grid';
@@ -26,7 +27,7 @@ export const ItineraryView = ({
   onPressItem,
   trip,
 }: ItineraryViewProps) => {
-  const appColors = useAppColors();
+  const appColors = useTravelBuddyColors();
   const [mode, setMode] = useState<ViewMode>('agenda');
   const days = useMemo(
     () => groupItineraryByDay(items, trip.startDate, trip.endDate),
@@ -62,7 +63,7 @@ export const ItineraryView = ({
 
   return (
     <View className="gap-4">
-      <View className="flex-row rounded-xl bg-background p-1 dark:bg-background-dark">
+      <View className="flex-row rounded-md bg-background p-1 dark:bg-background-dark">
         {modes.map((option) => {
           const selected = option.value === mode;
           return (
@@ -70,13 +71,13 @@ export const ItineraryView = ({
               key={option.value}
               accessibilityRole="button"
               accessibilityState={{ selected }}
-              className={`flex-1 flex-row items-center justify-center gap-2 rounded-lg py-2 ${
+              className={`flex-1 flex-row items-center justify-center gap-2 rounded-sm py-2 ${
                 selected ? 'bg-surface dark:bg-surface-dark' : ''
               }`}
               onPress={() => changeMode(option.value)}
             >
               <IconSymbol
-                color={selected ? appColors.primary : appColors.muted}
+                color={selected ? appColors.primaryStrong : appColors.muted}
                 name={option.icon}
                 size={18}
               />

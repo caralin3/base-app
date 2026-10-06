@@ -64,7 +64,7 @@ export const IdeaCard = ({
 
   return (
     <View
-      className={`gap-3 rounded-xl bg-background p-4 dark:bg-background-dark ${
+      className={`gap-3 rounded-lg bg-background p-4 dark:bg-background-dark ${
         rejected ? 'opacity-50' : ''
       }`}
     >
@@ -93,7 +93,7 @@ export const IdeaCard = ({
             onPress={() => openWebsite(idea.website as string)}
           >
             <IconSymbol color={appColors.primary} name="link" size={16} />
-            <Text className="flex-1 text-sm text-primary dark:text-primary-dark">
+            <Text className="flex-1 text-sm text-primary-strong dark:text-primary-strong-dark">
               {displayUrl(idea.website)}
             </Text>
           </Pressable>
@@ -109,7 +109,7 @@ export const IdeaCard = ({
               name="mappin.and.ellipse"
               size={16}
             />
-            <Text className="flex-1 text-sm text-primary dark:text-primary-dark">
+            <Text className="flex-1 text-sm text-primary-strong dark:text-primary-strong-dark">
               {address}
             </Text>
           </Pressable>
@@ -125,7 +125,7 @@ export const IdeaCard = ({
               name="arrow.triangle.turn.up.right.diamond"
               size={16}
             />
-            <Text className="text-sm text-primary dark:text-primary-dark">
+            <Text className="text-sm text-primary-strong dark:text-primary-strong-dark">
               Directions from stay
             </Text>
           </Pressable>

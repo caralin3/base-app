@@ -2,18 +2,31 @@ import { Address } from '@base-app/core';
 /* eslint-disable @typescript-eslint/no-redeclare */
 import { z } from 'zod';
 
+export const PlaceStatus = z.enum(['idea', 'planned']);
+export type PlaceStatus = z.infer<typeof PlaceStatus>;
+
+export const Vote = z.enum(['want', 'maybe', 'wont']);
+export type Vote = z.infer<typeof Vote>;
+
 const createPlaceSchema = () =>
   z.object({
     address: Address.optional(),
+    cost: z.number().optional(),
     createdAt: z.string(),
     datetime: z.string().optional(),
+    endDatetime: z.string().optional(),
     id: z.string(),
     name: z.string(),
     notes: z.string().optional(),
     phoneNumber: z.string().optional(),
+    // Missing status on older docs means "planned".
+    status: PlaceStatus.optional(),
     tripId: z.string().optional(),
     updatedAt: z.string(),
     userId: z.string(),
+    // Keyed by traveler id.
+    votes: z.record(z.string(), Vote).optional(),
+    website: z.string().optional(),
   });
 
 export const Activity = createPlaceSchema();
@@ -64,6 +77,7 @@ export const Flight = z.object({
   tripId: z.string().optional(),
   updatedAt: z.string(),
   userId: z.string(),
+  website: z.string().optional(),
 });
 
 export type Flight = z.infer<typeof Flight>;
@@ -72,6 +86,7 @@ export type NewFlight = z.infer<typeof NewFlight>;
 
 export const Lodging = z.object({
   address: Address.optional(),
+  bookingUrl: z.string().optional(),
   checkInDatetime: z.string().optional(),
   checkOutDatetime: z.string().optional(),
   confirmationNumber: z.string().optional(),
@@ -83,6 +98,7 @@ export const Lodging = z.object({
   tripId: z.string().optional(),
   updatedAt: z.string(),
   userId: z.string(),
+  website: z.string().optional(),
 });
 
 export type Lodging = z.infer<typeof Lodging>;
@@ -90,6 +106,7 @@ export const NewLodging = Lodging.omit({ id: true });
 export type NewLodging = z.infer<typeof NewLodging>;
 
 export const Transport = z.object({
+  arrivalDatetime: z.string().optional(),
   confirmationNumber: z.string().optional(),
   createdAt: z.string(),
   departureDatetime: z.string().optional(),
@@ -102,6 +119,7 @@ export const Transport = z.object({
   tripId: z.string().optional(),
   updatedAt: z.string(),
   userId: z.string(),
+  website: z.string().optional(),
 });
 
 export type Transport = z.infer<typeof Transport>;

@@ -6,6 +6,7 @@ export type PlanType =
   | 'entertainment'
   | 'flight'
   | 'food'
+  | 'idea'
   | 'lodging'
   | 'shopping'
   | 'todo'
@@ -67,6 +68,12 @@ const menuItems: PlanMenuItem[] = [
     icon: 'figure.walk',
     label: 'Activity',
     value: 'activity',
+  },
+  {
+    description: 'Save something you might do and vote on it.',
+    icon: 'lightbulb',
+    label: 'Idea',
+    value: 'idea',
   },
   {
     description: 'Capture a follow-up task.',

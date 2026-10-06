@@ -1,49 +1,66 @@
-import { ControlledInput, Separator, Text, View } from '@base-app/ui';
+import {
+  ControlledDateTimeInput,
+  ControlledInput,
+  Separator,
+  Text,
+  View,
+} from '@base-app/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
 import { useAddFlightMutation } from '@/lib/hooks/use-firestore-collection-hooks';
 import type { NewFlight } from '@/lib/types/plans';
 
 import { PlanFormShell } from './form-shell';
-import { nowIso, optionalText } from './form-utils';
+import { endAfterStart, nowIso, optionalText } from './form-utils';
 import { ControlledTripSelect } from './trip-select';
 
-const flightFormSchema = z.object({
-  airline: z.string().min(1, { message: 'Required' }),
-  arrivalAirportCode: z.string().min(1, { message: 'Required' }),
-  arrivalAirportName: z.string().optional(),
-  arrivalCity: z.string().min(1, { message: 'Required' }),
-  arrivalCountry: z.string().min(1, { message: 'Required' }),
-  arrivalDatetime: z.string().min(1, { message: 'Required' }),
-  arrivalState: z.string().optional(),
-  arrivalTerminal: z.string().optional(),
-  arrivalTimezone: z.string().min(1, { message: 'Required' }),
-  confirmationNumber: z.string().optional(),
-  departureAirportCode: z.string().min(1, { message: 'Required' }),
-  departureAirportName: z.string().optional(),
-  departureCity: z.string().min(1, { message: 'Required' }),
-  departureCountry: z.string().min(1, { message: 'Required' }),
-  departureDatetime: z.string().min(1, { message: 'Required' }),
-  departureState: z.string().optional(),
-  departureTerminal: z.string().optional(),
-  departureTimezone: z.string().min(1, { message: 'Required' }),
-  duration: z.string().optional(),
-  flightNumber: z.string().min(1, { message: 'Required' }),
-  notes: z.string().optional(),
-  seatType: z.string().optional(),
-  tripId: z.string().optional(),
-});
+const flightFormSchema = z
+  .object({
+    airline: z.string().min(1, { message: 'Required' }),
+    arrivalAirportCode: z.string().min(1, { message: 'Required' }),
+    arrivalAirportName: z.string().optional(),
+    arrivalCity: z.string().min(1, { message: 'Required' }),
+    arrivalCountry: z.string().min(1, { message: 'Required' }),
+    arrivalDatetime: z.string().min(1, { message: 'Required' }),
+    arrivalState: z.string().optional(),
+    arrivalTerminal: z.string().optional(),
+    arrivalTimezone: z.string().min(1, { message: 'Required' }),
+    confirmationNumber: z.string().optional(),
+    departureAirportCode: z.string().min(1, { message: 'Required' }),
+    departureAirportName: z.string().optional(),
+    departureCity: z.string().min(1, { message: 'Required' }),
+    departureCountry: z.string().min(1, { message: 'Required' }),
+    departureDatetime: z.string().min(1, { message: 'Required' }),
+    departureState: z.string().optional(),
+    departureTerminal: z.string().optional(),
+    departureTimezone: z.string().min(1, { message: 'Required' }),
+    duration: z.string().optional(),
+    flightNumber: z.string().min(1, { message: 'Required' }),
+    notes: z.string().optional(),
+    seatType: z.string().optional(),
+    tripId: z.string().optional(),
+    website: z.string().optional(),
+  })
+  .refine(endAfterStart('departureDatetime', 'arrivalDatetime'), {
+    message: 'Arrival must be after departure',
+    path: ['arrivalDatetime'],
+  });
 
 type FlightFormValues = z.infer<typeof flightFormSchema>;
 
 type FlightFormProps = {
+  defaultTripId?: string;
   onSuccess?: () => void;
   userId: string;
 };
 
-export const FlightForm = ({ onSuccess, userId }: FlightFormProps) => {
+export const FlightForm = ({
+  defaultTripId = '',
+  onSuccess,
+  userId,
+}: FlightFormProps) => {
   const { control, handleSubmit, formState } = useForm<FlightFormValues>({
     defaultValues: {
       airline: '',
@@ -68,10 +85,12 @@ export const FlightForm = ({ onSuccess, userId }: FlightFormProps) => {
       flightNumber: '',
       notes: '',
       seatType: '',
-      tripId: '',
+      tripId: defaultTripId,
+      website: '',
     },
     resolver: zodResolver(flightFormSchema),
   });
+  const departureDatetime = useWatch({ control, name: 'departureDatetime' });
   const addFlight = useAddFlightMutation(userId);
 
   const submitForm = async (values: FlightFormValues) => {
@@ -108,6 +127,7 @@ export const FlightForm = ({ onSuccess, userId }: FlightFormProps) => {
       tripId: optionalText(values.tripId),
       updatedAt: nowIso(),
       userId,
+      website: optionalText(values.website),
     };
 
     await addFlight.mutateAsync(flightData);
@@ -151,6 +171,13 @@ export const FlightForm = ({ onSuccess, userId }: FlightFormProps) => {
         name="tripId"
         userId={userId}
       />
+      <ControlledInput
+        control={control}
+        keyboardType="url"
+        label="Website"
+        name="website"
+        placeholder="Manage booking URL"
+      />
       <Separator hideBottomPadding hideTopPadding />
       <Text className="text-base font-semibold text-foreground dark:text-foreground-dark">
         Departure
@@ -186,7 +213,12 @@ export const FlightForm = ({ onSuccess, userId }: FlightFormProps) => {
           placeholder="Country"
           required
         />
-        {/* @TODO Add date and time picker */}
+        <ControlledDateTimeInput
+          control={control}
+          label="Departs"
+          name="departureDatetime"
+          required
+        />
         <ControlledInput
           control={control}
           error={formState.errors.departureTimezone?.message}
@@ -243,7 +275,15 @@ export const FlightForm = ({ onSuccess, userId }: FlightFormProps) => {
           placeholder="Country"
           required
         />
-        {/* @TODO Add date and time picker */}
+        <ControlledDateTimeInput
+          control={control}
+          defaultPickerDate={
+            departureDatetime ? new Date(departureDatetime) : undefined
+          }
+          label="Arrives"
+          name="arrivalDatetime"
+          required
+        />
         <ControlledInput
           control={control}
           error={formState.errors.arrivalTimezone?.message}

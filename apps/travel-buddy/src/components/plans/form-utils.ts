@@ -8,6 +8,29 @@ export const optionalText = (value?: string | null) => {
   return trimmed ? trimmed : '';
 };
 
+export const optionalNumber = (value?: string | null) => {
+  const trimmed = value?.trim();
+  if (!trimmed) return undefined;
+  const parsed = Number(trimmed);
+  return Number.isNaN(parsed) ? undefined : parsed;
+};
+
+/** zod refine helper: passes when either side is empty or end > start. */
+export const endAfterStart =
+  <T extends Record<string, unknown>>(
+    startKey: keyof T,
+    endKey: keyof T,
+    { allowEqual = false }: { allowEqual?: boolean } = {}
+  ) =>
+  (values: T) => {
+    const start = values[startKey];
+    const end = values[endKey];
+    if (typeof start !== 'string' || typeof end !== 'string') return true;
+    if (!start || !end) return true;
+    const diff = new Date(end).getTime() - new Date(start).getTime();
+    return allowEqual ? diff >= 0 : diff > 0;
+  };
+
 type AddressFields = {
   city?: string;
   country?: string;

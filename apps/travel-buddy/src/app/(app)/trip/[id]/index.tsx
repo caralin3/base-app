@@ -1,5 +1,6 @@
 import { useAuth } from '@base-app/core';
 import {
+  Button,
   colors,
   ModalForm,
   Screen,
@@ -15,19 +16,23 @@ import { differenceInCalendarDays } from 'date-fns/differenceInCalendarDays';
 import { format } from 'date-fns/format';
 import { parseISO } from 'date-fns/parseISO';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
+import { IdeasList } from '@/components/ideas';
+import { ItineraryView } from '@/components/itinerary';
 import {
   FloatingAddPlanModal,
   type FloatingAddPlanModalRef,
   TripTodoForm,
 } from '@/components/plans';
 import { PackingList } from '@/components/todos/packing-list';
+import { BookingCards, EditTravelersForm } from '@/components/trip';
 import type { Todo } from '@/lib/firebase/firestore/todos';
 import {
   useGetTripByIdQuery,
   useTodosByTripIdQuery,
+  useTripItinerary,
   useUpdateTodoMutation,
 } from '@/lib/hooks';
 import { getCountdownDays, groupByCategory } from '@/lib/utils';
@@ -44,6 +49,8 @@ export default function TripScreen() {
   const tripId = local.id;
   const userId = useAuth.use.user()?.id;
   const modal = useModal();
+  const travelersModal = useModal();
+  const [travelersFormKey, setTravelersFormKey] = useState(0);
   const addPlanModalRef = useRef<FloatingAddPlanModalRef>(null);
 
   const { data: tripData, isLoading } = useGetTripByIdQuery(tripId, userId);
@@ -52,6 +59,11 @@ export default function TripScreen() {
     tripId
   );
   const updateTodo = useUpdateTodoMutation(userId);
+  const {
+    isLoading: isLoadingPlans,
+    items: itineraryItems,
+    plans,
+  } = useTripItinerary(userId, tripId);
 
   if (isLoading) {
     return (
@@ -103,6 +115,12 @@ export default function TripScreen() {
   };
 
   const closeTodoModal = () => modal.dismiss();
+
+  const editTravelers = () => {
+    // Remount so the form starts from the latest saved travelers.
+    setTravelersFormKey((key) => key + 1);
+    travelersModal.present();
+  };
 
   const Header = () => (
     <ScrollableHeader
@@ -185,6 +203,36 @@ export default function TripScreen() {
                       )}
                     </View>
                   </View>
+                  <View className="rounded-lg bg-surface p-4 dark:bg-surface-dark">
+                    <View className="flex-row items-center justify-between">
+                      <Text className="text-lg font-bold">Travelers</Text>
+                      <Button
+                        label={tripData.travelers?.length ? 'Edit' : 'Add'}
+                        onPress={editTravelers}
+                        size="sm"
+                        variant="link"
+                      />
+                    </View>
+                    {tripData.travelers?.length ? (
+                      <View className="mt-3 flex-row flex-wrap gap-2">
+                        {tripData.travelers.map((traveler) => (
+                          <View
+                            key={traveler.id}
+                            className="rounded-full bg-background px-3 py-1 dark:bg-background-dark"
+                          >
+                            <Text className="text-sm font-medium">
+                              {traveler.name}
+                            </Text>
+                          </View>
+                        ))}
+                      </View>
+                    ) : (
+                      <Text className="mt-2 text-muted dark:text-muted-dark">
+                        {"Add who's coming so everyone can vote on ideas."}
+                      </Text>
+                    )}
+                  </View>
+                  <BookingCards plans={plans} />
                 </View>
               </TabsScrollView>
             ),
@@ -193,13 +241,28 @@ export default function TripScreen() {
             name: 'Plan',
             content: (
               <TabsScrollView contentContainerStyle={styles.tabContent}>
-                <View className="gap-4 py-4">
-                  <View className="rounded-lg bg-surface p-4 dark:bg-surface-dark">
-                    <Text className="text-lg font-bold">Plan</Text>
-                    <Text className="mt-2 text-muted dark:text-muted-dark">
-                      Your trip plans will show here.
-                    </Text>
-                  </View>
+                <View className="py-4">
+                  <ItineraryView
+                    isLoading={isLoadingPlans}
+                    items={itineraryItems}
+                    trip={tripData}
+                  />
+                </View>
+              </TabsScrollView>
+            ),
+          },
+          {
+            name: 'Ideas',
+            content: (
+              <TabsScrollView contentContainerStyle={styles.tabContent}>
+                <View className="py-4">
+                  <IdeasList
+                    isLoading={isLoadingPlans}
+                    onAddIdea={() => addPlanModalRef.current?.present('idea')}
+                    plans={plans}
+                    trip={tripData}
+                    userId={userId}
+                  />
                 </View>
               </TabsScrollView>
             ),
@@ -227,7 +290,20 @@ export default function TripScreen() {
           userId={userId ?? ''}
         />
       </ModalForm>
+      <ModalForm
+        ref={travelersModal.ref}
+        snapPoints={['60%']}
+        title="Travelers"
+      >
+        <EditTravelersForm
+          key={travelersFormKey}
+          onSuccess={() => travelersModal.dismiss()}
+          trip={tripData}
+          userId={userId}
+        />
+      </ModalForm>
       <FloatingAddPlanModal
+        defaultTripId={tripId}
         ref={addPlanModalRef}
         title="Add Plan"
         showFloatingButton={false}

@@ -125,9 +125,7 @@ export const DateTimeInput = ({
       DateTimePickerAndroid.open({
         is24Hour: false,
         mode: 'time',
-        onChange: (event, selected) => {
-          if (event.type === 'set' && selected) emit(selected);
-        },
+        onValueChange: (_event, selected) => emit(selected),
         value: base,
       });
 
@@ -140,8 +138,7 @@ export const DateTimeInput = ({
       maximumDate,
       minimumDate,
       mode: 'date',
-      onChange: (event, selected) => {
-        if (event.type !== 'set' || !selected) return;
+      onValueChange: (_event, selected) => {
         if (mode === 'datetime') {
           const withTime = new Date(selected);
           withTime.setHours(initialDate.getHours(), initialDate.getMinutes());
@@ -152,13 +149,6 @@ export const DateTimeInput = ({
       },
       value: initialDate,
     });
-  };
-
-  const onIosChange = (
-    _event: DateTimePickerModule.DateTimePickerEvent,
-    selected?: Date
-  ) => {
-    if (selected) emit(selected);
   };
 
   if (!picker) {
@@ -214,7 +204,7 @@ export const DateTimeInput = ({
               minimumDate={minimumDate}
               minuteInterval={minuteInterval}
               mode={mode}
-              onChange={onIosChange}
+              onValueChange={(_event, selected) => emit(selected)}
               testID={testID}
               value={date}
             />

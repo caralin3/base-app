@@ -1,10 +1,5 @@
 import { useAuth } from '@base-app/core';
-import {
-  BottomSheetKeyboardAwareScrollView,
-  FloatingActionButton,
-  ModalForm,
-  useModal,
-} from '@base-app/ui';
+import { FloatingActionButton, ModalForm, useModal } from '@base-app/ui';
 import { forwardRef, useCallback, useImperativeHandle, useState } from 'react';
 
 import { type NewTodo } from '@/lib/firebase';
@@ -153,19 +148,13 @@ export const FloatingAddPlanModal = forwardRef<
       ) : null}
       <ModalForm
         ref={modal.ref}
+        contentContainerStyle={{ gap: currentForm === 'menu' ? 16 : 8 }}
         dismissible={currentForm === 'menu'}
         onLeftActionPress={currentView[currentForm].leftAction}
         snapPoints={currentForm !== 'menu' ? ['95%'] : ['70%', '95%']}
         title={currentView[currentForm].title}
       >
-        <BottomSheetKeyboardAwareScrollView
-          contentContainerStyle={{
-            gap: currentForm === 'menu' ? 16 : 8,
-          }}
-          showsHorizontalScrollIndicator={false}
-        >
-          {currentView[currentForm].component}
-        </BottomSheetKeyboardAwareScrollView>
+        {currentView[currentForm].component}
       </ModalForm>
     </>
   );

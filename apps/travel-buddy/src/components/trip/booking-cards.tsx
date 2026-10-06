@@ -9,6 +9,7 @@ import { format } from 'date-fns/format';
 import { type ReactNode } from 'react';
 import { Pressable } from 'react-native';
 
+import type { EditPlanTarget } from '@/components/plans/edit-plan-modal';
 import { type useTripPlans } from '@/lib/hooks';
 import { itineraryCategories } from '@/lib/static-data';
 import type { Flight, Lodging } from '@/lib/types/plans';
@@ -21,6 +22,7 @@ import {
 } from '@/lib/utils';
 
 type TripPlans = ReturnType<typeof useTripPlans>['plans'];
+type OnEdit = (target: EditPlanTarget) => void;
 
 const formatDateTime = (value?: string) => {
   const date = parseDateTime(value);
@@ -33,6 +35,26 @@ const Card = ({ children, title }: { children: ReactNode; title: string }) => (
     <View className="mt-4 gap-4">{children}</View>
   </View>
 );
+
+const EditButton = ({
+  label,
+  onPress,
+}: {
+  label: string;
+  onPress: () => void;
+}) => {
+  const appColors = useAppColors();
+  return (
+    <Pressable
+      accessibilityLabel={`Edit ${label}`}
+      accessibilityRole="button"
+      hitSlop={8}
+      onPress={onPress}
+    >
+      <IconSymbol color={appColors.muted} name="pencil" size={16} />
+    </Pressable>
+  );
+};
 
 const Field = ({
   label,
@@ -78,11 +100,19 @@ const LinkRow = ({
   );
 };
 
-const StayDetails = ({ stay }: { stay: Lodging }) => {
+const StayDetails = ({ onEdit, stay }: { onEdit?: OnEdit; stay: Lodging }) => {
   const address = formatFullAddress(stay.address);
   return (
     <View className="gap-3">
-      <Text className="text-base font-semibold">{stay.name}</Text>
+      <View className="flex-row items-center gap-2">
+        <Text className="flex-1 text-base font-semibold">{stay.name}</Text>
+        {onEdit && (
+          <EditButton
+            label={stay.name}
+            onPress={() => onEdit({ id: stay.id, type: 'lodging' })}
+          />
+        )}
+      </View>
       {!!address && (
         <LinkRow
           icon="mappin.and.ellipse"
@@ -114,20 +144,34 @@ const StayDetails = ({ stay }: { stay: Lodging }) => {
   );
 };
 
-export const StayCard = ({ lodging }: { lodging: Lodging[] }) =>
+export const StayCard = ({
+  lodging,
+  onEdit,
+}: {
+  lodging: Lodging[];
+  onEdit?: OnEdit;
+}) =>
   lodging.length ? (
     <Card title={lodging.length > 1 ? 'Stays' : 'Stay'}>
       {lodging.map((stay) => (
-        <StayDetails key={stay.id} stay={stay} />
+        <StayDetails key={stay.id} onEdit={onEdit} stay={stay} />
       ))}
     </Card>
   ) : null;
 
-const FlightRow = ({ flight }: { flight: Flight }) => (
+const FlightRow = ({ flight, onEdit }: { flight: Flight; onEdit?: OnEdit }) => (
   <View className="gap-1">
-    <Text className="text-base font-semibold">
-      {flight.departure.airportCode} → {flight.arrival.airportCode}
-    </Text>
+    <View className="flex-row items-center gap-2">
+      <Text className="flex-1 text-base font-semibold">
+        {flight.departure.airportCode} → {flight.arrival.airportCode}
+      </Text>
+      {onEdit && (
+        <EditButton
+          label={`flight ${flight.flightNumber}`}
+          onPress={() => onEdit({ id: flight.id, type: 'flight' })}
+        />
+      )}
+    </View>
     <Text className="text-sm text-muted dark:text-muted-dark">
       {[
         formatDateTime(flight.departure.datetime),
@@ -144,7 +188,13 @@ const FlightRow = ({ flight }: { flight: Flight }) => (
   </View>
 );
 
-export const FlightsCard = ({ flights }: { flights: Flight[] }) => {
+export const FlightsCard = ({
+  flights,
+  onEdit,
+}: {
+  flights: Flight[];
+  onEdit?: OnEdit;
+}) => {
   const sorted = [...flights].sort(
     (a, b) =>
       (parseDateTime(a.departure.datetime)?.getTime() ?? 0) -
@@ -153,7 +203,7 @@ export const FlightsCard = ({ flights }: { flights: Flight[] }) => {
   return sorted.length ? (
     <Card title="Flights">
       {sorted.map((flight) => (
-        <FlightRow key={flight.id} flight={flight} />
+        <FlightRow key={flight.id} flight={flight} onEdit={onEdit} />
       ))}
     </Card>
   ) : null;
@@ -250,10 +300,16 @@ export const LinksCard = ({ plans }: { plans: TripPlans }) => {
 };
 
 /** Booking details from the sheet's "Booking" tab, shown on the trip Overview. */
-export const BookingCards = ({ plans }: { plans: TripPlans }) => (
+export const BookingCards = ({
+  onEdit,
+  plans,
+}: {
+  onEdit?: OnEdit;
+  plans: TripPlans;
+}) => (
   <>
-    <StayCard lodging={plans.lodging} />
-    <FlightsCard flights={plans.flights} />
+    <StayCard lodging={plans.lodging} onEdit={onEdit} />
+    <FlightsCard flights={plans.flights} onEdit={onEdit} />
     <LinksCard plans={plans} />
   </>
 );

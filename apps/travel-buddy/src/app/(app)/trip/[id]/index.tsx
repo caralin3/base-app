@@ -1,5 +1,6 @@
 import { useAuth } from '@base-app/core';
 import {
+  BottomSheetKeyboardAwareScrollView,
   Button,
   colors,
   ModalForm,
@@ -22,8 +23,11 @@ import { StyleSheet } from 'react-native';
 import { IdeasList } from '@/components/ideas';
 import { ItineraryView } from '@/components/itinerary';
 import {
+  EditPlanModal,
+  type EditPlanModalRef,
   FloatingAddPlanModal,
   type FloatingAddPlanModalRef,
+  TripForm,
   TripTodoForm,
 } from '@/components/plans';
 import { PackingList } from '@/components/todos/packing-list';
@@ -52,6 +56,9 @@ export default function TripScreen() {
   const travelersModal = useModal();
   const [travelersFormKey, setTravelersFormKey] = useState(0);
   const addPlanModalRef = useRef<FloatingAddPlanModalRef>(null);
+  const editPlanModalRef = useRef<EditPlanModalRef>(null);
+  const tripModal = useModal();
+  const [tripFormKey, setTripFormKey] = useState(0);
 
   const { data: tripData, isLoading } = useGetTripByIdQuery(tripId, userId);
   const { data: todosData, isLoading: isLoadingTodos } = useTodosByTripIdQuery(
@@ -116,6 +123,12 @@ export default function TripScreen() {
 
   const closeTodoModal = () => modal.dismiss();
 
+  const editTrip = () => {
+    // Remount so the form starts from the latest saved trip.
+    setTripFormKey((key) => key + 1);
+    tripModal.present();
+  };
+
   const editTravelers = () => {
     // Remount so the form starts from the latest saved travelers.
     setTravelersFormKey((key) => key + 1);
@@ -168,7 +181,15 @@ export default function TripScreen() {
               <TabsScrollView contentContainerStyle={styles.tabContent}>
                 <View className="gap-4 py-4">
                   <View className="rounded-lg bg-surface p-4 dark:bg-surface-dark">
-                    <Text className="text-lg font-bold">Trip Details</Text>
+                    <View className="flex-row items-center justify-between">
+                      <Text className="text-lg font-bold">Trip Details</Text>
+                      <Button
+                        label="Edit"
+                        onPress={editTrip}
+                        size="sm"
+                        variant="link"
+                      />
+                    </View>
                     <View className="mt-4 gap-3">
                       <View>
                         <Text className="text-sm font-semibold text-muted dark:text-muted-dark">
@@ -232,7 +253,10 @@ export default function TripScreen() {
                       </Text>
                     )}
                   </View>
-                  <BookingCards plans={plans} />
+                  <BookingCards
+                    onEdit={(target) => editPlanModalRef.current?.edit(target)}
+                    plans={plans}
+                  />
                 </View>
               </TabsScrollView>
             ),
@@ -245,6 +269,12 @@ export default function TripScreen() {
                   <ItineraryView
                     isLoading={isLoadingPlans}
                     items={itineraryItems}
+                    onPressItem={(item) =>
+                      editPlanModalRef.current?.edit({
+                        id: item.sourceId,
+                        type: item.sourceType,
+                      })
+                    }
                     trip={tripData}
                   />
                 </View>
@@ -259,6 +289,12 @@ export default function TripScreen() {
                   <IdeasList
                     isLoading={isLoadingPlans}
                     onAddIdea={() => addPlanModalRef.current?.present('idea')}
+                    onEditIdea={(idea) =>
+                      editPlanModalRef.current?.edit({
+                        id: idea.id,
+                        type: idea.placeType,
+                      })
+                    }
                     plans={plans}
                     trip={tripData}
                     userId={userId}
@@ -302,6 +338,20 @@ export default function TripScreen() {
           userId={userId}
         />
       </ModalForm>
+      <ModalForm ref={tripModal.ref} snapPoints={['95%']} title="Edit Trip">
+        <BottomSheetKeyboardAwareScrollView
+          contentContainerStyle={{ gap: 8 }}
+          showsHorizontalScrollIndicator={false}
+        >
+          <TripForm
+            key={tripFormKey}
+            onSuccess={() => tripModal.dismiss()}
+            trip={tripData}
+            userId={userId ?? ''}
+          />
+        </BottomSheetKeyboardAwareScrollView>
+      </ModalForm>
+      <EditPlanModal ref={editPlanModalRef} plans={plans} />
       <FloatingAddPlanModal
         defaultTripId={tripId}
         ref={addPlanModalRef}

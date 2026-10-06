@@ -9,13 +9,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
-import type { NewActivity, PlaceStatus } from '@/lib/types/plans';
+import type { Activity, NewActivity, PlaceStatus } from '@/lib/types/plans';
 
 import { PlanFormShell } from './form-shell';
 import {
+  addressToFields,
   endAfterStart,
+  fieldsToAddress,
   nowIso,
-  optionalAddress,
   optionalNumber,
   optionalText,
 } from './form-utils';
@@ -56,14 +57,7 @@ export const toNewPlace = (
   userId: string,
   status: PlaceStatus = 'planned'
 ): NewActivity => ({
-  address: optionalAddress({
-    city: values.addressCity,
-    country: values.addressCountry,
-    postalCode: values.addressPostalCode,
-    state: values.addressState,
-    street1: values.addressStreet1,
-    street2: values.addressStreet2,
-  }),
+  address: fieldsToAddress('address', values),
   cost: optionalNumber(values.cost),
   createdAt: nowIso(),
   datetime: status === 'idea' ? '' : optionalText(values.datetime),
@@ -78,6 +72,21 @@ export const toNewPlace = (
   website: optionalText(values.website),
 });
 
+const toPlaceFormValues = (
+  defaultTripId: string,
+  plan?: Activity
+): PlaceFormValues => ({
+  ...addressToFields('address', plan?.address),
+  cost: plan?.cost !== undefined ? String(plan.cost) : '',
+  datetime: plan?.datetime ?? '',
+  endDatetime: plan?.endDatetime ?? '',
+  name: plan?.name ?? '',
+  notes: plan?.notes ?? '',
+  phoneNumber: plan?.phoneNumber ?? '',
+  tripId: plan?.tripId ?? defaultTripId,
+  website: plan?.website ?? '',
+});
+
 type PlaceFormProps = {
   children?: React.ReactNode;
   defaultTripId?: string;
@@ -86,6 +95,8 @@ type PlaceFormProps = {
   isIdea?: boolean;
   loading?: boolean;
   onSubmit: (values: PlaceFormValues) => Promise<void>;
+  /** Existing place to edit; the form starts from its values. */
+  plan?: Activity;
   submitLabel: string;
   title: string;
   userId: string;
@@ -98,27 +109,13 @@ export const PlaceForm = ({
   isIdea = false,
   loading = false,
   onSubmit,
+  plan,
   submitLabel,
   title,
   userId,
 }: PlaceFormProps) => {
   const { control, handleSubmit, formState } = useForm<PlaceFormValues>({
-    defaultValues: {
-      addressCity: '',
-      addressCountry: '',
-      addressPostalCode: '',
-      addressState: '',
-      addressStreet1: '',
-      addressStreet2: '',
-      cost: '',
-      datetime: '',
-      endDatetime: '',
-      name: '',
-      notes: '',
-      phoneNumber: '',
-      tripId: defaultTripId,
-      website: '',
-    },
+    defaultValues: toPlaceFormValues(defaultTripId, plan),
     resolver: zodResolver(placeFormSchema),
   });
   const startDatetime = useWatch({ control, name: 'datetime' });

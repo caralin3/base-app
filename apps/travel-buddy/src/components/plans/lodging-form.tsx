@@ -9,15 +9,20 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
-import { useAddLodgingMutation } from '@/lib/hooks/use-firestore-collection-hooks';
-import type { NewLodging } from '@/lib/types/plans';
+import {
+  useAddLodgingMutation,
+  useUpdateLodgingMutation,
+} from '@/lib/hooks/use-firestore-collection-hooks';
+import type { Lodging, NewLodging } from '@/lib/types/plans';
 
 import { PlanFormShell } from './form-shell';
 import {
+  addressToFields,
   endAfterStart,
+  fieldsToAddress,
   nowIso,
-  optionalAddress,
   optionalText,
+  toUpdateData,
 } from './form-utils';
 import { ControlledTripSelect } from './trip-select';
 
@@ -49,47 +54,44 @@ type LodgingFormValues = z.infer<typeof lodgingFormSchema>;
 type LodgingFormProps = {
   defaultTripId?: string;
   onSuccess?: () => void;
+  /** Existing lodging to edit; omit to create a new one. */
+  plan?: Lodging;
   userId: string;
 };
+
+const toLodgingFormValues = (
+  defaultTripId: string,
+  plan?: Lodging
+): LodgingFormValues => ({
+  ...addressToFields('address', plan?.address),
+  bookingUrl: plan?.bookingUrl ?? '',
+  checkInDatetime: plan?.checkInDatetime ?? '',
+  checkOutDatetime: plan?.checkOutDatetime ?? '',
+  confirmationNumber: plan?.confirmationNumber ?? '',
+  name: plan?.name ?? '',
+  notes: plan?.notes ?? '',
+  phoneNumber: plan?.phoneNumber ?? '',
+  tripId: plan?.tripId ?? defaultTripId,
+  website: plan?.website ?? '',
+});
 
 export const LodgingForm = ({
   defaultTripId = '',
   onSuccess,
+  plan,
   userId,
 }: LodgingFormProps) => {
   const { control, handleSubmit, formState } = useForm<LodgingFormValues>({
-    defaultValues: {
-      addressCity: '',
-      addressCountry: '',
-      addressPostalCode: '',
-      addressState: '',
-      addressStreet1: '',
-      addressStreet2: '',
-      bookingUrl: '',
-      checkInDatetime: '',
-      checkOutDatetime: '',
-      confirmationNumber: '',
-      name: '',
-      notes: '',
-      phoneNumber: '',
-      tripId: defaultTripId,
-      website: '',
-    },
+    defaultValues: toLodgingFormValues(defaultTripId, plan),
     resolver: zodResolver(lodgingFormSchema),
   });
   const checkInDatetime = useWatch({ control, name: 'checkInDatetime' });
   const addLodging = useAddLodgingMutation(userId);
+  const updateLodging = useUpdateLodgingMutation(userId);
 
   const submitForm = async (values: LodgingFormValues) => {
     const lodgingData: NewLodging = {
-      address: optionalAddress({
-        city: values.addressCity,
-        country: values.addressCountry,
-        postalCode: values.addressPostalCode,
-        state: values.addressState,
-        street1: values.addressStreet1,
-        street2: values.addressStreet2,
-      }),
+      address: fieldsToAddress('address', values),
       bookingUrl: optionalText(values.bookingUrl),
       checkInDatetime: optionalText(values.checkInDatetime),
       checkOutDatetime: optionalText(values.checkOutDatetime),
@@ -104,7 +106,14 @@ export const LodgingForm = ({
       website: optionalText(values.website),
     };
 
-    await addLodging.mutateAsync(lodgingData);
+    if (plan) {
+      await updateLodging.mutateAsync({
+        data: toUpdateData(lodgingData),
+        id: plan.id,
+      });
+    } else {
+      await addLodging.mutateAsync(lodgingData);
+    }
     onSuccess?.();
   };
 
@@ -112,9 +121,9 @@ export const LodgingForm = ({
     <PlanFormShell
       description="Track the place you are staying and the key check-in details."
       disabled={!userId}
-      loading={addLodging.isPending}
+      loading={addLodging.isPending || updateLodging.isPending}
       onSubmit={handleSubmit(submitForm)}
-      submitLabel="Add Lodging"
+      submitLabel={plan ? 'Save Changes' : 'Add Lodging'}
       title="Lodging"
     >
       <ControlledInput

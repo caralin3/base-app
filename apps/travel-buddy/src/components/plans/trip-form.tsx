@@ -3,11 +3,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
-import { useAddTripMutation } from '@/lib/hooks/use-firestore-collection-hooks';
-import { type NewTrip, Traveler } from '@/lib/types/trips';
+import {
+  useAddTripMutation,
+  useUpdateTripMutation,
+} from '@/lib/hooks/use-firestore-collection-hooks';
+import { type NewTrip, Traveler, type Trip } from '@/lib/types/trips';
 
 import { PlanFormShell } from './form-shell';
-import { endAfterStart, nowIso, optionalText } from './form-utils';
+import {
+  endAfterStart,
+  nowIso,
+  optionalText,
+  toUpdateData,
+} from './form-utils';
 import { ControlledTravelersField } from './travelers-field';
 
 const tripFormSchema = z
@@ -29,23 +37,26 @@ type TripFormValues = z.infer<typeof tripFormSchema>;
 
 type TripFormProps = {
   onSuccess?: (tripId: string) => void;
+  /** Existing trip to edit; omit to create a new one. */
+  trip?: Trip;
   userId: string;
 };
 
-export const TripForm = ({ onSuccess, userId }: TripFormProps) => {
+export const TripForm = ({ onSuccess, trip, userId }: TripFormProps) => {
   const { control, handleSubmit, formState } = useForm<TripFormValues>({
     defaultValues: {
-      coverPhotoUrl: '',
-      destination: '',
-      endDate: '',
-      name: '',
-      notes: '',
-      startDate: '',
-      travelers: [],
+      coverPhotoUrl: trip?.coverPhotoUrl ?? '',
+      destination: trip?.destination ?? '',
+      endDate: trip?.endDate ?? '',
+      name: trip?.name ?? '',
+      notes: trip?.notes ?? '',
+      startDate: trip?.startDate ?? '',
+      travelers: trip?.travelers ?? [],
     },
     resolver: zodResolver(tripFormSchema),
   });
   const addTrip = useAddTripMutation(userId);
+  const updateTrip = useUpdateTripMutation(userId);
   const startDate = useWatch({ control, name: 'startDate' });
 
   const submitForm = async (values: TripFormValues) => {
@@ -62,17 +73,25 @@ export const TripForm = ({ onSuccess, userId }: TripFormProps) => {
       userId,
     };
 
-    const id = await addTrip.mutateAsync(tripData);
-    onSuccess?.(id);
+    if (trip) {
+      await updateTrip.mutateAsync({
+        data: toUpdateData(tripData),
+        id: trip.id,
+      });
+      onSuccess?.(trip.id);
+    } else {
+      const id = await addTrip.mutateAsync(tripData);
+      onSuccess?.(id);
+    }
   };
 
   return (
     <PlanFormShell
       description="Keep the core trip details in one place."
       disabled={!userId}
-      loading={addTrip.isPending}
+      loading={addTrip.isPending || updateTrip.isPending}
       onSubmit={handleSubmit(submitForm)}
-      submitLabel="Add Trip"
+      submitLabel={trip ? 'Save Changes' : 'Add Trip'}
       title="Trip"
     >
       <ControlledInput

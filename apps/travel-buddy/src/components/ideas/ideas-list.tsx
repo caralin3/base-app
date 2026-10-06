@@ -33,6 +33,7 @@ type TripPlans = ReturnType<typeof useTripPlans>['plans'];
 type IdeasListProps = {
   isLoading?: boolean;
   onAddIdea: () => void;
+  onEditIdea?: (idea: Idea) => void;
   plans: TripPlans;
   trip: Trip;
   userId?: string;
@@ -41,6 +42,7 @@ type IdeasListProps = {
 export const IdeasList = ({
   isLoading = false,
   onAddIdea,
+  onEditIdea,
   plans,
   trip,
   userId,
@@ -148,6 +150,7 @@ export const IdeasList = ({
               <IdeaCard
                 key={idea.id}
                 idea={idea}
+                onEdit={onEditIdea}
                 onSchedule={openSchedule}
                 onVote={vote}
                 stayAddress={stayAddress}

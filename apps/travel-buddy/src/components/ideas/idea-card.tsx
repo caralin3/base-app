@@ -32,6 +32,7 @@ const voteStyles: Record<Vote, { className: string; label: string }> = {
 
 type IdeaCardProps = {
   idea: Idea;
+  onEdit?: (idea: Idea) => void;
   onSchedule: (idea: Idea) => void;
   onVote: (idea: Idea, traveler: Traveler) => void;
   /** Address of where the group is staying, for "Directions from stay". */
@@ -41,6 +42,7 @@ type IdeaCardProps = {
 
 export const IdeaCard = ({
   idea,
+  onEdit,
   onSchedule,
   onVote,
   stayAddress,
@@ -157,12 +159,26 @@ export const IdeaCard = ({
         </View>
       )}
 
-      <Button
-        label="Schedule it"
-        onPress={() => onSchedule(idea)}
-        size="sm"
-        variant="outline"
-      />
+      <View className="flex-row gap-2">
+        {onEdit && (
+          <View className="flex-1">
+            <Button
+              label="Edit"
+              onPress={() => onEdit(idea)}
+              size="sm"
+              variant="outline"
+            />
+          </View>
+        )}
+        <View className="flex-1">
+          <Button
+            label="Schedule it"
+            onPress={() => onSchedule(idea)}
+            size="sm"
+            variant="outline"
+          />
+        </View>
+      </View>
     </View>
   );
 };

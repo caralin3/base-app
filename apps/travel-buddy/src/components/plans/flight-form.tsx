@@ -9,11 +9,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
-import { useAddFlightMutation } from '@/lib/hooks/use-firestore-collection-hooks';
-import type { NewFlight } from '@/lib/types/plans';
+import {
+  useAddFlightMutation,
+  useUpdateFlightMutation,
+} from '@/lib/hooks/use-firestore-collection-hooks';
+import type { Flight, NewFlight } from '@/lib/types/plans';
 
 import { PlanFormShell } from './form-shell';
-import { endAfterStart, nowIso, optionalText } from './form-utils';
+import {
+  endAfterStart,
+  nowIso,
+  optionalText,
+  toUpdateData,
+} from './form-utils';
 import { ControlledTripSelect } from './trip-select';
 
 const flightFormSchema = z
@@ -53,45 +61,54 @@ type FlightFormValues = z.infer<typeof flightFormSchema>;
 type FlightFormProps = {
   defaultTripId?: string;
   onSuccess?: () => void;
+  /** Existing flight to edit; omit to create a new one. */
+  plan?: Flight;
   userId: string;
 };
+
+const toFlightFormValues = (
+  defaultTripId: string,
+  plan?: Flight
+): FlightFormValues => ({
+  airline: plan?.airline ?? '',
+  arrivalAirportCode: plan?.arrival.airportCode ?? '',
+  arrivalAirportName: plan?.arrival.airportName ?? '',
+  arrivalCity: plan?.arrival.city ?? '',
+  arrivalCountry: plan?.arrival.country ?? '',
+  arrivalDatetime: plan?.arrival.datetime ?? '',
+  arrivalState: plan?.arrival.state ?? '',
+  arrivalTerminal: plan?.arrival.terminal ?? '',
+  arrivalTimezone: plan?.arrival.timezone ?? '',
+  confirmationNumber: plan?.confirmationNumber ?? '',
+  departureAirportCode: plan?.departure.airportCode ?? '',
+  departureAirportName: plan?.departure.airportName ?? '',
+  departureCity: plan?.departure.city ?? '',
+  departureCountry: plan?.departure.country ?? '',
+  departureDatetime: plan?.departure.datetime ?? '',
+  departureState: plan?.departure.state ?? '',
+  departureTerminal: plan?.departure.terminal ?? '',
+  departureTimezone: plan?.departure.timezone ?? '',
+  duration: plan?.duration !== undefined ? String(plan.duration) : '',
+  flightNumber: plan?.flightNumber ?? '',
+  notes: plan?.notes ?? '',
+  seatType: plan?.departure.seatType ?? '',
+  tripId: plan?.tripId ?? defaultTripId,
+  website: plan?.website ?? '',
+});
 
 export const FlightForm = ({
   defaultTripId = '',
   onSuccess,
+  plan,
   userId,
 }: FlightFormProps) => {
   const { control, handleSubmit, formState } = useForm<FlightFormValues>({
-    defaultValues: {
-      airline: '',
-      arrivalAirportCode: '',
-      arrivalAirportName: '',
-      arrivalCity: '',
-      arrivalCountry: '',
-      arrivalDatetime: '',
-      arrivalState: '',
-      arrivalTerminal: '',
-      arrivalTimezone: '',
-      confirmationNumber: '',
-      departureAirportCode: '',
-      departureAirportName: '',
-      departureCity: '',
-      departureCountry: '',
-      departureDatetime: '',
-      departureState: '',
-      departureTerminal: '',
-      departureTimezone: '',
-      duration: '',
-      flightNumber: '',
-      notes: '',
-      seatType: '',
-      tripId: defaultTripId,
-      website: '',
-    },
+    defaultValues: toFlightFormValues(defaultTripId, plan),
     resolver: zodResolver(flightFormSchema),
   });
   const departureDatetime = useWatch({ control, name: 'departureDatetime' });
   const addFlight = useAddFlightMutation(userId);
+  const updateFlight = useUpdateFlightMutation(userId);
 
   const submitForm = async (values: FlightFormValues) => {
     const flightData: NewFlight = {
@@ -122,7 +139,7 @@ export const FlightForm = ({
       },
       duration: values.duration ? Number(values.duration) : undefined,
       flightNumber: values.flightNumber,
-      layoverFlightIds: [],
+      layoverFlightIds: plan?.layoverFlightIds ?? [],
       notes: optionalText(values.notes),
       tripId: optionalText(values.tripId),
       updatedAt: nowIso(),
@@ -130,7 +147,14 @@ export const FlightForm = ({
       website: optionalText(values.website),
     };
 
-    await addFlight.mutateAsync(flightData);
+    if (plan) {
+      await updateFlight.mutateAsync({
+        data: toUpdateData(flightData),
+        id: plan.id,
+      });
+    } else {
+      await addFlight.mutateAsync(flightData);
+    }
     onSuccess?.();
   };
 
@@ -138,9 +162,9 @@ export const FlightForm = ({
     <PlanFormShell
       description="Capture the departure and arrival details for a flight."
       disabled={!userId}
-      loading={addFlight.isPending}
+      loading={addFlight.isPending || updateFlight.isPending}
       onSubmit={handleSubmit(submitForm)}
-      submitLabel="Add Flight"
+      submitLabel={plan ? 'Save Changes' : 'Add Flight'}
       title="Flight"
     >
       <ControlledInput

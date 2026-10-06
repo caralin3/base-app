@@ -16,12 +16,14 @@ const VIEW_MODE_KEY = 'travel-buddy.itinerary-view-mode';
 type ItineraryViewProps = {
   isLoading?: boolean;
   items: ItineraryItem[];
+  onPressItem?: (item: ItineraryItem) => void;
   trip: Pick<Trip, 'endDate' | 'startDate'>;
 };
 
 export const ItineraryView = ({
   isLoading = false,
   items,
+  onPressItem,
   trip,
 }: ItineraryViewProps) => {
   const appColors = useAppColors();
@@ -119,9 +121,9 @@ export const ItineraryView = ({
 
       {!isLoading &&
         (mode === 'agenda' ? (
-          <ItineraryAgenda days={days} />
+          <ItineraryAgenda days={days} onPressItem={onPressItem} />
         ) : (
-          <ItineraryGrid days={days} />
+          <ItineraryGrid days={days} onPressItem={onPressItem} />
         ))}
     </View>
   );

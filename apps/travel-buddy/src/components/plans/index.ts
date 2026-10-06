@@ -1,5 +1,6 @@
 export * from './activity-form';
 export * from './add-plan-menu';
+export * from './edit-plan-modal';
 export * from './entertainment-form';
 export * from './flight-form';
 export * from './floating-add-plan-modal';

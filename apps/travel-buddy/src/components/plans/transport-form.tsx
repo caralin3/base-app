@@ -9,15 +9,20 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
-import { useAddTransportMutation } from '@/lib/hooks/use-firestore-collection-hooks';
-import type { NewTransport } from '@/lib/types/plans';
+import {
+  useAddTransportMutation,
+  useUpdateTransportMutation,
+} from '@/lib/hooks/use-firestore-collection-hooks';
+import type { NewTransport, Transport } from '@/lib/types/plans';
 
 import { PlanFormShell } from './form-shell';
 import {
+  addressToFields,
   endAfterStart,
+  fieldsToAddress,
   nowIso,
-  optionalAddress,
   optionalText,
+  toUpdateData,
 } from './form-utils';
 import { ControlledTripSelect } from './trip-select';
 
@@ -54,41 +59,40 @@ type TransportFormValues = z.infer<typeof transportFormSchema>;
 type TransportFormProps = {
   defaultTripId?: string;
   onSuccess?: () => void;
+  /** Existing transport to edit; omit to create a new one. */
+  plan?: Transport;
   userId: string;
 };
+
+const toTransportFormValues = (
+  defaultTripId: string,
+  plan?: Transport
+): TransportFormValues => ({
+  ...addressToFields('dropoff', plan?.dropoffLocation),
+  ...addressToFields('pickup', plan?.pickupLocation),
+  arrivalDatetime: plan?.arrivalDatetime ?? '',
+  confirmationNumber: plan?.confirmationNumber ?? '',
+  departureDatetime: plan?.departureDatetime ?? '',
+  name: plan?.name ?? '',
+  notes: plan?.notes ?? '',
+  phoneNumber: plan?.phoneNumber ?? '',
+  tripId: plan?.tripId ?? defaultTripId,
+  website: plan?.website ?? '',
+});
 
 export const TransportForm = ({
   defaultTripId = '',
   onSuccess,
+  plan,
   userId,
 }: TransportFormProps) => {
   const { control, handleSubmit, formState } = useForm<TransportFormValues>({
-    defaultValues: {
-      arrivalDatetime: '',
-      confirmationNumber: '',
-      departureDatetime: '',
-      dropoffCity: '',
-      dropoffCountry: '',
-      dropoffPostalCode: '',
-      dropoffState: '',
-      dropoffStreet1: '',
-      dropoffStreet2: '',
-      name: '',
-      notes: '',
-      pickupCity: '',
-      pickupCountry: '',
-      pickupPostalCode: '',
-      pickupState: '',
-      pickupStreet1: '',
-      pickupStreet2: '',
-      phoneNumber: '',
-      tripId: defaultTripId,
-      website: '',
-    },
+    defaultValues: toTransportFormValues(defaultTripId, plan),
     resolver: zodResolver(transportFormSchema),
   });
   const departureDatetime = useWatch({ control, name: 'departureDatetime' });
   const addTransport = useAddTransportMutation(userId);
+  const updateTransport = useUpdateTransportMutation(userId);
 
   const submitForm = async (values: TransportFormValues) => {
     const transportData: NewTransport = {
@@ -96,24 +100,10 @@ export const TransportForm = ({
       confirmationNumber: optionalText(values.confirmationNumber),
       createdAt: nowIso(),
       departureDatetime: optionalText(values.departureDatetime),
-      dropoffLocation: optionalAddress({
-        city: values.dropoffCity,
-        country: values.dropoffCountry,
-        postalCode: values.dropoffPostalCode,
-        state: values.dropoffState,
-        street1: values.dropoffStreet1,
-        street2: values.dropoffStreet2,
-      }),
+      dropoffLocation: fieldsToAddress('dropoff', values),
       name: values.name,
       notes: optionalText(values.notes),
-      pickupLocation: optionalAddress({
-        city: values.pickupCity,
-        country: values.pickupCountry,
-        postalCode: values.pickupPostalCode,
-        state: values.pickupState,
-        street1: values.pickupStreet1,
-        street2: values.pickupStreet2,
-      }),
+      pickupLocation: fieldsToAddress('pickup', values),
       phoneNumber: optionalText(values.phoneNumber),
       tripId: optionalText(values.tripId),
       updatedAt: nowIso(),
@@ -121,7 +111,14 @@ export const TransportForm = ({
       website: optionalText(values.website),
     };
 
-    await addTransport.mutateAsync(transportData);
+    if (plan) {
+      await updateTransport.mutateAsync({
+        data: toUpdateData(transportData),
+        id: plan.id,
+      });
+    } else {
+      await addTransport.mutateAsync(transportData);
+    }
     onSuccess?.();
   };
 
@@ -129,9 +126,9 @@ export const TransportForm = ({
     <PlanFormShell
       description="Record the ride, shuttle, or transfer details."
       disabled={!userId}
-      loading={addTransport.isPending}
+      loading={addTransport.isPending || updateTransport.isPending}
       onSubmit={handleSubmit(submitForm)}
-      submitLabel="Add Transport"
+      submitLabel={plan ? 'Save Changes' : 'Add Transport'}
       title="Transport"
     >
       <ControlledInput

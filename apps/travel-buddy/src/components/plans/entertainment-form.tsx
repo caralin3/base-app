@@ -1,22 +1,38 @@
-import { useAddEntertainmentMutation } from '@/lib/hooks/use-firestore-collection-hooks';
+import {
+  useAddEntertainmentMutation,
+  useUpdateEntertainmentMutation,
+} from '@/lib/hooks/use-firestore-collection-hooks';
+import type { Entertainment } from '@/lib/types/plans';
 
+import { toUpdateData } from './form-utils';
 import { PlaceForm, type PlaceFormValues, toNewPlace } from './place-form';
 
 type EntertainmentFormProps = {
   defaultTripId?: string;
   onSuccess?: () => void;
+  /** Existing entertainment to edit; omit to create a new one. */
+  plan?: Entertainment;
   userId: string;
 };
 
 export const EntertainmentForm = ({
   defaultTripId,
   onSuccess,
+  plan,
   userId,
 }: EntertainmentFormProps) => {
   const addEntertainment = useAddEntertainmentMutation(userId);
+  const updateEntertainment = useUpdateEntertainmentMutation(userId);
 
   const submitForm = async (values: PlaceFormValues) => {
-    await addEntertainment.mutateAsync(toNewPlace(values, userId));
+    if (plan) {
+      await updateEntertainment.mutateAsync({
+        data: toUpdateData(toNewPlace(values, userId, plan.status)),
+        id: plan.id,
+      });
+    } else {
+      await addEntertainment.mutateAsync(toNewPlace(values, userId));
+    }
     onSuccess?.();
   };
 
@@ -24,9 +40,11 @@ export const EntertainmentForm = ({
     <PlaceForm
       defaultTripId={defaultTripId}
       description="Track shows, events, and other plans."
-      loading={addEntertainment.isPending}
+      isIdea={plan?.status === 'idea'}
+      loading={addEntertainment.isPending || updateEntertainment.isPending}
       onSubmit={submitForm}
-      submitLabel="Add Entertainment"
+      plan={plan}
+      submitLabel={plan ? 'Save Changes' : 'Add Entertainment'}
       title="Entertainment"
       userId={userId}
     />

@@ -7,6 +7,7 @@ import { itineraryCategories } from '@/lib/static-data';
 import {
   formatTimeRange,
   type ItineraryDay,
+  type ItineraryItem,
   layoutDayGrid,
   parseDateTime,
 } from '@/lib/utils';
@@ -16,6 +17,7 @@ const GUTTER_WIDTH = 56;
 
 type ItineraryGridProps = {
   days: ItineraryDay[];
+  onPressItem?: (item: ItineraryItem) => void;
 };
 
 const hourLabel = (minutes: number) => {
@@ -25,7 +27,7 @@ const hourLabel = (minutes: number) => {
 };
 
 /** Single-day calendar grid, like the Itinerary tab of the trip sheet. */
-export const ItineraryGrid = ({ days }: ItineraryGridProps) => {
+export const ItineraryGrid = ({ days, onPressItem }: ItineraryGridProps) => {
   const [selectedDate, setSelectedDate] = useState(days[0]?.date);
   const day = days.find((d) => d.date === selectedDate) ?? days[0];
   const layout = useMemo(() => (day ? layoutDayGrid(day) : undefined), [day]);
@@ -106,10 +108,14 @@ export const ItineraryGrid = ({ days }: ItineraryGridProps) => {
             24
           );
           return (
-            <View
+            <Pressable
               key={block.item.id}
+              accessibilityHint={onPressItem ? 'Edit this plan' : undefined}
+              accessibilityRole="button"
               accessibilityLabel={`${block.item.title}, ${formatTimeRange(block.item)}`}
               className="absolute overflow-hidden rounded-lg px-2 py-1"
+              disabled={!onPressItem}
+              onPress={() => onPressItem?.(block.item)}
               style={{
                 backgroundColor: `${category.color}33`,
                 borderLeftColor: category.color,
@@ -131,7 +137,7 @@ export const ItineraryGrid = ({ days }: ItineraryGridProps) => {
                   {formatTimeRange(block.item)}
                 </Text>
               )}
-            </View>
+            </Pressable>
           );
         })}
 

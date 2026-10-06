@@ -2,6 +2,7 @@ import {
   collection,
   type CollectionReference,
   deleteDoc,
+  deleteField,
   doc,
   type DocumentReference,
   getDocs,
@@ -28,6 +29,16 @@ const stripUndefined = <T>(value: T): T => {
   }
   return value;
 };
+
+// On update, a top-level `undefined` means the field was cleared, so delete it
+// rather than silently keeping the old value.
+const toUpdateData = <T extends object>(data: T): T =>
+  Object.fromEntries(
+    Object.entries(data).map(([key, entry]) => [
+      key,
+      entry === undefined ? deleteField() : stripUndefined(entry),
+    ])
+  ) as T;
 
 export const createFirestoreCollection = <TDocument extends { id: string }>(
   collectionName: string,
@@ -67,7 +78,7 @@ export const createFirestoreCollection = <TDocument extends { id: string }>(
       normalizeDocumentId(id)
     ) as DocumentReference<DocumentType, DocumentType>;
 
-    await updateDoc(docRef, stripUndefined(data));
+    await updateDoc(docRef, toUpdateData(data));
   };
 
   const deleteDocument = async (id: string | number) => {

@@ -14,6 +14,21 @@ import { firebaseDB } from '../config';
 
 const normalizeDocumentId = (id: string | number) => String(id);
 
+// Firestore rejects `undefined` field values, so drop them before writing.
+const stripUndefined = <T>(value: T): T => {
+  if (Array.isArray(value)) {
+    return value.map(stripUndefined) as T;
+  }
+  if (value && typeof value === 'object' && value.constructor === Object) {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([, entry]) => entry !== undefined)
+        .map(([key, entry]) => [key, stripUndefined(entry)])
+    ) as T;
+  }
+  return value;
+};
+
 export const createFirestoreCollection = <TDocument extends { id: string }>(
   collectionName: string,
   schema: {
@@ -38,7 +53,7 @@ export const createFirestoreCollection = <TDocument extends { id: string }>(
       id: docRef.id,
     } as DocumentType;
 
-    await setDoc(docRef, documentData);
+    await setDoc(docRef, stripUndefined(documentData));
     return docRef.id;
   };
 
@@ -52,7 +67,7 @@ export const createFirestoreCollection = <TDocument extends { id: string }>(
       normalizeDocumentId(id)
     ) as DocumentReference<DocumentType, DocumentType>;
 
-    await updateDoc(docRef, data);
+    await updateDoc(docRef, stripUndefined(data));
   };
 
   const deleteDocument = async (id: string | number) => {

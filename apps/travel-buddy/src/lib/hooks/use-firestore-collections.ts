@@ -73,14 +73,17 @@ export const createFirestoreCollectionHooks = <
     });
   };
 
+  // Reads from the shared collection cache so optimistic updates and
+  // invalidations from the mutations below apply here too.
   const useGetByIdQuery = (id: string, userId?: string) => {
     return useQuery({
       enabled: Boolean(userId),
       queryFn: async () => {
-        const document = await actions.getDocuments();
-        return document.find((doc) => doc.id === id && doc.userId === userId);
+        const documents = await actions.getDocuments();
+        return documents.filter((document) => document.userId === userId);
       },
-      queryKey: ['firestore', collectionName, 'byId', id, userId],
+      queryKey: queryKey(userId),
+      select: (documents) => documents.find((doc) => doc.id === id),
       staleTime: Infinity,
     });
   };

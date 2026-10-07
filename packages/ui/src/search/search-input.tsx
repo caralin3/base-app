@@ -52,6 +52,7 @@ export const SearchInput = ({
         size={22}
       />
       <Input
+        containerStyles="flex-1"
         style={styles.input}
         value={value}
         onBlur={onBlur}
@@ -79,6 +80,7 @@ export const SearchInput = ({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',

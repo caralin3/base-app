@@ -1,51 +1,50 @@
-import { useAddEntertainmentMutation } from '@/lib/hooks/use-firestore-collection-hooks';
-import type { NewEntertainment } from '@/lib/types/plans';
+import {
+  useAddEntertainmentMutation,
+  useUpdateEntertainmentMutation,
+} from '@/lib/hooks/use-firestore-collection-hooks';
+import type { Entertainment } from '@/lib/types/plans';
 
-import { nowIso, optionalAddress, optionalText } from './form-utils';
-import { PlaceForm, type PlaceFormValues } from './place-form';
+import { toUpdateData } from './form-utils';
+import { PlaceForm, type PlaceFormValues, toNewPlace } from './place-form';
 
 type EntertainmentFormProps = {
+  defaultTripId?: string;
   onSuccess?: () => void;
+  /** Existing entertainment to edit; omit to create a new one. */
+  plan?: Entertainment;
   userId: string;
 };
 
 export const EntertainmentForm = ({
+  defaultTripId,
   onSuccess,
+  plan,
   userId,
 }: EntertainmentFormProps) => {
   const addEntertainment = useAddEntertainmentMutation(userId);
+  const updateEntertainment = useUpdateEntertainmentMutation(userId);
 
   const submitForm = async (values: PlaceFormValues) => {
-    const entertainmentData: NewEntertainment = {
-      address: optionalAddress({
-        city: values.addressCity,
-        country: values.addressCountry,
-        postalCode: values.addressPostalCode,
-        state: values.addressState,
-        street1: values.addressStreet1,
-        street2: values.addressStreet2,
-      }),
-      createdAt: nowIso(),
-      datetime: optionalText(values.datetime),
-      name: values.name,
-      notes: optionalText(values.notes),
-      phoneNumber: optionalText(values.phoneNumber),
-      tripId: optionalText(values.tripId),
-      updatedAt: nowIso(),
-      userId,
-    };
-
-    await addEntertainment.mutateAsync(entertainmentData);
+    if (plan) {
+      await updateEntertainment.mutateAsync({
+        data: toUpdateData(toNewPlace(values, userId, plan.status)),
+        id: plan.id,
+      });
+    } else {
+      await addEntertainment.mutateAsync(toNewPlace(values, userId));
+    }
     onSuccess?.();
   };
 
   return (
     <PlaceForm
+      defaultTripId={defaultTripId}
       description="Track shows, events, and other plans."
-      loading={addEntertainment.isPending}
-      onSuccess={onSuccess}
+      isIdea={plan?.status === 'idea'}
+      loading={addEntertainment.isPending || updateEntertainment.isPending}
       onSubmit={submitForm}
-      submitLabel="Add Entertainment"
+      plan={plan}
+      submitLabel={plan ? 'Save Changes' : 'Add Entertainment'}
       title="Entertainment"
       userId={userId}
     />

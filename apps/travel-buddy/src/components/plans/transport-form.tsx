@@ -1,99 +1,124 @@
-import { ControlledInput, Separator, Text, View } from '@base-app/ui';
+import {
+  ControlledDateTimeInput,
+  ControlledInput,
+  Separator,
+  Text,
+  View,
+} from '@base-app/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
-import { useAddTransportMutation } from '@/lib/hooks/use-firestore-collection-hooks';
-import type { NewTransport } from '@/lib/types/plans';
+import {
+  useAddTransportMutation,
+  useUpdateTransportMutation,
+} from '@/lib/hooks/use-firestore-collection-hooks';
+import type { NewTransport, Transport } from '@/lib/types/plans';
 
 import { PlanFormShell } from './form-shell';
-import { nowIso, optionalAddress, optionalText } from './form-utils';
+import {
+  addressToFields,
+  endAfterStart,
+  fieldsToAddress,
+  nowIso,
+  optionalText,
+  toUpdateData,
+} from './form-utils';
 import { ControlledTripSelect } from './trip-select';
 
-const transportFormSchema = z.object({
-  confirmationNumber: z.string().optional(),
-  departureDatetime: z.string().optional(),
-  dropoffCity: z.string().optional(),
-  dropoffCountry: z.string().optional(),
-  dropoffPostalCode: z.string().optional(),
-  dropoffState: z.string().optional(),
-  dropoffStreet1: z.string().optional(),
-  dropoffStreet2: z.string().optional(),
-  name: z.string().min(1, { message: 'Required' }),
-  notes: z.string().optional(),
-  pickupCity: z.string().optional(),
-  pickupCountry: z.string().optional(),
-  pickupPostalCode: z.string().optional(),
-  pickupState: z.string().optional(),
-  pickupStreet1: z.string().optional(),
-  pickupStreet2: z.string().optional(),
-  phoneNumber: z.string().optional(),
-  tripId: z.string().optional(),
-});
+const transportFormSchema = z
+  .object({
+    arrivalDatetime: z.string().optional(),
+    confirmationNumber: z.string().optional(),
+    departureDatetime: z.string().optional(),
+    dropoffCity: z.string().optional(),
+    dropoffCountry: z.string().optional(),
+    dropoffPostalCode: z.string().optional(),
+    dropoffState: z.string().optional(),
+    dropoffStreet1: z.string().optional(),
+    dropoffStreet2: z.string().optional(),
+    name: z.string().min(1, { message: 'Required' }),
+    notes: z.string().optional(),
+    pickupCity: z.string().optional(),
+    pickupCountry: z.string().optional(),
+    pickupPostalCode: z.string().optional(),
+    pickupState: z.string().optional(),
+    pickupStreet1: z.string().optional(),
+    pickupStreet2: z.string().optional(),
+    phoneNumber: z.string().optional(),
+    tripId: z.string().optional(),
+    website: z.string().optional(),
+  })
+  .refine(endAfterStart('departureDatetime', 'arrivalDatetime'), {
+    message: 'Arrival must be after departure',
+    path: ['arrivalDatetime'],
+  });
 
 type TransportFormValues = z.infer<typeof transportFormSchema>;
 
 type TransportFormProps = {
+  defaultTripId?: string;
   onSuccess?: () => void;
+  /** Existing transport to edit; omit to create a new one. */
+  plan?: Transport;
   userId: string;
 };
 
-export const TransportForm = ({ onSuccess, userId }: TransportFormProps) => {
+const toTransportFormValues = (
+  defaultTripId: string,
+  plan?: Transport
+): TransportFormValues => ({
+  ...addressToFields('dropoff', plan?.dropoffLocation),
+  ...addressToFields('pickup', plan?.pickupLocation),
+  arrivalDatetime: plan?.arrivalDatetime ?? '',
+  confirmationNumber: plan?.confirmationNumber ?? '',
+  departureDatetime: plan?.departureDatetime ?? '',
+  name: plan?.name ?? '',
+  notes: plan?.notes ?? '',
+  phoneNumber: plan?.phoneNumber ?? '',
+  tripId: plan?.tripId ?? defaultTripId,
+  website: plan?.website ?? '',
+});
+
+export const TransportForm = ({
+  defaultTripId = '',
+  onSuccess,
+  plan,
+  userId,
+}: TransportFormProps) => {
   const { control, handleSubmit, formState } = useForm<TransportFormValues>({
-    defaultValues: {
-      confirmationNumber: '',
-      departureDatetime: '',
-      dropoffCity: '',
-      dropoffCountry: '',
-      dropoffPostalCode: '',
-      dropoffState: '',
-      dropoffStreet1: '',
-      dropoffStreet2: '',
-      name: '',
-      notes: '',
-      pickupCity: '',
-      pickupCountry: '',
-      pickupPostalCode: '',
-      pickupState: '',
-      pickupStreet1: '',
-      pickupStreet2: '',
-      phoneNumber: '',
-      tripId: '',
-    },
+    defaultValues: toTransportFormValues(defaultTripId, plan),
     resolver: zodResolver(transportFormSchema),
   });
+  const departureDatetime = useWatch({ control, name: 'departureDatetime' });
   const addTransport = useAddTransportMutation(userId);
+  const updateTransport = useUpdateTransportMutation(userId);
 
   const submitForm = async (values: TransportFormValues) => {
     const transportData: NewTransport = {
+      arrivalDatetime: optionalText(values.arrivalDatetime),
       confirmationNumber: optionalText(values.confirmationNumber),
       createdAt: nowIso(),
       departureDatetime: optionalText(values.departureDatetime),
-      dropoffLocation: optionalAddress({
-        city: values.dropoffCity,
-        country: values.dropoffCountry,
-        postalCode: values.dropoffPostalCode,
-        state: values.dropoffState,
-        street1: values.dropoffStreet1,
-        street2: values.dropoffStreet2,
-      }),
+      dropoffLocation: fieldsToAddress('dropoff', values),
       name: values.name,
       notes: optionalText(values.notes),
-      pickupLocation: optionalAddress({
-        city: values.pickupCity,
-        country: values.pickupCountry,
-        postalCode: values.pickupPostalCode,
-        state: values.pickupState,
-        street1: values.pickupStreet1,
-        street2: values.pickupStreet2,
-      }),
+      pickupLocation: fieldsToAddress('pickup', values),
       phoneNumber: optionalText(values.phoneNumber),
       tripId: optionalText(values.tripId),
       updatedAt: nowIso(),
       userId,
+      website: optionalText(values.website),
     };
 
-    await addTransport.mutateAsync(transportData);
+    if (plan) {
+      await updateTransport.mutateAsync({
+        data: toUpdateData(transportData),
+        id: plan.id,
+      });
+    } else {
+      await addTransport.mutateAsync(transportData);
+    }
     onSuccess?.();
   };
 
@@ -101,9 +126,9 @@ export const TransportForm = ({ onSuccess, userId }: TransportFormProps) => {
     <PlanFormShell
       description="Record the ride, shuttle, or transfer details."
       disabled={!userId}
-      loading={addTransport.isPending}
+      loading={addTransport.isPending || updateTransport.isPending}
       onSubmit={handleSubmit(submitForm)}
-      submitLabel="Add Transport"
+      submitLabel={plan ? 'Save Changes' : 'Add Transport'}
       title="Transport"
     >
       <ControlledInput
@@ -114,7 +139,26 @@ export const TransportForm = ({ onSuccess, userId }: TransportFormProps) => {
         placeholder="e.g. Airport transfer"
         required
       />
-      {/* TODO: Add Date and Time fields */}
+      <ControlledDateTimeInput
+        control={control}
+        label="Departs"
+        name="departureDatetime"
+      />
+      <ControlledDateTimeInput
+        control={control}
+        defaultPickerDate={
+          departureDatetime ? new Date(departureDatetime) : undefined
+        }
+        label="Arrives"
+        name="arrivalDatetime"
+      />
+      <ControlledInput
+        control={control}
+        keyboardType="url"
+        label="Website"
+        name="website"
+        placeholder="Booking or company website"
+      />
       <ControlledInput
         control={control}
         label="Confirmation Number"

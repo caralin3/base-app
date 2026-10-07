@@ -21,7 +21,7 @@ export const PlanFormShell = ({
   title,
 }: PlanFormShellProps) => {
   return (
-    <View className="gap-4 rounded-3xl border border-border bg-surface p-4 dark:border-border-dark dark:bg-surface-dark">
+    <View className="gap-4 rounded-lg border border-border bg-surface p-4 dark:border-border-dark dark:bg-surface-dark">
       <View className="gap-1">
         <Text className="text-xl font-bold text-foreground dark:text-foreground-dark">
           {title}

@@ -1,13 +1,13 @@
 import { useAuth } from '@base-app/core';
 import {
-  colors,
+  BottomSheetKeyboardAwareScrollView,
+  Button,
   ModalForm,
   Screen,
   ScrollableHeader,
   TabsScrollView,
   TabsView,
   Text,
-  useAppColors,
   useModal,
   View,
 } from '@base-app/ui';
@@ -15,22 +15,30 @@ import { differenceInCalendarDays } from 'date-fns/differenceInCalendarDays';
 import { format } from 'date-fns/format';
 import { parseISO } from 'date-fns/parseISO';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
+import { IdeasList } from '@/components/ideas';
+import { ItineraryView } from '@/components/itinerary';
 import {
+  EditPlanModal,
+  type EditPlanModalRef,
   FloatingAddPlanModal,
   type FloatingAddPlanModalRef,
+  TripForm,
   TripTodoForm,
 } from '@/components/plans';
 import { PackingList } from '@/components/todos/packing-list';
+import { BookingCards, EditTravelersForm } from '@/components/trip';
 import type { Todo } from '@/lib/firebase/firestore/todos';
 import {
   useGetTripByIdQuery,
   useTodosByTripIdQuery,
+  useTripItinerary,
   useUpdateTodoMutation,
 } from '@/lib/hooks';
 import { getCountdownDays, groupByCategory } from '@/lib/utils';
+import { useTravelBuddyColors } from '@/theme/use-travel-buddy-colors';
 
 export type TripScreenParams = {
   id: string;
@@ -38,13 +46,18 @@ export type TripScreenParams = {
 };
 
 export default function TripScreen() {
-  const appColors = useAppColors();
+  const appColors = useTravelBuddyColors();
   const local = useLocalSearchParams<TripScreenParams>();
   const router = useRouter();
   const tripId = local.id;
   const userId = useAuth.use.user()?.id;
   const modal = useModal();
+  const travelersModal = useModal();
+  const [travelersFormKey, setTravelersFormKey] = useState(0);
   const addPlanModalRef = useRef<FloatingAddPlanModalRef>(null);
+  const editPlanModalRef = useRef<EditPlanModalRef>(null);
+  const tripModal = useModal();
+  const [tripFormKey, setTripFormKey] = useState(0);
 
   const { data: tripData, isLoading } = useGetTripByIdQuery(tripId, userId);
   const { data: todosData, isLoading: isLoadingTodos } = useTodosByTripIdQuery(
@@ -52,6 +65,11 @@ export default function TripScreen() {
     tripId
   );
   const updateTodo = useUpdateTodoMutation(userId);
+  const {
+    isLoading: isLoadingPlans,
+    items: itineraryItems,
+    plans,
+  } = useTripItinerary(userId, tripId);
 
   if (isLoading) {
     return (
@@ -104,19 +122,31 @@ export default function TripScreen() {
 
   const closeTodoModal = () => modal.dismiss();
 
+  const editTrip = () => {
+    // Remount so the form starts from the latest saved trip.
+    setTripFormKey((key) => key + 1);
+    tripModal.present();
+  };
+
+  const editTravelers = () => {
+    // Remount so the form starts from the latest saved travelers.
+    setTravelersFormKey((key) => key + 1);
+    travelersModal.present();
+  };
+
   const Header = () => (
     <ScrollableHeader
       backgroundImageUri={headerImageUri}
       height={300}
       onBackPress={() => router.back()}
       style={styles.header}
-      className="rounded-t-3xl bg-background dark:bg-background-dark"
+      className="rounded-t-sheet bg-background dark:bg-background-dark"
       right={[
         {
           icon: {
             name: 'plus',
-            color: colors.white,
-            backgroundColor: appColors.primary,
+            color: appColors.onPrimary,
+            backgroundColor: appColors.primaryStrong,
           },
           onPress: () => addPlanModalRef.current?.present(),
         },
@@ -124,13 +154,13 @@ export default function TripScreen() {
     >
       <View className="flex-row items-center justify-between gap-4">
         <View className="flex-1">
-          <Text className="text-2xl font-bold">{tripData.name}</Text>
+          <Text className="text-title">{tripData.name}</Text>
           <Text className="text-md mt-2 text-muted dark:text-muted-dark">
             {dateRange}
           </Text>
         </View>
-        <View className="min-w-20 items-center justify-center rounded-lg bg-background px-3 py-2 dark:bg-background-dark">
-          <Text className="text-2xl font-bold">{daysToGo}</Text>
+        <View className="min-w-20 items-center justify-center rounded-sm bg-background px-3 py-2 dark:bg-background-dark">
+          <Text className="text-title">{daysToGo}</Text>
           <Text className="text-center text-sm font-semibold">
             day{daysToGo === 1 ? '' : 's'} to go
           </Text>
@@ -150,7 +180,15 @@ export default function TripScreen() {
               <TabsScrollView contentContainerStyle={styles.tabContent}>
                 <View className="gap-4 py-4">
                   <View className="rounded-lg bg-surface p-4 dark:bg-surface-dark">
-                    <Text className="text-lg font-bold">Trip Details</Text>
+                    <View className="flex-row items-center justify-between">
+                      <Text className="text-lg font-bold">Trip Details</Text>
+                      <Button
+                        label="Edit"
+                        onPress={editTrip}
+                        size="sm"
+                        variant="link"
+                      />
+                    </View>
                     <View className="mt-4 gap-3">
                       <View>
                         <Text className="text-sm font-semibold text-muted dark:text-muted-dark">
@@ -185,6 +223,39 @@ export default function TripScreen() {
                       )}
                     </View>
                   </View>
+                  <View className="rounded-lg bg-surface p-4 dark:bg-surface-dark">
+                    <View className="flex-row items-center justify-between">
+                      <Text className="text-lg font-bold">Travelers</Text>
+                      <Button
+                        label={tripData.travelers?.length ? 'Edit' : 'Add'}
+                        onPress={editTravelers}
+                        size="sm"
+                        variant="link"
+                      />
+                    </View>
+                    {tripData.travelers?.length ? (
+                      <View className="mt-3 flex-row flex-wrap gap-2">
+                        {tripData.travelers.map((traveler) => (
+                          <View
+                            key={traveler.id}
+                            className="rounded-full bg-background px-3 py-1 dark:bg-background-dark"
+                          >
+                            <Text className="text-sm font-medium">
+                              {traveler.name}
+                            </Text>
+                          </View>
+                        ))}
+                      </View>
+                    ) : (
+                      <Text className="mt-2 text-muted dark:text-muted-dark">
+                        {"Add who's coming so everyone can vote on ideas."}
+                      </Text>
+                    )}
+                  </View>
+                  <BookingCards
+                    onEdit={(target) => editPlanModalRef.current?.edit(target)}
+                    plans={plans}
+                  />
                 </View>
               </TabsScrollView>
             ),
@@ -193,13 +264,40 @@ export default function TripScreen() {
             name: 'Plan',
             content: (
               <TabsScrollView contentContainerStyle={styles.tabContent}>
-                <View className="gap-4 py-4">
-                  <View className="rounded-lg bg-surface p-4 dark:bg-surface-dark">
-                    <Text className="text-lg font-bold">Plan</Text>
-                    <Text className="mt-2 text-muted dark:text-muted-dark">
-                      Your trip plans will show here.
-                    </Text>
-                  </View>
+                <View className="py-4">
+                  <ItineraryView
+                    isLoading={isLoadingPlans}
+                    items={itineraryItems}
+                    onPressItem={(item) =>
+                      editPlanModalRef.current?.edit({
+                        id: item.sourceId,
+                        type: item.sourceType,
+                      })
+                    }
+                    trip={tripData}
+                  />
+                </View>
+              </TabsScrollView>
+            ),
+          },
+          {
+            name: 'Ideas',
+            content: (
+              <TabsScrollView contentContainerStyle={styles.tabContent}>
+                <View className="py-4">
+                  <IdeasList
+                    isLoading={isLoadingPlans}
+                    onAddIdea={() => addPlanModalRef.current?.present('idea')}
+                    onEditIdea={(idea) =>
+                      editPlanModalRef.current?.edit({
+                        id: idea.id,
+                        type: idea.placeType,
+                      })
+                    }
+                    plans={plans}
+                    trip={tripData}
+                    userId={userId}
+                  />
                 </View>
               </TabsScrollView>
             ),
@@ -227,7 +325,34 @@ export default function TripScreen() {
           userId={userId ?? ''}
         />
       </ModalForm>
+      <ModalForm
+        ref={travelersModal.ref}
+        snapPoints={['60%']}
+        title="Travelers"
+      >
+        <EditTravelersForm
+          key={travelersFormKey}
+          onSuccess={() => travelersModal.dismiss()}
+          trip={tripData}
+          userId={userId}
+        />
+      </ModalForm>
+      <ModalForm ref={tripModal.ref} snapPoints={['95%']} title="Edit Trip">
+        <BottomSheetKeyboardAwareScrollView
+          contentContainerStyle={{ gap: 8 }}
+          showsHorizontalScrollIndicator={false}
+        >
+          <TripForm
+            key={tripFormKey}
+            onSuccess={() => tripModal.dismiss()}
+            trip={tripData}
+            userId={userId ?? ''}
+          />
+        </BottomSheetKeyboardAwareScrollView>
+      </ModalForm>
+      <EditPlanModal ref={editPlanModalRef} plans={plans} />
       <FloatingAddPlanModal
+        defaultTripId={tripId}
         ref={addPlanModalRef}
         title="Add Plan"
         showFloatingButton={false}

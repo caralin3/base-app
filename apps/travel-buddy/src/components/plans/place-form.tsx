@@ -1,33 +1,102 @@
-import { ControlledInput, Separator, Text, View } from '@base-app/ui';
+import {
+  ControlledDateTimeInput,
+  ControlledInput,
+  Separator,
+  Text,
+  View,
+} from '@base-app/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
+import type { Activity, NewActivity, PlaceStatus } from '@/lib/types/plans';
+
 import { PlanFormShell } from './form-shell';
+import {
+  addressToFields,
+  endAfterStart,
+  fieldsToAddress,
+  nowIso,
+  optionalNumber,
+  optionalText,
+} from './form-utils';
 import { ControlledTripSelect } from './trip-select';
 
-export const placeFormSchema = z.object({
-  addressCity: z.string().optional(),
-  addressCountry: z.string().optional(),
-  addressPostalCode: z.string().optional(),
-  addressState: z.string().optional(),
-  addressStreet1: z.string().optional(),
-  addressStreet2: z.string().optional(),
-  datetime: z.string().optional(),
-  name: z.string().min(1, { message: 'Required' }),
-  notes: z.string().optional(),
-  phoneNumber: z.string().optional(),
-  tripId: z.string().optional(),
-});
+export const placeFormSchema = z
+  .object({
+    addressCity: z.string().optional(),
+    addressCountry: z.string().optional(),
+    addressPostalCode: z.string().optional(),
+    addressState: z.string().optional(),
+    addressStreet1: z.string().optional(),
+    addressStreet2: z.string().optional(),
+    cost: z
+      .string()
+      .optional()
+      .refine((value) => !value || !Number.isNaN(Number(value)), {
+        message: 'Enter a number',
+      }),
+    datetime: z.string().optional(),
+    endDatetime: z.string().optional(),
+    name: z.string().min(1, { message: 'Required' }),
+    notes: z.string().optional(),
+    phoneNumber: z.string().optional(),
+    tripId: z.string().optional(),
+    website: z.string().optional(),
+  })
+  .refine(endAfterStart('datetime', 'endDatetime'), {
+    message: 'End must be after start',
+    path: ['endDatetime'],
+  });
 
 export type PlaceFormValues = z.infer<typeof placeFormSchema>;
 
+/** Every place type (activity, food, entertainment, shopping) shares this shape. */
+export const toNewPlace = (
+  values: PlaceFormValues,
+  userId: string,
+  status: PlaceStatus = 'planned'
+): NewActivity => ({
+  address: fieldsToAddress('address', values),
+  cost: optionalNumber(values.cost),
+  createdAt: nowIso(),
+  datetime: status === 'idea' ? '' : optionalText(values.datetime),
+  endDatetime: status === 'idea' ? '' : optionalText(values.endDatetime),
+  name: values.name,
+  notes: optionalText(values.notes),
+  phoneNumber: optionalText(values.phoneNumber),
+  status,
+  tripId: optionalText(values.tripId),
+  updatedAt: nowIso(),
+  userId,
+  website: optionalText(values.website),
+});
+
+const toPlaceFormValues = (
+  defaultTripId: string,
+  plan?: Activity
+): PlaceFormValues => ({
+  ...addressToFields('address', plan?.address),
+  cost: plan?.cost !== undefined ? String(plan.cost) : '',
+  datetime: plan?.datetime ?? '',
+  endDatetime: plan?.endDatetime ?? '',
+  name: plan?.name ?? '',
+  notes: plan?.notes ?? '',
+  phoneNumber: plan?.phoneNumber ?? '',
+  tripId: plan?.tripId ?? defaultTripId,
+  website: plan?.website ?? '',
+});
+
 type PlaceFormProps = {
   children?: React.ReactNode;
+  defaultTripId?: string;
   description: string;
+  /** Ideas have no time yet; they are scheduled later from the Ideas tab. */
+  isIdea?: boolean;
   loading?: boolean;
-  onSuccess?: () => void;
   onSubmit: (values: PlaceFormValues) => Promise<void>;
+  /** Existing place to edit; the form starts from its values. */
+  plan?: Activity;
   submitLabel: string;
   title: string;
   userId: string;
@@ -35,42 +104,28 @@ type PlaceFormProps = {
 
 export const PlaceForm = ({
   children,
+  defaultTripId = '',
   description,
+  isIdea = false,
   loading = false,
-  onSuccess,
   onSubmit,
+  plan,
   submitLabel,
   title,
   userId,
 }: PlaceFormProps) => {
   const { control, handleSubmit, formState } = useForm<PlaceFormValues>({
-    defaultValues: {
-      addressCity: '',
-      addressCountry: '',
-      addressPostalCode: '',
-      addressState: '',
-      addressStreet1: '',
-      addressStreet2: '',
-      datetime: '',
-      name: '',
-      notes: '',
-      phoneNumber: '',
-      tripId: '',
-    },
+    defaultValues: toPlaceFormValues(defaultTripId, plan),
     resolver: zodResolver(placeFormSchema),
   });
-
-  const submit = async (values: PlaceFormValues) => {
-    await onSubmit(values);
-    onSuccess?.();
-  };
+  const startDatetime = useWatch({ control, name: 'datetime' });
 
   return (
     <PlanFormShell
       description={description}
       disabled={!userId}
       loading={loading}
-      onSubmit={handleSubmit(submit)}
+      onSubmit={handleSubmit(onSubmit)}
       submitLabel={submitLabel}
       title={title}
     >
@@ -82,12 +137,44 @@ export const PlaceForm = ({
         placeholder="e.g. Dinner at Le Jardin"
         required
       />
-      {/* TODO: Add Date and Time fields */}
+      {children}
+      {!isIdea && (
+        <>
+          <ControlledDateTimeInput
+            control={control}
+            label="Starts"
+            name="datetime"
+          />
+          <ControlledDateTimeInput
+            control={control}
+            defaultPickerDate={
+              startDatetime ? new Date(startDatetime) : undefined
+            }
+            label="Ends"
+            name="endDatetime"
+          />
+        </>
+      )}
       <ControlledTripSelect
         control={control}
         label="Trip"
         name="tripId"
         userId={userId}
+      />
+      <ControlledInput
+        control={control}
+        keyboardType="url"
+        label="Website"
+        name="website"
+        placeholder="https://..."
+      />
+      <ControlledInput
+        control={control}
+        error={formState.errors.cost?.message}
+        keyboardType="decimal-pad"
+        label="Cost"
+        name="cost"
+        placeholder="Optional cost per person"
       />
       <ControlledInput
         control={control}
@@ -145,7 +232,6 @@ export const PlaceForm = ({
         numberOfLines={4}
         placeholder="Optional details"
       />
-      {children}
     </PlanFormShell>
   );
 };

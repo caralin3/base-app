@@ -1,48 +1,50 @@
-import { useAddFoodMutation } from '@/lib/hooks/use-firestore-collection-hooks';
-import type { NewFood } from '@/lib/types/plans';
+import {
+  useAddFoodMutation,
+  useUpdateFoodMutation,
+} from '@/lib/hooks/use-firestore-collection-hooks';
+import type { Food } from '@/lib/types/plans';
 
-import { nowIso, optionalAddress, optionalText } from './form-utils';
-import { PlaceForm, type PlaceFormValues } from './place-form';
+import { toUpdateData } from './form-utils';
+import { PlaceForm, type PlaceFormValues, toNewPlace } from './place-form';
 
 type FoodFormProps = {
+  defaultTripId?: string;
   onSuccess?: () => void;
+  /** Existing food to edit; omit to create a new one. */
+  plan?: Food;
   userId: string;
 };
 
-export const FoodForm = ({ onSuccess, userId }: FoodFormProps) => {
+export const FoodForm = ({
+  defaultTripId,
+  onSuccess,
+  plan,
+  userId,
+}: FoodFormProps) => {
   const addFood = useAddFoodMutation(userId);
+  const updateFood = useUpdateFoodMutation(userId);
 
   const submitForm = async (values: PlaceFormValues) => {
-    const foodData: NewFood = {
-      address: optionalAddress({
-        city: values.addressCity,
-        country: values.addressCountry,
-        postalCode: values.addressPostalCode,
-        state: values.addressState,
-        street1: values.addressStreet1,
-        street2: values.addressStreet2,
-      }),
-      createdAt: nowIso(),
-      datetime: optionalText(values.datetime),
-      name: values.name,
-      notes: optionalText(values.notes),
-      phoneNumber: optionalText(values.phoneNumber),
-      tripId: optionalText(values.tripId),
-      updatedAt: nowIso(),
-      userId,
-    };
-
-    await addFood.mutateAsync(foodData);
+    if (plan) {
+      await updateFood.mutateAsync({
+        data: toUpdateData(toNewPlace(values, userId, plan.status)),
+        id: plan.id,
+      });
+    } else {
+      await addFood.mutateAsync(toNewPlace(values, userId));
+    }
     onSuccess?.();
   };
 
   return (
     <PlaceForm
+      defaultTripId={defaultTripId}
       description="Save a restaurant, reservation, or meal stop."
-      loading={addFood.isPending}
-      onSuccess={onSuccess}
+      isIdea={plan?.status === 'idea'}
+      loading={addFood.isPending || updateFood.isPending}
       onSubmit={submitForm}
-      submitLabel="Add Food"
+      plan={plan}
+      submitLabel={plan ? 'Save Changes' : 'Add Food'}
       title="Food"
       userId={userId}
     />

@@ -1,12 +1,14 @@
 import { useAuth } from '@base-app/core';
-import { HapticTab, IconSymbol, useAppColors } from '@base-app/ui';
+import { HapticTab, IconSymbol } from '@base-app/ui';
 import { Redirect, Tabs } from 'expo-router';
 import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useTravelBuddyColors } from '@/theme/use-travel-buddy-colors';
+
 export default function TabLayout() {
   const status = useAuth.use.status();
-  const colors = useAppColors();
+  const colors = useTravelBuddyColors();
   const insets = useSafeAreaInsets();
   const isIOS = Platform.OS === 'ios';
   const tabBarPaddingBottom = isIOS ? Math.max(insets.bottom, 8) : 6;
@@ -35,17 +37,12 @@ export default function TabLayout() {
       backBehavior="history"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.primary,
+        tabBarActiveTintColor: colors.primaryStrong,
         tabBarInactiveTintColor: colors.muted,
         tabBarButton: HapticTab,
-        tabBarShowLabel: false,
-        tabBarIconStyle: {
-          height: 50,
-          width: '100%',
-        },
         tabBarStyle: {
           backgroundColor: colors.surface,
-          borderTopColor: colors.border,
+          borderTopColor: colors.borderSubtle,
           borderTopWidth: 1,
           height: tabBarHeight,
           paddingBottom: tabBarPaddingBottom,
@@ -57,9 +54,9 @@ export default function TabLayout() {
         name="index"
         options={{
           // headerShown: false,
-          title: 'App Name',
+          title: 'Trips',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={32} name="house.fill" color={color} />
+            <IconSymbol size={26} name="suitcase" color={color} />
           ),
         }}
       />
@@ -78,7 +75,7 @@ export default function TabLayout() {
         options={{
           title: 'Itinerary',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={32} name="calendar" color={color} />
+            <IconSymbol size={26} name="calendar" color={color} />
           ),
         }}
       />
@@ -87,7 +84,7 @@ export default function TabLayout() {
         options={{
           title: 'Todos',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={32} name="checklist" color={color} />
+            <IconSymbol size={26} name="checkmark.square" color={color} />
           ),
         }}
       />
@@ -96,7 +93,7 @@ export default function TabLayout() {
         options={{
           title: 'Expenses',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={32} name="dollarsign" color={color} />
+            <IconSymbol size={26} name="dollarsign" color={color} />
           ),
         }}
       />
@@ -106,7 +103,7 @@ export default function TabLayout() {
           headerShown: false,
           title: 'Profile',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={32} name="person.fill" color={color} />
+            <IconSymbol size={26} name="person" color={color} />
           ),
         }}
       />

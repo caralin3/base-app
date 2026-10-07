@@ -1,6 +1,7 @@
 import { useAuth } from '@base-app/core';
-import { Screen, Text, useAppColors } from '@base-app/ui';
+import { Image, Screen, Text } from '@base-app/ui';
 import { isFuture, isPast, parseISO } from 'date-fns';
+import { useColorScheme } from 'nativewind';
 import { useCallback, useMemo } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 
@@ -9,7 +10,7 @@ import { useTripsQuery } from '@/lib/hooks';
 import { getCountdownDays } from '@/lib/utils/dates';
 
 export default function Home() {
-  const colors = useAppColors();
+  const { colorScheme } = useColorScheme();
   const userId = useAuth.use.user()?.id;
 
   const {
@@ -45,9 +46,18 @@ export default function Home() {
   return (
     <Screen
       headerProps={{
-        title: 'App Home',
         showBackButton: false,
-        titleColor: colors.primary,
+        children: (
+          <Image
+            source={
+              colorScheme === 'dark'
+                ? require('../../../assets/images/header-logo-dark.png')
+                : require('../../../assets/images/header-logo-light.png')
+            }
+            contentFit="contain"
+            style={{ width: 164, height: 32 }}
+          />
+        ),
       }}
     >
       <View className="relative flex-1 gap-4 px-5 py-4">

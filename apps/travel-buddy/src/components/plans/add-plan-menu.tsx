@@ -6,6 +6,7 @@ export type PlanType =
   | 'entertainment'
   | 'flight'
   | 'food'
+  | 'idea'
   | 'lodging'
   | 'shopping'
   | 'todo'
@@ -69,6 +70,12 @@ const menuItems: PlanMenuItem[] = [
     value: 'activity',
   },
   {
+    description: 'Save something you might do and vote on it.',
+    icon: 'lightbulb',
+    label: 'Idea',
+    value: 'idea',
+  },
+  {
     description: 'Capture a follow-up task.',
     icon: 'checklist',
     label: 'Todo',
@@ -87,7 +94,7 @@ export const AddPlanMenu = ({ onSelect }: AddPlanMenuProps) => {
       {menuItems.map((item) => (
         <Pressable
           key={item.value}
-          className="flex-row items-center gap-4 rounded-2xl border border-border bg-background p-4 dark:border-border-dark dark:bg-surface-dark"
+          className="flex-row items-center gap-4 rounded-lg border border-border bg-background p-4 dark:border-border-dark dark:bg-surface-dark"
           onPress={() => onSelect(item.value)}
         >
           <IconSymbol color={appColors.primary} name={item.icon} size={24} />

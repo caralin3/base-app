@@ -9,7 +9,7 @@ module.exports = ({ config }) => ({
   slug: Env.SLUG,
   version: Env.VERSION.toString(),
   orientation: 'portrait',
-  icon: './assets/images/icon.png',
+  icon: './assets/icons/icon.png',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
   updates: {
@@ -29,10 +29,8 @@ module.exports = ({ config }) => ({
   },
   android: {
     adaptiveIcon: {
-      backgroundColor: '#E6F4FE',
-      foregroundImage: './assets/images/android-icon-foreground.png',
-      backgroundImage: './assets/images/android-icon-background.png',
-      monochromeImage: './assets/images/android-icon-monochrome.png',
+      backgroundColor: '#C2410C',
+      foregroundImage: './assets/icons/adaptive-icon.png',
     },
     package: Env.PACKAGE,
     predictiveBackGestureEnabled: false,
@@ -41,16 +39,17 @@ module.exports = ({ config }) => ({
   },
   web: {
     output: 'static',
-    favicon: './assets/images/favicon.png',
+    favicon: './assets/icons/favicon.png',
   },
   plugins: [
     'expo-router',
     'expo-font',
     'expo-web-browser',
+    '@react-native-community/datetimepicker',
     [
       'expo-splash-screen',
       {
-        image: './assets/images/splash-icon.png',
+        image: './assets/icons/splash-icon.png',
         imageWidth: 200,
         resizeMode: 'contain',
         backgroundColor: '#ffffff',

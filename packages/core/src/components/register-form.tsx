@@ -40,6 +40,8 @@ export type RegisterFormProps = {
   authError?: string | null;
   /** Optional logo above the heading, e.g. require('@/assets/images/logo.png') */
   logo?: ImgProps['source'];
+  /** Size of the logo; defaults to 200x100 */
+  logoStyle?: ImgProps['style'];
   onSubmit?: SubmitHandler<FormType>;
 };
 
@@ -48,6 +50,7 @@ export const RegisterForm = ({
   onSubmit = () => {},
   authError = null,
   logo,
+  logoStyle = { width: 200, height: 100 },
 }: RegisterFormProps) => {
   const router = useRouter();
 
@@ -63,12 +66,13 @@ export const RegisterForm = ({
     >
       <View className="flex-1 justify-center gap-4 bg-background p-8 dark:bg-background-dark">
         <View className="items-center justify-center">
-          {!!logo && (
-            <Image source={logo} style={{ width: 200, height: 100 }} />
+          {!!logo ? (
+            <Image source={logo} contentFit="contain" style={logoStyle} />
+          ) : (
+            <Text className="pb-8 text-center text-5xl/tight font-bold">
+              {appName}
+            </Text>
           )}
-          <Text className="pb-8 text-center text-5xl/tight font-bold">
-            {appName}
-          </Text>
         </View>
         <Text
           testID="form-title"

@@ -1,48 +1,50 @@
-import { useAddShoppingMutation } from '@/lib/hooks/use-firestore-collection-hooks';
-import type { NewShopping } from '@/lib/types/plans';
+import {
+  useAddShoppingMutation,
+  useUpdateShoppingMutation,
+} from '@/lib/hooks/use-firestore-collection-hooks';
+import type { Shopping } from '@/lib/types/plans';
 
-import { nowIso, optionalAddress, optionalText } from './form-utils';
-import { PlaceForm, type PlaceFormValues } from './place-form';
+import { toUpdateData } from './form-utils';
+import { PlaceForm, type PlaceFormValues, toNewPlace } from './place-form';
 
 type ShoppingFormProps = {
+  defaultTripId?: string;
   onSuccess?: () => void;
+  /** Existing shopping to edit; omit to create a new one. */
+  plan?: Shopping;
   userId: string;
 };
 
-export const ShoppingForm = ({ onSuccess, userId }: ShoppingFormProps) => {
+export const ShoppingForm = ({
+  defaultTripId,
+  onSuccess,
+  plan,
+  userId,
+}: ShoppingFormProps) => {
   const addShopping = useAddShoppingMutation(userId);
+  const updateShopping = useUpdateShoppingMutation(userId);
 
   const submitForm = async (values: PlaceFormValues) => {
-    const shoppingData: NewShopping = {
-      address: optionalAddress({
-        city: values.addressCity,
-        country: values.addressCountry,
-        postalCode: values.addressPostalCode,
-        state: values.addressState,
-        street1: values.addressStreet1,
-        street2: values.addressStreet2,
-      }),
-      createdAt: nowIso(),
-      datetime: optionalText(values.datetime),
-      name: values.name,
-      notes: optionalText(values.notes),
-      phoneNumber: optionalText(values.phoneNumber),
-      tripId: optionalText(values.tripId),
-      updatedAt: nowIso(),
-      userId,
-    };
-
-    await addShopping.mutateAsync(shoppingData);
+    if (plan) {
+      await updateShopping.mutateAsync({
+        data: toUpdateData(toNewPlace(values, userId, plan.status)),
+        id: plan.id,
+      });
+    } else {
+      await addShopping.mutateAsync(toNewPlace(values, userId));
+    }
     onSuccess?.();
   };
 
   return (
     <PlaceForm
+      defaultTripId={defaultTripId}
       description="Save a store, market, or purchase stop."
-      loading={addShopping.isPending}
-      onSuccess={onSuccess}
+      isIdea={plan?.status === 'idea'}
+      loading={addShopping.isPending || updateShopping.isPending}
       onSubmit={submitForm}
-      submitLabel="Add Shopping"
+      plan={plan}
+      submitLabel={plan ? 'Save Changes' : 'Add Shopping'}
       title="Shopping"
       userId={userId}
     />

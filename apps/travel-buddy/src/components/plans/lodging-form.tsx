@@ -1,69 +1,98 @@
-import { ControlledInput, Separator, Text, View } from '@base-app/ui';
+import {
+  ControlledDateTimeInput,
+  ControlledInput,
+  Separator,
+  Text,
+  View,
+} from '@base-app/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
-import { useAddLodgingMutation } from '@/lib/hooks/use-firestore-collection-hooks';
-import type { NewLodging } from '@/lib/types/plans';
+import {
+  useAddLodgingMutation,
+  useUpdateLodgingMutation,
+} from '@/lib/hooks/use-firestore-collection-hooks';
+import type { Lodging, NewLodging } from '@/lib/types/plans';
 
 import { PlanFormShell } from './form-shell';
-import { nowIso, optionalAddress, optionalText } from './form-utils';
+import {
+  addressToFields,
+  endAfterStart,
+  fieldsToAddress,
+  nowIso,
+  optionalText,
+  toUpdateData,
+} from './form-utils';
 import { ControlledTripSelect } from './trip-select';
 
-const lodgingFormSchema = z.object({
-  addressCity: z.string().optional(),
-  addressCountry: z.string().optional(),
-  addressPostalCode: z.string().optional(),
-  addressState: z.string().optional(),
-  addressStreet1: z.string().optional(),
-  addressStreet2: z.string().optional(),
-  checkInDatetime: z.string().optional(),
-  checkOutDatetime: z.string().optional(),
-  confirmationNumber: z.string().optional(),
-  name: z.string().min(1, { message: 'Required' }),
-  notes: z.string().optional(),
-  phoneNumber: z.string().optional(),
-  tripId: z.string().optional(),
-});
+const lodgingFormSchema = z
+  .object({
+    addressCity: z.string().optional(),
+    addressCountry: z.string().optional(),
+    addressPostalCode: z.string().optional(),
+    addressState: z.string().optional(),
+    addressStreet1: z.string().optional(),
+    addressStreet2: z.string().optional(),
+    bookingUrl: z.string().optional(),
+    checkInDatetime: z.string().optional(),
+    checkOutDatetime: z.string().optional(),
+    confirmationNumber: z.string().optional(),
+    name: z.string().min(1, { message: 'Required' }),
+    notes: z.string().optional(),
+    phoneNumber: z.string().optional(),
+    tripId: z.string().optional(),
+    website: z.string().optional(),
+  })
+  .refine(endAfterStart('checkInDatetime', 'checkOutDatetime'), {
+    message: 'Check-out must be after check-in',
+    path: ['checkOutDatetime'],
+  });
 
 type LodgingFormValues = z.infer<typeof lodgingFormSchema>;
 
 type LodgingFormProps = {
+  defaultTripId?: string;
   onSuccess?: () => void;
+  /** Existing lodging to edit; omit to create a new one. */
+  plan?: Lodging;
   userId: string;
 };
 
-export const LodgingForm = ({ onSuccess, userId }: LodgingFormProps) => {
+const toLodgingFormValues = (
+  defaultTripId: string,
+  plan?: Lodging
+): LodgingFormValues => ({
+  ...addressToFields('address', plan?.address),
+  bookingUrl: plan?.bookingUrl ?? '',
+  checkInDatetime: plan?.checkInDatetime ?? '',
+  checkOutDatetime: plan?.checkOutDatetime ?? '',
+  confirmationNumber: plan?.confirmationNumber ?? '',
+  name: plan?.name ?? '',
+  notes: plan?.notes ?? '',
+  phoneNumber: plan?.phoneNumber ?? '',
+  tripId: plan?.tripId ?? defaultTripId,
+  website: plan?.website ?? '',
+});
+
+export const LodgingForm = ({
+  defaultTripId = '',
+  onSuccess,
+  plan,
+  userId,
+}: LodgingFormProps) => {
   const { control, handleSubmit, formState } = useForm<LodgingFormValues>({
-    defaultValues: {
-      addressCity: '',
-      addressCountry: '',
-      addressPostalCode: '',
-      addressState: '',
-      addressStreet1: '',
-      addressStreet2: '',
-      checkInDatetime: '',
-      checkOutDatetime: '',
-      confirmationNumber: '',
-      name: '',
-      notes: '',
-      phoneNumber: '',
-      tripId: '',
-    },
+    defaultValues: toLodgingFormValues(defaultTripId, plan),
     resolver: zodResolver(lodgingFormSchema),
   });
+  const checkInDatetime = useWatch({ control, name: 'checkInDatetime' });
   const addLodging = useAddLodgingMutation(userId);
+  const updateLodging = useUpdateLodgingMutation(userId);
 
   const submitForm = async (values: LodgingFormValues) => {
     const lodgingData: NewLodging = {
-      address: optionalAddress({
-        city: values.addressCity,
-        country: values.addressCountry,
-        postalCode: values.addressPostalCode,
-        state: values.addressState,
-        street1: values.addressStreet1,
-        street2: values.addressStreet2,
-      }),
+      address: fieldsToAddress('address', values),
+      bookingUrl: optionalText(values.bookingUrl),
       checkInDatetime: optionalText(values.checkInDatetime),
       checkOutDatetime: optionalText(values.checkOutDatetime),
       confirmationNumber: optionalText(values.confirmationNumber),
@@ -74,9 +103,17 @@ export const LodgingForm = ({ onSuccess, userId }: LodgingFormProps) => {
       tripId: optionalText(values.tripId),
       updatedAt: nowIso(),
       userId,
+      website: optionalText(values.website),
     };
 
-    await addLodging.mutateAsync(lodgingData);
+    if (plan) {
+      await updateLodging.mutateAsync({
+        data: toUpdateData(lodgingData),
+        id: plan.id,
+      });
+    } else {
+      await addLodging.mutateAsync(lodgingData);
+    }
     onSuccess?.();
   };
 
@@ -84,9 +121,9 @@ export const LodgingForm = ({ onSuccess, userId }: LodgingFormProps) => {
     <PlanFormShell
       description="Track the place you are staying and the key check-in details."
       disabled={!userId}
-      loading={addLodging.isPending}
+      loading={addLodging.isPending || updateLodging.isPending}
       onSubmit={handleSubmit(submitForm)}
-      submitLabel="Add Lodging"
+      submitLabel={plan ? 'Save Changes' : 'Add Lodging'}
       title="Lodging"
     >
       <ControlledInput
@@ -97,7 +134,21 @@ export const LodgingForm = ({ onSuccess, userId }: LodgingFormProps) => {
         placeholder="Hotel, rental, or stay name"
         required
       />
-      {/* @TODO Add date and time pickers for check in and check out */}
+      <ControlledDateTimeInput
+        control={control}
+        label="Check In"
+        minuteInterval={15}
+        name="checkInDatetime"
+      />
+      <ControlledDateTimeInput
+        control={control}
+        defaultPickerDate={
+          checkInDatetime ? new Date(checkInDatetime) : undefined
+        }
+        label="Check Out"
+        minuteInterval={15}
+        name="checkOutDatetime"
+      />
       <ControlledInput
         control={control}
         label="Confirmation Number"
@@ -152,6 +203,20 @@ export const LodgingForm = ({ onSuccess, userId }: LodgingFormProps) => {
           placeholder="Country"
         />
       </View>
+      <ControlledInput
+        control={control}
+        keyboardType="url"
+        label="Website"
+        name="website"
+        placeholder="Hotel or rental website"
+      />
+      <ControlledInput
+        control={control}
+        keyboardType="url"
+        label="Booking Link"
+        name="bookingUrl"
+        placeholder="Manage reservation URL"
+      />
       <ControlledInput
         control={control}
         label="Phone Number"

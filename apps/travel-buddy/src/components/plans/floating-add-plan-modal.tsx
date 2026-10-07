@@ -12,6 +12,7 @@ import { EntertainmentForm } from './entertainment-form';
 import { FlightForm } from './flight-form';
 import { FoodForm } from './food-form';
 import { nowIso } from './form-utils';
+import { IdeaForm } from './idea-form';
 import { LodgingForm } from './lodging-form';
 import { ShoppingForm } from './shopping-form';
 import { TodoForm } from './todo-form';
@@ -19,19 +20,22 @@ import { TransportForm } from './transport-form';
 import { TripForm } from './trip-form';
 
 type FloatingAddPlanModalProps = {
+  /** Pre-selects the trip on every form, e.g. when opened from a trip screen. */
+  defaultTripId?: string;
   showFloatingButton?: boolean;
   title?: string;
 };
 
 export type FloatingAddPlanModalRef = {
   dismiss: () => void;
-  present: () => void;
+  /** Opens the menu, or jumps straight to one form. */
+  present: (form?: PlanType) => void;
 };
 
 export const FloatingAddPlanModal = forwardRef<
   FloatingAddPlanModalRef,
   FloatingAddPlanModalProps
->(({ showFloatingButton = true, title = 'Add a Plan' }, ref) => {
+>(({ defaultTripId, showFloatingButton = true, title = 'Add a Plan' }, ref) => {
   const modal = useModal();
   const [currentForm, setCurrentForm] = useState<PlanType | 'menu'>('menu');
   const userId = useAuth((state) => state.user?.id || '');
@@ -68,10 +72,13 @@ export const FloatingAddPlanModal = forwardRef<
     dismissForm();
   };
 
-  const presentForm = useCallback(() => {
-    setCurrentForm('menu');
-    modal.present();
-  }, [modal]);
+  const presentForm = useCallback(
+    (form?: PlanType) => {
+      setCurrentForm(form ?? 'menu');
+      modal.present();
+    },
+    [modal]
+  );
 
   useImperativeHandle(
     ref,
@@ -95,42 +102,101 @@ export const FloatingAddPlanModal = forwardRef<
       title,
     },
     activity: {
-      component: <ActivityForm onSuccess={dismissForm} userId={userId} />,
+      component: (
+        <ActivityForm
+          defaultTripId={defaultTripId}
+          onSuccess={dismissForm}
+          userId={userId}
+        />
+      ),
       leftAction: goBack,
       title: 'Activity',
     },
     entertainment: {
-      component: <EntertainmentForm onSuccess={dismissForm} userId={userId} />,
+      component: (
+        <EntertainmentForm
+          defaultTripId={defaultTripId}
+          onSuccess={dismissForm}
+          userId={userId}
+        />
+      ),
       leftAction: goBack,
       title: 'Entertainment',
     },
     flight: {
-      component: <FlightForm onSuccess={dismissForm} userId={userId} />,
+      component: (
+        <FlightForm
+          defaultTripId={defaultTripId}
+          onSuccess={dismissForm}
+          userId={userId}
+        />
+      ),
       leftAction: goBack,
       title: 'Flight',
     },
     food: {
-      component: <FoodForm onSuccess={dismissForm} userId={userId} />,
+      component: (
+        <FoodForm
+          defaultTripId={defaultTripId}
+          onSuccess={dismissForm}
+          userId={userId}
+        />
+      ),
       leftAction: goBack,
       title: 'Food',
     },
+    idea: {
+      component: (
+        <IdeaForm
+          defaultTripId={defaultTripId}
+          onSuccess={dismissForm}
+          userId={userId}
+        />
+      ),
+      leftAction: goBack,
+      title: 'Idea',
+    },
     lodging: {
-      component: <LodgingForm onSuccess={dismissForm} userId={userId} />,
+      component: (
+        <LodgingForm
+          defaultTripId={defaultTripId}
+          onSuccess={dismissForm}
+          userId={userId}
+        />
+      ),
       leftAction: goBack,
       title: 'Lodging',
     },
     shopping: {
-      component: <ShoppingForm onSuccess={dismissForm} userId={userId} />,
+      component: (
+        <ShoppingForm
+          defaultTripId={defaultTripId}
+          onSuccess={dismissForm}
+          userId={userId}
+        />
+      ),
       leftAction: goBack,
       title: 'Shopping',
     },
     todo: {
-      component: <TodoForm onSuccess={dismissForm} userId={userId} />,
+      component: (
+        <TodoForm
+          onSuccess={dismissForm}
+          tripId={defaultTripId}
+          userId={userId}
+        />
+      ),
       leftAction: goBack,
       title: 'Todo',
     },
     transport: {
-      component: <TransportForm onSuccess={dismissForm} userId={userId} />,
+      component: (
+        <TransportForm
+          defaultTripId={defaultTripId}
+          onSuccess={dismissForm}
+          userId={userId}
+        />
+      ),
       leftAction: goBack,
       title: 'Transport',
     },
@@ -144,7 +210,7 @@ export const FloatingAddPlanModal = forwardRef<
   return (
     <>
       {showFloatingButton ? (
-        <FloatingActionButton name="plus" onPress={presentForm} />
+        <FloatingActionButton name="plus" onPress={() => presentForm()} />
       ) : null}
       <ModalForm
         ref={modal.ref}

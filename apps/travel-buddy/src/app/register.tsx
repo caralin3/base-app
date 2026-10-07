@@ -1,5 +1,6 @@
 import { RegisterForm, type RegisterFormProps, useAuth } from '@base-app/core';
 import { Redirect } from 'expo-router';
+import { useColorScheme } from 'nativewind';
 import React, { useState } from 'react';
 
 import { Env } from '@/lib';
@@ -8,6 +9,8 @@ export default function Register() {
   type RegisterFormData = Parameters<
     NonNullable<RegisterFormProps['onSubmit']>
   >[0];
+
+  const { colorScheme } = useColorScheme();
 
   const status = useAuth.use.status();
   const register = useAuth.use.register();
@@ -42,6 +45,12 @@ export default function Register() {
       appName={Env.NAME}
       onSubmit={onSubmit}
       authError={formError}
+      logo={
+        colorScheme === 'dark'
+          ? require('../../assets/images/header-logo-dark.png')
+          : require('../../assets/images/header-logo-light.png')
+      }
+      logoStyle={{ width: 256, height: 50 }}
     />
   );
 }

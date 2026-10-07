@@ -1,11 +1,14 @@
 import { LoginForm, type LoginFormProps, useAuth } from '@base-app/core';
 import { Redirect } from 'expo-router';
+import { useColorScheme } from 'nativewind';
 import React, { useState } from 'react';
 
 import { Env } from '@/lib';
 
 export default function Login() {
   type LoginFormData = Parameters<NonNullable<LoginFormProps['onSubmit']>>[0];
+
+  const { colorScheme } = useColorScheme();
 
   const status = useAuth.use.status();
   const signIn = useAuth.use.signIn();
@@ -34,6 +37,16 @@ export default function Login() {
   };
 
   return (
-    <LoginForm appName={Env.NAME} onSubmit={onSubmit} authError={formError} />
+    <LoginForm
+      appName={Env.NAME}
+      onSubmit={onSubmit}
+      authError={formError}
+      logo={
+        colorScheme === 'dark'
+          ? require('../../assets/images/header-logo-dark.png')
+          : require('../../assets/images/header-logo-light.png')
+      }
+      logoStyle={{ width: 256, height: 50 }}
+    />
   );
 }

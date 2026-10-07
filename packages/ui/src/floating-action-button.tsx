@@ -1,0 +1,71 @@
+import React from 'react';
+import {
+  type GestureResponderEvent,
+  Pressable,
+  type PressableProps,
+  type StyleProp,
+  StyleSheet,
+  View,
+  type ViewStyle,
+} from 'react-native';
+
+import { IconSymbol, type IconSymbolName } from './icon-symbol';
+import { useAppColors } from './theme';
+
+type FloatingActionButtonProps = Omit<PressableProps, 'children'> & {
+  iconColor?: string;
+  name?: IconSymbolName;
+  onPress?: (event: GestureResponderEvent) => void;
+  size?: number;
+};
+
+export const FloatingActionButton = ({
+  iconColor,
+  name = 'plus',
+  onPress,
+  size = 24,
+  style,
+  ...props
+}: FloatingActionButtonProps) => {
+  const colors = useAppColors();
+
+  const resolvedStyle: StyleProp<ViewStyle> =
+    typeof style === 'function'
+      ? style({ pressed: false, hovered: false } as any)
+      : style;
+
+  return (
+    <Pressable
+      accessibilityLabel="Add item"
+      accessibilityRole="button"
+      className="absolute bottom-6 right-6 z-50 size-14 items-center justify-center rounded-full"
+      onPress={onPress}
+      style={[
+        resolvedStyle,
+        {
+          backgroundColor: colors.primary,
+          ...styles.shadow,
+        },
+      ]}
+      {...props}
+    >
+      <View className="items-center justify-center">
+        <IconSymbol
+          color={iconColor || colors.background}
+          name={name}
+          size={size}
+        />
+      </View>
+    </Pressable>
+  );
+};
+
+const styles = StyleSheet.create({
+  shadow: {
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
+  },
+});

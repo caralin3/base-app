@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Base App shared compiler options",
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "allowArbitraryExtensions": true,
+    "checkJs": true
+  }
+}

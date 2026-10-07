@@ -1,0 +1,11 @@
+{
+  "extends": ["expo/tsconfig.base", "@base-app/tsconfig/base.json"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "nativewind-env.d.ts"],
+  "compilerOptions": {
+    "paths": {
+      "react-native-collapsible-tab-view/src/hooks": [
+        "../ui/node_modules/react-native-collapsible-tab-view/lib/typescript/src/hooks.d.ts"
+      ]
+    }
+  }
+}

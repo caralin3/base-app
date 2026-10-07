@@ -1,50 +1,94 @@
-# Welcome to your Expo app 👋
+# Base App workspace
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A pnpm workspace for Expo apps that share one foundation.
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+apps/
+  starter/         # starter app — copy this to begin a new app
+  binge-buddy/     # Binge Buddy
+  travel-buddy/    # Travel Buddy
+packages/
+  tsconfig/        # shared TypeScript compiler options (@base-app/tsconfig)
+  ui/              # shared components, theme provider, Tailwind preset (@base-app/ui)
+  core/            # Firebase setup, auth store and forms, storage, theme selection (@base-app/core)
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Theming an app
 
-## Learn more
+Each app owns its brand palette (`apps/<app>/src/theme/app-theme.js`) and passes
+it to `@base-app/ui` in two places, so Tailwind classes and runtime colors match:
 
-To learn more about developing your project with Expo, look at the following resources:
+```js
+// tailwind.config.js
+const { content: coreContent } = require('@base-app/core/tailwind');
+const {
+  content: uiContent,
+  createTailwindPreset,
+} = require('@base-app/ui/tailwind');
+const appTheme = require('./src/theme/app-theme');
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+module.exports = {
+  // The package globs are required: Tailwind replaces a preset's content
+  // instead of merging it, so classes used only in packages would be dropped.
+  content: ['./src/**/*.{js,jsx,ts,tsx}', uiContent, coreContent],
+  presets: [createTailwindPreset(appTheme)],
+};
+```
 
-## Join the community
+## Firebase
 
-Join our community of developers creating universal apps.
+Each app's `src/lib/firebase/config.ts` calls `initFirebase` from
+`@base-app/core` with its env values and re-exports `firebaseAuth`,
+`firebaseDB` and `firebaseInitError` for its own Firestore code. When the env is
+incomplete, auth is `null` and `firebaseInitError` says why, instead of the app
+crashing on import.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```tsx
+// src/app/_layout.tsx
+<AppThemeProvider theme={appTheme}>{/* app */}</AppThemeProvider>
+```
+
+Native libraries the UI package uses are `peerDependencies` pinned through the
+catalog, so the app and the package always share one copy.
+
+## Setup
+
+```bash
+pnpm install
+```
+
+Each app reads its env from git-ignored files in its own folder:
+`apps/<app>/.env.<development|preview|production>.local`, picked by `APP_ENV`
+(default `development`). The committed `.env.development`, `.env.preview` and
+`.env.production` files list the required keys. On EAS, the same variables come
+from the build profile's environment instead.
+
+## Common commands
+
+Run from the repo root:
+
+| Command                          | What it does                     |
+| -------------------------------- | -------------------------------- |
+| `pnpm starter start`             | Start the Metro dev server       |
+| `pnpm starter ios`               | Build and run on iOS             |
+| `pnpm starter android`           | Build and run on Android         |
+| `pnpm starter build:preview:ios` | EAS preview build                |
+| `pnpm type-check`                | Type-check every app and package |
+| `pnpm lint`                      | Lint every app and package       |
+
+`pnpm starter <script>` is shorthand for `pnpm --filter starter <script>`, so
+any script in `apps/starter/package.json` works. `pnpm binge-buddy <script>`
+and `pnpm travel-buddy <script>` do the same for the other apps. You can also `cd` into the app
+and run `pnpm <script>` directly.
+
+## CI
+
+`.github/workflows/ci.yml` runs `pnpm lint` and `pnpm type-check` on every pull
+request and on pushes to `main`.
+
+## Dependency versions
+
+Versions that every app must agree on (Expo SDK, React, React Native and the
+native libraries tied to them) live in the `catalog:` section of
+`pnpm-workspace.yaml`. Reference them from a package with `"catalog:"` so an SDK
+upgrade is a single edit.

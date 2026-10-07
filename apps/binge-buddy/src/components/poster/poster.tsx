@@ -1,0 +1,173 @@
+import { colors, IconButton, Text, useAppColors, View } from '@base-app/ui';
+import { format } from 'date-fns';
+import { Link, type LinkProps } from 'expo-router';
+import { useMemo } from 'react';
+import { StyleSheet } from 'react-native';
+
+import { PosterImage } from './poster-image';
+
+export interface PosterProps {
+  editMode?: boolean;
+  firstAirDate?: string | null;
+  horizontal?: boolean;
+  href: LinkProps['href'];
+  id: number;
+  isFavorite: boolean;
+  isCurrentlyWatching?: boolean;
+  isInWatchlist?: boolean;
+  name: string;
+  numberOfSeasons?: number;
+  onCurrentlyWatching?: () => void;
+  onFavorite?: () => void;
+  onPress?: (showId: number) => void;
+  onRemove?: () => void;
+  onSaveToWatchlist?: () => void;
+  uri: string | null;
+}
+
+export const Poster = ({
+  editMode = false,
+  firstAirDate,
+  horizontal = false,
+  href,
+  id,
+  isCurrentlyWatching,
+  isFavorite,
+  isInWatchlist,
+  name,
+  numberOfSeasons,
+  onCurrentlyWatching,
+  onFavorite,
+  onPress,
+  onRemove,
+  onSaveToWatchlist,
+  uri,
+}: PosterProps) => {
+  const appColors = useAppColors();
+  const startYear = useMemo(
+    () => (firstAirDate ? format(new Date(firstAirDate), 'yyyy') : null),
+    [firstAirDate]
+  );
+  const alt = useMemo(
+    () => `${name} ${startYear ? `(${startYear})` : ''}`,
+    [name, startYear]
+  );
+
+  if (horizontal) {
+    return (
+      <View style={styles.container}>
+        <Link
+          href={href}
+          push
+          style={styles.flex}
+          onPress={() => onPress?.(id)}
+        >
+          <View style={styles.imageLink}>
+            <PosterImage
+              horizontal
+              alt={alt}
+              uri={uri}
+              style={styles.horizontalImage}
+            />
+            <View style={styles.flex}>
+              <Text size="xl" weight="bold" style={styles.name}>
+                {name}
+              </Text>
+              {!!startYear && <Text>{startYear}</Text>}
+              {!!numberOfSeasons && (
+                <Text>
+                  {numberOfSeasons} season{numberOfSeasons > 1 ? 's' : ''}
+                </Text>
+              )}
+            </View>
+          </View>
+        </Link>
+        <View style={styles.buttonContainer}>
+          {editMode && !!onRemove ? (
+            <IconButton
+              iconName="trash"
+              iconType="community"
+              color={colors.danger[600]}
+              onPress={onRemove}
+              size={28}
+            />
+          ) : (
+            <>
+              {!!onCurrentlyWatching && (
+                <IconButton
+                  iconName={isCurrentlyWatching ? 'eye.fill' : 'eye'}
+                  iconType="community"
+                  color={appColors.primary}
+                  onPress={onCurrentlyWatching}
+                  size={28}
+                />
+              )}
+              {!!onSaveToWatchlist && (
+                <IconButton
+                  iconName={isInWatchlist ? 'bookmark.fill' : 'bookmark'}
+                  color={appColors.primary}
+                  onPress={onSaveToWatchlist}
+                  size={28}
+                />
+              )}
+              {!!onFavorite && (
+                <IconButton
+                  iconName={isFavorite ? 'heart.fill' : 'heart'}
+                  color={appColors.primary}
+                  onPress={onFavorite}
+                  size={28}
+                />
+              )}
+            </>
+          )}
+        </View>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.verticalContainer}>
+      <Link href={href} push onPress={() => onPress?.(id)}>
+        <PosterImage alt={alt} uri={uri} style={styles.verticalImage} />
+      </Link>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  flex: {
+    flex: 1,
+    gap: 4,
+  },
+  imageLink: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  horizontalImage: {
+    height: 140,
+    width: 92,
+  },
+  name: {
+    flexWrap: 'wrap',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+  },
+  verticalContainer: {
+    flex: 1,
+    paddingRight: 10,
+  },
+  verticalImage: {
+    height: 175,
+    width: 115,
+    borderRadius: 6,
+  },
+});

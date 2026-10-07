@@ -1,0 +1,29 @@
+{
+  "extends": ["expo/tsconfig.base", "@base-app/tsconfig/base.json"],
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@env": ["./src/lib/env"],
+      "react-native-collapsible-tab-view/src/hooks": [
+        "./node_modules/react-native-collapsible-tab-view/lib/typescript/src/hooks.d.ts"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "docs",
+    "cli",
+    "android",
+    "ios",
+    "app-example/"
+  ],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "nativewind-env.d.ts"
+  ]
+}

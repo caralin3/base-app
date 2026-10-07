@@ -1,0 +1,71 @@
+{
+  "name": "@base-app/ui",
+  "version": "0.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./colors": "./src/colors.js",
+    "./icons": "./src/icons/index.tsx",
+    "./tailwind": "./tailwind.js"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "tailwind-merge": "catalog:",
+    "tailwind-variants": "catalog:"
+  },
+  "peerDependencies": {
+    "@expo/vector-icons": "catalog:",
+    "@gorhom/bottom-sheet": "catalog:",
+    "@react-native-community/datetimepicker": "catalog:",
+    "expo-haptics": "catalog:",
+    "expo-image": "catalog:",
+    "expo-router": "catalog:",
+    "expo-status-bar": "catalog:",
+    "expo-symbols": "catalog:",
+    "moti": "catalog:",
+    "nativewind": "catalog:",
+    "react": "catalog:",
+    "react-hook-form": "catalog:",
+    "react-native": "catalog:",
+    "react-native-collapsible-tab-view": "catalog:",
+    "react-native-gesture-handler": "catalog:",
+    "react-native-keyboard-controller": "catalog:",
+    "react-native-pager-view": "catalog:",
+    "react-native-reanimated": "catalog:",
+    "react-native-safe-area-context": "catalog:",
+    "react-native-svg": "catalog:"
+  },
+  "devDependencies": {
+    "@base-app/tsconfig": "workspace:*",
+    "@expo/vector-icons": "catalog:",
+    "@gorhom/bottom-sheet": "catalog:",
+    "@react-native-community/datetimepicker": "catalog:",
+    "@types/react": "catalog:",
+    "expo": "catalog:",
+    "expo-haptics": "catalog:",
+    "expo-image": "catalog:",
+    "expo-router": "catalog:",
+    "expo-status-bar": "catalog:",
+    "expo-symbols": "catalog:",
+    "moti": "catalog:",
+    "nativewind": "catalog:",
+    "react": "catalog:",
+    "react-hook-form": "catalog:",
+    "react-native": "catalog:",
+    "react-native-collapsible-tab-view": "catalog:",
+    "react-native-gesture-handler": "catalog:",
+    "react-native-keyboard-controller": "catalog:",
+    "react-native-pager-view": "catalog:",
+    "react-native-reanimated": "catalog:",
+    "react-native-safe-area-context": "catalog:",
+    "react-native-screens": "catalog:",
+    "react-native-svg": "catalog:",
+    "react-native-worklets": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
+  }
+}

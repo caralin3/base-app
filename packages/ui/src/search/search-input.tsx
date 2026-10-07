@@ -1,0 +1,106 @@
+import { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { StyleSheet, type TextInputProps } from 'react-native';
+
+import { IconButton } from '../icon-button';
+import { IconSymbol } from '../icon-symbol';
+import { Input } from '../input';
+import { useAppColors } from '../theme/use-app-colors';
+
+interface SearchInputProps {
+  autoFocus?: boolean;
+  onBlur?: TextInputProps['onBlur'];
+  onChangeText: (text: string) => void;
+  onFocus?: TextInputProps['onFocus'];
+  onSubmitEditing?: TextInputProps['onSubmitEditing'];
+  placeholder?: string;
+  value: string;
+}
+
+export const SearchInput = ({
+  autoFocus = true,
+  onBlur,
+  onChangeText,
+  onFocus,
+  onSubmitEditing,
+  placeholder,
+  value,
+}: SearchInputProps) => {
+  const [showClear, setShowClear] = useState(false);
+  const colors = useAppColors();
+  const color = colors.foreground;
+
+  useEffect(() => {
+    setShowClear(!!value);
+  }, [value]);
+
+  const handleChangeText = (text: string) => {
+    if (!showClear && text) {
+      setShowClear(true);
+    } else if (showClear && !text) {
+      setShowClear(false);
+    }
+    onChangeText(text);
+  };
+
+  return (
+    <View style={styles.container}>
+      <IconSymbol
+        name="magnifyingglass"
+        style={styles.searchIcon}
+        color={color}
+        size={22}
+      />
+      <Input
+        containerStyles="flex-1"
+        style={styles.input}
+        value={value}
+        onBlur={onBlur}
+        onChangeText={handleChangeText}
+        onFocus={onFocus}
+        onSubmitEditing={onSubmitEditing}
+        autoFocus={autoFocus}
+        enterKeyHint="search"
+        placeholder={placeholder ?? 'Search'}
+      />
+      <IconButton
+        iconName="xmark.circle"
+        size={24}
+        color={color}
+        iconType="community"
+        onPress={() => onChangeText('')}
+        style={StyleSheet.flatten([
+          styles.clearIcon,
+          !showClear ? styles.hide : {},
+        ])}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  clearIcon: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+  },
+  hide: {
+    display: 'none',
+  },
+  searchIcon: {
+    left: 10,
+    position: 'absolute',
+    top: 12,
+    zIndex: 1,
+  },
+  input: {
+    paddingLeft: 40,
+  },
+});

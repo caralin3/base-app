@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
 import { defineConfig, globalIgnores } from 'eslint/config';
 import expoConfig from 'eslint-config-expo/flat.js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
@@ -10,21 +13,34 @@ import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import unusedImports from 'eslint-plugin-unused-imports';
 import { configs, parser } from 'typescript-eslint';
 
+// eslint-plugin-react's settings.react.version: 'detect' (set by
+// eslint-config-expo) requires('react') relative to the directory ESLint
+// runs from. With pnpm's non-hoisted node_modules, that's this workspace
+// root, which has no react of its own — every app/package does. Pin the
+// version so detection doesn't silently fall back to "latest".
+const reactVersion = JSON.parse(
+  readFileSync(
+    fileURLToPath(
+      new URL('./apps/starter/node_modules/react/package.json', import.meta.url)
+    )
+  )
+).version;
+
 export default defineConfig([
   globalIgnores([
-    'dist/*',
-    'node_modules',
-    '__tests__/',
-    'coverage',
-    '.expo',
-    'app-example/',
-    '.expo-shared',
-    'android',
-    'ios',
-    '.vscode',
-    'docs/',
-    'cli/',
-    'expo-env.d.ts',
+    '**/dist/',
+    '**/node_modules/',
+    '**/__tests__/',
+    '**/coverage/',
+    '**/.expo/',
+    '**/app-example/',
+    '**/.expo-shared/',
+    '**/android/',
+    '**/ios/',
+    '.vscode/',
+    '**/docs/',
+    '**/cli/',
+    '**/expo-env.d.ts',
   ]),
   expoConfig,
   eslintPluginPrettierRecommended,
@@ -72,12 +88,26 @@ export default defineConfig([
       'import/no-cycle': ['error', { maxDepth: '∞' }],
       'prettier/prettier': ['error', { ignores: ['expo-env.d.ts'] }],
       'import/order': 'off',
+      // React Compiler rules added by eslint-plugin-react-hooks 7 (via
+      // eslint-config-expo 57). Existing code predates them; warn until the
+      // flagged components are refactored.
+      'react-hooks/refs': 'warn',
+      'react-hooks/set-state-in-effect': 'warn',
+      'react-hooks/use-memo': 'warn',
     },
     settings: {
       'import/resolver': {
         typescript: {
-          project: './tsconfig.json',
+          project: ['apps/*/tsconfig.json', 'packages/*/tsconfig.json'],
+          noWarnOnMultipleProjects: true,
         },
+      },
+      // Class ordering only needs a Tailwind config; every app shares the same preset.
+      tailwindcss: {
+        config: 'apps/starter/tailwind.config.js',
+      },
+      react: {
+        version: reactVersion,
       },
     },
   },
@@ -86,7 +116,8 @@ export default defineConfig([
     languageOptions: {
       parser: parser,
       parserOptions: {
-        project: './tsconfig.json',
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
         sourceType: 'module',
       },
     },
@@ -101,6 +132,17 @@ export default defineConfig([
           disallowTypeAnnotations: true,
         },
       ],
+    },
+  },
+  {
+    // Node-only build helpers shipped by workspace packages
+    files: ['packages/*/tailwind.js'],
+    languageOptions: {
+      globals: {
+        __dirname: 'readonly',
+        module: 'writable',
+        require: 'readonly',
+      },
     },
   },
   {
